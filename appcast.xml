@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+     xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>FreeMind</title>
+    <link>https://github.com/xVanTuring/FreeMind</link>
+    <description>Updates for FreeMind, a native macOS mind-mapping app.</description>
+    <language>en</language>
+    <!-- BEGIN-ITEMS (release.sh inserts new entries here, newest first) -->
+  </channel>
+</rss>

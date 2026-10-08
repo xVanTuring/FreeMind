@@ -54,6 +54,16 @@ build/DerivedData/Build/Products/Debug/FreeMind.app/Contents/MacOS/FreeMind   # 
 - 本机实测：`build/.../Debug/FreeMind.app/Contents/MacOS/FreeMind -ApplePersistenceIgnoreState YES` 单独起一个实例
   （不恢复窗口，免得和正在用的实例同时打开同一份文件），再用 curl 调 `http://127.0.0.1:8775/mcp`。
 
+## 发布与自动更新
+
+- 详见 `docs/release.md`。`scripts/package.sh` 签名、公证、打 zip + dmg（只在本机生成文件）；
+  `scripts/release.sh <版本> --notes-file <日志>` 会推送到 GitHub 并通过 Sparkle 推送给所有用户——
+  **没有用户明确要求时只能跑 `--dry-run`**。
+- 版本号只改 `project.yml` 的 `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION`（release.sh 自动改），三个 target 的 Info.plist 都引用它们。
+- `project.yml` 保持 ad-hoc 签名；Developer ID 身份由 package.sh 在命令行指定。
+- Sparkle 只链接到 App target（`App/UpdaterService.swift`），别让 Quick Look 扩展引用它。
+- `SUPublicEDKey` 第一次发布后严禁更换。
+
 ## Quick Look 扩展
 
 - `FreeMindQuickLook`（空格预览）和 `FreeMindThumbnail`（Finder 缩略图）两个 app-extension 只编译模型、布局、渲染、

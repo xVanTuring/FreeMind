@@ -6,8 +6,20 @@ options:
   createIntermediateGroups: true
   groupSortPosition: top
 
+packages:
+  # Sparkle 2 自动更新（同 Perch / UniReader）。`App/UpdaterService.swift` 用 SPUStandardUpdaterController
+  # 跑整个流程（拉 appcast、EdDSA 校验、下载、安装、重启）；`scripts/release.sh` 用这个包里的 sign_update
+  # 给发布的 zip 签名。App 没有开沙盒，不需要 Installer XPC 和额外的 entitlements。
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle.git
+    from: "2.9.1"
+
 settings:
   base:
+    # 版本号只在这里改（scripts/release.sh 会自动改），App 和两个扩展的 Info.plist 都引用这两个值，
+    # 扩展的版本号必须和 App 一致。
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.0"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     # Hardened Runtime 是 Developer ID 公证的硬性要求，开发阶段就打开。
@@ -37,6 +49,7 @@ targets:
         embed: true
       - target: FreeMindThumbnail
         embed: true
+      - package: Sparkle
     settings:
       base:
         PRODUCT_NAME: FreeMind
@@ -49,8 +62,8 @@ targets:
       properties:
         CFBundleName: FreeMind
         CFBundleDisplayName: FreeMind
-        CFBundleShortVersionString: "1.0.0"
-        CFBundleVersion: "1"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         CFBundlePackageType: APPL
         CFBundleDevelopmentRegion: en
         CFBundleAllowMixedLocalizations: true
@@ -59,6 +72,15 @@ targets:
         NSHumanReadableCopyright: "© 2026 xVanTuring. Licensed under the GNU GPL v3 or later."
         NSPrincipalClass: NSApplication
         CFBundleIconName: AppIcon
+        # ── Sparkle 自动更新（见 docs/release.md）─────────────────────
+        # appcast 放在仓库 main 分支根目录，scripts/release.sh 每次发布后提交并推送。
+        SUFeedURL: "https://raw.githubusercontent.com/xVanTuring/FreeMind/main/appcast.xml"
+        # EdDSA 公钥，用来校验下载的更新包；私钥在发布机的登录钥匙串里（与 Perch / UniReader 共用一对）。
+        # ⚠️ 第一次发布之后严禁更换，否则已安装的版本会拒绝以后所有的更新。
+        SUPublicEDKey: "g3SCjADYsXhMN5/4hnQZ7eOawvtVoGJJsS5CFew15WQ="
+        # 默认自动检查（不在第二次启动时弹窗询问），用户可以在设置 › 通用里关掉。
+        SUEnableAutomaticChecks: true
+        SUScheduledCheckInterval: 86400
         # ── 文档类型 ─────────────────────────────────────────────
         # .fmind 是本应用的专属格式：一个 package（目录包），Finder 里显示为单个文件。
         # Markdown / OPML / XMind 只声明为 Viewer：打开时导入成新的未命名导图。
@@ -135,8 +157,8 @@ targets:
       path: Extensions/QuickLook/Info.plist
       properties:
         CFBundleDisplayName: FreeMind Quick Look
-        CFBundleShortVersionString: "1.0.0"
-        CFBundleVersion: "1"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.quicklook.preview
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
@@ -170,8 +192,8 @@ targets:
       path: Extensions/Thumbnail/Info.plist
       properties:
         CFBundleDisplayName: FreeMind Thumbnail
-        CFBundleShortVersionString: "1.0.0"
-        CFBundleVersion: "1"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.quicklook.thumbnail
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ThumbnailProvider

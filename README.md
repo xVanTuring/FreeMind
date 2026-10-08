@@ -35,6 +35,7 @@
 - **Welcome window**: lists recent maps with thumbnails; click one to open it. Right-click the Dock icon for New Map and Open.
 - **Template gallery**: ⌘N lets you start from a blank map or a template. Any map can be saved as a template.
 - **Native macOS behavior**: autosave, version browsing, undo / redo, window tabs, full screen and dark mode.
+- **Automatic updates**: signed and notarized releases on GitHub; the app checks for new versions daily (FreeMind ▸ Check for Updates…).
 - **AI agent access (MCP)**: FreeMind runs a local [MCP](https://modelcontextprotocol.io) server, so agents such as Claude Code can read your open maps and add, edit, move or delete topics. Every change an agent makes is one undo step. Set it up in Settings ▸ Agent ([details, in Chinese](docs/mcp.md)).
 - English and Simplified Chinese interface, following the system language.
 
@@ -107,12 +108,13 @@ xcodebuild -project FreeMind.xcodeproj -scheme FreeMind -configuration Release b
 xcodebuild -project FreeMind.xcodeproj -scheme FreeMind test
 ```
 
-Local builds are ad-hoc signed and run directly.
+Local builds are ad-hoc signed and run directly. The first build resolves the [Sparkle](https://sparkle-project.org) package used for automatic updates.
 
 Helper scripts:
 
 - `scripts/make-icon.sh` renders `Sources/FreeMind/Resources/AppIcon.svg` into the app icon set (requires `rsvg-convert`).
 - `scripts/check-strings.sh` checks that every UI string has a Chinese translation.
+- `scripts/package.sh` builds a Developer ID signed, notarized `.zip` and `.dmg`; `scripts/release.sh` publishes a GitHub release and the Sparkle update feed ([details, in Chinese](docs/release.md)).
 
 ## Project layout
 

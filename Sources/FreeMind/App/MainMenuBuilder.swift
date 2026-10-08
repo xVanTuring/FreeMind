@@ -1,4 +1,5 @@
 import AppKit
+import Sparkle
 
 /// 用代码构建主菜单（不依赖 xib），所有标题都本地化。
 /// 快捷键与 XMind 保持一致：Tab 子主题、Return 同级主题、⇧Return 前插、⌘Return 父主题、⌘/ 折叠。
@@ -44,6 +45,8 @@ enum MainMenuBuilder {
     private static func appMenu() -> NSMenu {
         let menu = NSMenu(title: "FreeMind")
         add(menu, L("About FreeMind"), #selector(NSApplication.orderFrontStandardAboutPanel(_:)))
+        add(menu, L("Check for Updates…"), #selector(SPUStandardUpdaterController.checkForUpdates(_:)),
+            target: UpdaterService.shared.controller)
         menu.addItem(.separator())
         add(menu, L("Settings…"), #selector(AppDelegate.showSettings(_:)), ",")
         menu.addItem(.separator())

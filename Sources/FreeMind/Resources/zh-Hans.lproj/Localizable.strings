@@ -521,3 +521,12 @@
 "Delete Topics" = "删除主题";
 "Edit Relationship" = "编辑联系";
 "Change Map Format" = "更改导图格式";
+
+/* MARK: - 软件更新（Sparkle） */
+"Check for Updates…" = "检查更新…";
+"Software Update" = "软件更新";
+"Check for updates automatically" = "自动检查更新";
+"FreeMind %@ (%@)" = "FreeMind %@（%@）";
+"Check Now" = "立即检查";
+"Not checked yet" = "还没有检查过";
+"Last checked %@" = "上次检查：%@";

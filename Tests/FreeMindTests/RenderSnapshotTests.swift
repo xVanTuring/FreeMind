@@ -112,7 +112,7 @@ final class RenderSnapshotTests: XCTestCase {
         try snapshot(WelcomeView(recents: recents, close: {}), size: CGSize(width: 800, height: 480), name: "welcome.png")
         try snapshot(WelcomeView(recents: [], close: {}), size: CGSize(width: 800, height: 480), name: "welcome-empty-dark.png", dark: true)
         try snapshot(TemplateGalleryView(close: {}), size: CGSize(width: 940, height: 680), name: "gallery.png")
-        try snapshot(GeneralSettings(), size: CGSize(width: 500, height: 520), name: "settings-general.png", dark: true)
+        try snapshot(GeneralSettings(), size: CGSize(width: 500, height: 680), name: "settings-general.png", dark: true)
         try snapshot(ExportSettings(), size: CGSize(width: 500, height: 420), name: "settings-export.png")
         try snapshot(LibrarySettings(), size: CGSize(width: 500, height: 360), name: "settings-library.png")
         try snapshot(AgentSettings(), size: CGSize(width: 500, height: 440), name: "settings-agent.png")

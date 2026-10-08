@@ -43,6 +43,7 @@ final class SettingsWindowController: NSWindowController {
 
 struct GeneralSettings: View {
     @Bindable private var prefs = Preferences.shared
+    @Bindable private var updater = UpdaterService.shared
     @State private var themes = ThemeLibrary.shared
 
     var body: some View {
@@ -88,7 +89,22 @@ struct GeneralSettings: View {
                     SettingsSwitch(isOn: $prefs.restoreViewState)
                 }
             }
+            SettingsGroup(title: L("Software Update")) {
+                SettingsRow(title: L("Check for updates automatically"), detail: updateStatus) {
+                    SettingsSwitch(isOn: $updater.automaticallyChecks)
+                }
+                SettingsDivider()
+                SettingsRow(title: LF("FreeMind %@ (%@)", updater.version, updater.build)) {
+                    Button(L("Check Now")) { updater.checkForUpdates() }
+                        .disabled(!updater.canCheck)
+                }
+            }
         }
+    }
+
+    private var updateStatus: String {
+        guard let date = updater.lastChecked else { return L("Not checked yet") }
+        return LF("Last checked %@", date.formatted(.relative(presentation: .named)))
     }
 }
 
