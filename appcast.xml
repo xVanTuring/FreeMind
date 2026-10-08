@@ -9,6 +9,52 @@
     <language>en</language>
     <!-- BEGIN-ITEMS (release.sh inserts new entries here, newest first) -->
     <item>
+      <title>v1.1.0</title>
+      <pubDate>Thu, 08 Oct 2026 11:20:44 +0000</pubDate>
+      <sparkle:version>3</sparkle:version>
+      <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description xml:lang="zh"><![CDATA[
+<h3>FreeMind 1.1.0</h3>
+<h4>联系线</h4>
+<ul>
+<li>按住联系线的线条或标签直接拖动就能调整弧度，不用先选中再找控制柄</li>
+<li>标签自动错开：几条联系线的标签不再叠在一起，也不会被别的线压住</li>
+<li>联系线太多觉得干扰时可以全部隐藏：“显示 ▸ 显示联系线”（⌥⌘L），或右键联系线选“隐藏所有联系线”。隐藏状态随文件保存，状态栏会提示隐藏了几条，点一下恢复显示</li>
+</ul>
+<h4>其他改进</h4>
+<ul>
+<li>触控板双指滚动可以往任意方向拖动画布，不再只能水平或垂直</li>
+<li>再次打开 FreeMind 时会切换到已经运行的那个，不会同时开出两个</li>
+</ul>
+<h4>问题修复</h4>
+<ul>
+<li>备注、超链接、标签等弹出框的内容显示不全</li>
+</ul>
+<p><a href="https://github.com/xVanTuring/FreeMind/releases/tag/v1.1.0">在 GitHub 上查看这次发布 →</a></p>
+      ]]></description>
+      <description xml:lang="en"><![CDATA[
+<h3>FreeMind 1.1.0</h3>
+<h4>Relationships</h4>
+<ul>
+<li>Drag a relationship line or its label to reshape it; no need to select it and find the handles first</li>
+<li>Labels move apart automatically, so they no longer pile up on top of each other or get crossed by other lines</li>
+<li>Hide all relationships when they get in the way: View ▸ Show Relationships (⌥⌘L), or right-click a relationship and choose Hide All Relationships. The setting is saved with the file, and the status bar shows how many are hidden; click it to show them again</li>
+</ul>
+<h4>Other improvements</h4>
+<ul>
+<li>Two-finger scrolling on the trackpad moves the map in any direction instead of only horizontally or vertically</li>
+<li>Opening FreeMind again switches to the copy that is already running instead of starting a second one</li>
+</ul>
+<h4>Fixes</h4>
+<ul>
+<li>Notes, hyperlink, label and other popovers were cut off at the edges</li>
+</ul>
+<p><a href="https://github.com/xVanTuring/FreeMind/releases/tag/v1.1.0">View the release on GitHub →</a></p>
+      ]]></description>
+      <enclosure url="https://github.com/xVanTuring/FreeMind/releases/download/v1.1.0/FreeMind-1.1.0.zip" length="3965770" type="application/octet-stream" sparkle:edSignature="iDzrst9L2nkgBK2H2OhXMLK48Gv05J1/8WTqiAIplTb9uQWJXr9MsXlKh80qeDRzKVvRbZkWZFPdKuvjB+DqCQ==" />
+    </item>
+    <item>
       <title>v1.0.0</title>
       <pubDate>Thu, 08 Oct 2026 09:03:47 +0000</pubDate>
       <sparkle:version>2</sparkle:version>
