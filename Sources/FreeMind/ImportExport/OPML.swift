@@ -66,7 +66,12 @@ final class OPMLImporter: NSObject, XMLParserDelegate {
         let parser = XMLParser(data: data)
         parser.delegate = importer
         guard parser.parse() else {
-            throw parser.parserError ?? CocoaError(.fileReadCorruptFile)
+            var info: [String: Any] = [
+                NSLocalizedDescriptionKey: L("This OPML file is damaged and could not be read."),
+                NSLocalizedRecoverySuggestionErrorKey: LF("The problem is near line %d.", parser.lineNumber),
+            ]
+            if let underlying = parser.parserError { info[NSUnderlyingErrorKey] = underlying }
+            throw NSError(domain: "FreeMind", code: 21, userInfo: info)
         }
         let root: Topic
         if importer.roots.count == 1 {
@@ -84,14 +89,33 @@ final class OPMLImporter: NSObject, XMLParserDelegate {
         switch name.lowercased() {
         case "title": inTitle = stack.isEmpty
         case "outline":
-            var t = Topic(title: attributes["text"] ?? attributes["title"] ?? "")
-            t.note = attributes["_note"] ?? ""
+            let (title, bold) = Self.cleanTitle(attributes["text"] ?? attributes["title"] ?? "")
+            var t = Topic(title: title)
+            if bold { t.style.bold = true }
+            t.note = (attributes["_note"] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
             if let url = attributes["url"] ?? attributes["htmlUrl"] ?? attributes["xmlUrl"], !url.isEmpty { t.link = url }
             t.collapsed = attributes["_collapsed"] == "true"
+            // Workflowy 用 _complete 标记已完成的条目
+            if attributes["_complete"] == "true" { t.markers = [MarkerID("task-100")] }
             stack.append(t)
         default: break
         }
     }
+
+    /// 其他大纲软件会把格式写进文字：Workflowy 用 HTML 标签（`<b>粗体</b>`），Logseq 用 Markdown（`**粗体**`）。
+    /// 去掉常见的格式标签和首尾空白；整行都是粗体时改为主题的粗体样式。
+    static func cleanTitle(_ raw: String) -> (title: String, bold: Bool) {
+        var text = formattingTags.stringByReplacingMatches(in: raw, range: NSRange(raw.startIndex..., in: raw), withTemplate: "")
+        text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        for mark in ["**", "__"] where text.count > mark.count * 2 && text.hasPrefix(mark) && text.hasSuffix(mark) {
+            let inner = String(text.dropFirst(mark.count).dropLast(mark.count))
+            if !inner.contains(mark) { return (inner.trimmingCharacters(in: .whitespaces), true) }
+        }
+        return (text, false)
+    }
+
+    private static let formattingTags = try! NSRegularExpression(
+        pattern: "</?(b|i|u|s|em|strong|span|mark|code|strike|del|a|br)\\b[^>]*>", options: [.caseInsensitive])
 
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         if inTitle { headTitle += string }
@@ -102,6 +126,8 @@ final class OPMLImporter: NSObject, XMLParserDelegate {
         case "title": inTitle = false
         case "outline":
             guard let t = stack.popLast() else { return }
+            // 什么都没有的空条目（Logseq 页面开头常有一个只含换行的块）不导入
+            if t.title.isEmpty, t.children.isEmpty, t.note.isEmpty, t.link == nil, t.markers.isEmpty { return }
             if stack.isEmpty { roots.append(t) } else { stack[stack.count - 1].children.append(t) }
         default: break
         }

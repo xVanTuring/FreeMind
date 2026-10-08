@@ -98,26 +98,54 @@ enum XMindImporter {
             t.markers = convertMarkers(markers.compactMap { $0["markerId"] as? String })
         }
         if (dict["branch"] as? String) == "folded" { t.collapsed = true }
-        if let image = dict["image"] as? [String: Any], let src = image["src"] as? String, src.hasPrefix("xap:") {
-            let path = String(src.dropFirst(4))
-            if let data = archiveFile(path, in: archive), let img = NSImage(data: data) {
-                let id = UUID()
-                let name = (path as NSString).lastPathComponent
-                resources[id] = ResourceFile(name: name, data: data)
-                var w = (image["width"] as? Double) ?? Double(img.size.width)
-                var h = (image["height"] as? Double) ?? Double(img.size.height)
-                let longest = max(w, h, 1)
-                if longest > 300 { w = w * 300 / longest; h = h * 300 / longest }
-                t.image = TopicImage(id: id, name: name, width: w.rounded(), height: h.rounded())
-            }
+        if let image = dict["image"] as? [String: Any], let src = image["src"] as? String {
+            t.image = importImage(src, width: image["width"] as? Double, height: image["height"] as? Double,
+                                  archive: archive, resources: &resources)
         }
         if let children = dict["children"] as? [String: Any] {
-            let attached = (children["attached"] as? [[String: Any]]) ?? []
-            // 自由主题（detached）没有对应概念，挂到中心主题末尾
-            let detached = (children["detached"] as? [[String: Any]]) ?? []
-            t.children = (attached + detached).map { topic(fromJSON: $0, archive: archive, resources: &resources, idMap: &idMap) }
+            t.children = childKinds.flatMap { (children[$0] as? [[String: Any]]) ?? [] }
+                .map { topic(fromJSON: $0, archive: archive, resources: &resources, idMap: &idMap) }
         }
+        applyBoundaries(((dict["boundaries"] as? [[String: Any]]) ?? []).compactMap { $0["range"] as? String }, to: &t)
         return t
+    }
+
+    /// 子主题的种类和导入后的顺序。FreeMind 没有标注（callout）、概要（summary）、自由主题（detached），
+    /// 为了不丢内容，都当作普通子主题接在后面（自由主题挂在中心主题末尾）。
+    private static let childKinds = ["attached", "callout", "summary", "detached"]
+
+    /// 导入主题图片（`xap:` 开头的包内路径）。显示尺寸按原图或 XMind 记录的尺寸，最长边不超过 300。
+    private static func importImage(_ src: String, width: Double?, height: Double?, archive: URL,
+                                    resources: inout [UUID: ResourceFile]) -> TopicImage? {
+        guard src.hasPrefix("xap:") else { return nil }
+        let path = String(src.dropFirst(4))
+        guard let data = archiveFile(path, in: archive), let img = NSImage(data: data) else { return nil }
+        let id = UUID()
+        let name = (path as NSString).lastPathComponent
+        resources[id] = ResourceFile(name: name, data: data)
+        var w = width ?? Double(img.size.width)
+        var h = height ?? Double(img.size.height)
+        let longest = max(w, h, 1)
+        if longest > 300 { w = w * 300 / longest; h = h * 300 / longest }
+        return TopicImage(id: id, name: name, width: max(w.rounded(), 1), height: max(h.rounded(), 1))
+    }
+
+    /// XMind 的外框写在父主题上：`(i,j)` 框住第 i…j 个子主题，`master` 框住主题本身。
+    /// FreeMind 的外框是“框住一个主题及其整个分支”：框住单个子主题时完全对应；框住多个时给其中每个子主题各加一个外框。
+    static func applyBoundaries(_ ranges: [String], to t: inout Topic) {
+        for range in ranges {
+            if range == "master" {
+                t.style.boundary = true
+                continue
+            }
+            let bounds = range.trimmingCharacters(in: CharacterSet(charactersIn: "() "))
+                .split(separator: ",").compactMap { Int($0.trimmingCharacters(in: .whitespaces)) }
+            guard bounds.count == 2, !t.children.isEmpty else { continue }
+            let lower = max(0, min(bounds[0], bounds[1]))
+            let upper = min(t.children.count - 1, max(bounds[0], bounds[1]))
+            guard lower <= upper else { continue }
+            for i in lower...upper { t.children[i].style.boundary = true }
+        }
     }
 
     // MARK: - XMind 8 XML
@@ -125,20 +153,59 @@ enum XMindImporter {
     private static func parseXML(_ data: Data, archive: URL, fallbackTitle: String) throws -> [ImportResult] {
         let doc = try XMLDocument(data: data, options: [])
         guard let root = doc.rootElement() else { throw importError(L("This file does not look like an XMind workbook.")) }
+        let comments = loadComments(in: archive)
         var results: [ImportResult] = []
         for sheet in root.children?.compactMap({ $0 as? XMLElement }).filter({ $0.localName == "sheet" }) ?? [] {
             guard let topicElement = child(sheet, "topic") else { continue }
             var resources: [UUID: ResourceFile] = [:]
-            let rootTopic = topic(fromXML: topicElement, archive: archive, resources: &resources)
+            var idMap: [String: UUID] = [:]
+            let rootTopic = topic(fromXML: topicElement, archive: archive, resources: &resources, idMap: &idMap)
             var map = MindMap(root: rootTopic,
                               structure: structure(from: topicElement.attribute(forName: "structure-class")?.stringValue),
                               theme: Preferences.shared.defaultTheme)
             map.root.collapsed = false
+            for rel in child(sheet, "relationships").map({ children($0, "relationship") }) ?? [] {
+                guard let a = attribute(rel, "end1").flatMap({ idMap[$0] }),
+                      let b = attribute(rel, "end2").flatMap({ idMap[$0] }), a != b else { continue }
+                map.relationships.append(Relationship(from: a, to: b, title: child(rel, "title")?.stringValue ?? ""))
+            }
+            for (xmindID, lines) in comments {
+                guard let id = idMap[xmindID] else { continue }
+                _ = map.update(id) { t in
+                    let section = L("Comments") + "\n" + lines.joined(separator: "\n")
+                    t.note = t.note.isEmpty ? section : t.note + "\n\n" + section
+                }
+            }
             let title = child(sheet, "title")?.stringValue ?? fallbackTitle
             results.append(ImportResult(map: map, resources: resources, title: title))
         }
         guard !results.isEmpty else { throw importError(L("The XMind file contains no maps.")) }
         return results
+    }
+
+    /// XMind 8 的批注单独存在 comments.xml 里（object-id 指向主题）。FreeMind 没有批注，导入时追加到主题备注末尾。
+    /// 返回：主题 id → 每条批注一行（作者、时间、内容）。
+    private static func loadComments(in archive: URL) -> [String: [String]] {
+        guard let data = archiveFile("comments.xml", in: archive),
+              let doc = try? XMLDocument(data: data, options: []), let root = doc.rootElement() else { return [:] }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        var result: [String: [String]] = [:]
+        for comment in children(root, "comment") {
+            guard let objectID = attribute(comment, "object-id") else { continue }
+            let content = (child(comment, "content")?.stringValue ?? "")
+                .replacingOccurrences(of: "\r\n", with: "\n").replacingOccurrences(of: "\r", with: "\n")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !content.isEmpty else { continue }
+            var byline = attribute(comment, "author") ?? ""
+            if let ms = attribute(comment, "time").flatMap(Double.init) {
+                let date = formatter.string(from: Date(timeIntervalSince1970: ms / 1000))
+                byline = byline.isEmpty ? date : "\(byline), \(date)"
+            }
+            result[objectID, default: []].append(byline.isEmpty ? "• \(content)" : "• \(byline): \(content)")
+        }
+        return result
     }
 
     private static func child(_ e: XMLElement, _ name: String) -> XMLElement? {
@@ -149,8 +216,15 @@ enum XMindImporter {
         e.children?.compactMap { $0 as? XMLElement }.filter { $0.localName == name } ?? []
     }
 
-    private static func topic(fromXML e: XMLElement, archive: URL, resources: inout [UUID: ResourceFile]) -> Topic {
+    /// 按本地名取属性，不管命名空间前缀（`xlink:href`、`xhtml:src`、`svg:width`）。
+    private static func attribute(_ e: XMLElement, _ name: String) -> String? {
+        e.attributes?.first { $0.localName == name }?.stringValue
+    }
+
+    private static func topic(fromXML e: XMLElement, archive: URL, resources: inout [UUID: ResourceFile],
+                              idMap: inout [String: UUID]) -> Topic {
         var t = Topic(title: child(e, "title")?.stringValue ?? "")
+        if let xmindID = attribute(e, "id") { idMap[xmindID] = t.id }
         if let notes = child(e, "notes"), let plain = child(notes, "plain") {
             t.note = (plain.stringValue ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         }
@@ -174,10 +248,22 @@ enum XMindImporter {
             t.markers = convertMarkers(children(refs, "marker-ref").compactMap { $0.attribute(forName: "marker-id")?.stringValue })
         }
         if e.attribute(forName: "branch")?.stringValue == "folded" { t.collapsed = true }
+        if let img = child(e, "img"), let src = attribute(img, "src") {
+            t.image = importImage(src, width: attribute(img, "width").flatMap(Double.init),
+                                  height: attribute(img, "height").flatMap(Double.init), archive: archive, resources: &resources)
+        }
         if let c = child(e, "children") {
-            for topics in children(c, "topics") {
-                t.children += children(topics, "topic").map { topic(fromXML: $0, archive: archive, resources: &resources) }
+            let groups = children(c, "topics")
+            for kind in childKinds {
+                for topics in groups where (attribute(topics, "type") ?? "attached") == kind {
+                    t.children += children(topics, "topic").map {
+                        topic(fromXML: $0, archive: archive, resources: &resources, idMap: &idMap)
+                    }
+                }
             }
+        }
+        if let boundaries = child(e, "boundaries") {
+            applyBoundaries(children(boundaries, "boundary").compactMap { attribute($0, "range") }, to: &t)
         }
         return t
     }
@@ -195,7 +281,11 @@ enum XMindImporter {
 
     static func convertMarkers(_ ids: [String]) -> [MarkerID] {
         var result: [MarkerID] = []
-        for id in ids {
+        for raw in ids {
+            // XMind 8 的自定义符号组写作 `c_simbol-right`，新版写作 `c_symbol_like`，统一成 `symbol-right` / `symbol-like`
+            var id = raw
+            if id.hasPrefix("c_simbol") || id.hasPrefix("c_symbol") { id = "symbol" + id.dropFirst(8) }
+            id = id.replacingOccurrences(of: "_", with: "-")
             var mapped: String?
             if id.hasPrefix("priority-"), let n = Int(id.dropFirst(9)) {
                 mapped = "priority-\(min(max(n, 1), 6))"
@@ -214,6 +304,7 @@ enum XMindImporter {
                 let table: [String: String] = ["question": "question", "exclam": "important", "attention": "important",
                                                "wrong": "cross", "right": "check", "idea": "idea", "info": "idea",
                                                "heart": "heart", "thumbs-up": "like", "thumbs-down": "dislike",
+                                               "like": "like", "dislike": "dislike",
                                                "pin": "pin", "time": "time", "money": "money"]
                 if let k = table[String(id.dropFirst(7))] { mapped = "symbol-\(k)" }
             } else if id.hasPrefix("people-") {

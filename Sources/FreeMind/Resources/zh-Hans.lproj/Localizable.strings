@@ -465,6 +465,11 @@
 "Change Theme…" = "更换风格…";
 "Remove individual formatting so the topic follows the theme." = "清除单独设置的格式，让主题恢复为风格默认样式。";
 
+/* 导入 */
+"Comments" = "批注";
+"This OPML file is damaged and could not be read." = "这个 OPML 文件已损坏，无法读取。";
+"The problem is near line %d." = "问题出在第 %d 行附近。";
+
 /* 欢迎窗口 */
 "Welcome to FreeMind" = "欢迎使用 FreeMind";
 "Version %@" = "版本 %@";
