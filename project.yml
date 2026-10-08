@@ -57,6 +57,13 @@ targets:
         CODE_SIGN_ENTITLEMENTS: Sources/FreeMind/Resources/FreeMind.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_FILE: Sources/FreeMind/Resources/Info.plist
+      configs:
+        # 双击 .fmind 时系统优先用 Owner 的 App：开发用的 Debug 版只登记为 Alternate，
+        # 装了正式版就不会被 Debug 版抢走（没装正式版时 Debug 版照样能打开）。
+        Debug:
+          FMIND_HANDLER_RANK: Alternate
+        Release:
+          FMIND_HANDLER_RANK: Owner
     info:
       path: Sources/FreeMind/Resources/Info.plist
       properties:
@@ -87,7 +94,7 @@ targets:
         CFBundleDocumentTypes:
           - CFBundleTypeName: FreeMind Mind Map
             CFBundleTypeRole: Editor
-            LSHandlerRank: Owner
+            LSHandlerRank: "$(FMIND_HANDLER_RANK)"
             LSTypeIsPackage: true
             LSItemContentTypes: [tech.xvanturing.freemind.map]
             NSDocumentClass: $(PRODUCT_MODULE_NAME).MindMapDocument

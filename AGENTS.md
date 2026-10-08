@@ -22,6 +22,8 @@ build/DerivedData/Build/Products/Debug/FreeMind.app/Contents/MacOS/FreeMind   # 
   上次用的来源：tobyqin/xmindparser 的 tests/*.xmind（XMind 8 Pro / Zen / 2026）、zhuifengshen/xmind 的 docs/*.xmind、
   hosting.opml.org/dave/spec/*.opml、Workflowy / Logseq / MultiMarkdown 导出的 OPML。固定下来的规则在 `ImportCompatibilityTests`。
 - 单元测试以 App 为宿主运行；`AppDelegate.isRunningTests` 为真时不弹任何窗口。
+- Debug 版把 .fmind 登记为 `Alternate`、Release 版为 `Owner`（`project.yml` 的 `FMIND_HANDLER_RANK`）：
+  装了正式版时，双击 .fmind 不会被开发用的 Debug 版打开。
 - 新增界面文字后跑 `scripts/check-strings.sh`，确保 `zh-Hans.lproj/Localizable.strings` 有对应翻译。
 
 ## 关键设计
