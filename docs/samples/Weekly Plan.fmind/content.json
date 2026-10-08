@@ -1,0 +1,173 @@
+{
+  "generator" : "FreeMind 1.0.0",
+  "version" : 1,
+  "format" : "freemind",
+  "map" : {
+    "structure" : "tree",
+    "theme" : {
+      "lineStyle" : "roundedElbow",
+      "central" : {
+        "padH" : 26,
+        "shape" : "capsule",
+        "borderWidth" : 0,
+        "border" : "none",
+        "fill" : "#0F766E",
+        "radius" : 6,
+        "padV" : 13,
+        "weight" : "semibold",
+        "fontSize" : 22,
+        "text" : "#FFFFFF"
+      },
+      "name" : "Fresh",
+      "branchColors" : [
+        "#14B8A6",
+        "#0EA5E9",
+        "#22C55E",
+        "#6366F1",
+        "#F97316"
+      ],
+      "sub" : {
+        "padH" : 10,
+        "shape" : "roundedRect",
+        "borderWidth" : 0,
+        "border" : "none",
+        "fill" : "branch-soft",
+        "radius" : 6,
+        "padV" : 5,
+        "weight" : "regular",
+        "fontSize" : 13.5,
+        "text" : "#1F2937"
+      },
+      "linePaint" : "branch",
+      "lineWidth" : 1.5,
+      "main" : {
+        "padH" : 14,
+        "shape" : "roundedRect",
+        "borderWidth" : 1.5,
+        "border" : "branch",
+        "fill" : "#FFFFFF",
+        "radius" : 8,
+        "padV" : 8,
+        "weight" : "medium",
+        "fontSize" : 16,
+        "text" : "#134E4A"
+      },
+      "mainLineWidth" : 2,
+      "background" : "#F4FBF8",
+      "id" : "fresh"
+    },
+    "root" : {
+      "title" : "This Week",
+      "id" : "77BC8FB3-BD19-4D25-8BC8-22907964719A",
+      "children" : [
+        {
+          "children" : [
+            {
+              "markers" : [
+                "star-yellow"
+              ],
+              "id" : "D221512D-1A45-4DDC-97E0-185605333F2E",
+              "title" : "Most important outcome"
+            }
+          ],
+          "title" : "Focus",
+          "id" : "A6C7BD26-6F66-4A95-BB63-C1853E8ACB49"
+        },
+        {
+          "children" : [
+            {
+              "id" : "6A67C0D0-EA3A-4DE3-9730-9F7E07242752",
+              "markers" : [
+                "task-0"
+              ],
+              "title" : "Task"
+            }
+          ],
+          "title" : "Monday",
+          "id" : "1FA0FB9A-82D9-4516-A4D4-85D9DEF66B84"
+        },
+        {
+          "children" : [
+            {
+              "title" : "Task",
+              "id" : "2AC1988F-6E04-47AE-9693-6636F9E7DFC7",
+              "markers" : [
+                "task-0"
+              ]
+            }
+          ],
+          "title" : "Tuesday",
+          "id" : "1A2649EA-844E-4C3F-B176-56428FD8D1D1"
+        },
+        {
+          "children" : [
+            {
+              "title" : "Task",
+              "markers" : [
+                "task-0"
+              ],
+              "id" : "559E5958-FC38-4A9C-891A-176A72C3998F"
+            }
+          ],
+          "title" : "Wednesday",
+          "id" : "C159958F-2FF3-4B43-ABD4-A6813D252417"
+        },
+        {
+          "children" : [
+            {
+              "id" : "0EFC4991-5C8B-42E9-89BF-00939483F737",
+              "markers" : [
+                "task-0"
+              ],
+              "title" : "Task"
+            }
+          ],
+          "title" : "Thursday",
+          "id" : "81DA10E7-2E2E-465D-B93F-56BAB63DC235"
+        },
+        {
+          "children" : [
+            {
+              "markers" : [
+                "task-0"
+              ],
+              "title" : "Task",
+              "id" : "ECAB6BC9-DE9C-41B1-B130-6AC06B3597E4"
+            }
+          ],
+          "title" : "Friday",
+          "id" : "3F41069C-62C3-4FC2-8BAD-12A2A2D0B4E1"
+        },
+        {
+          "children" : [
+            {
+              "title" : "Task",
+              "id" : "CB995AF4-F6B2-4FCF-82DF-D32F54456575",
+              "markers" : [
+                "task-0"
+              ]
+            }
+          ],
+          "title" : "Weekend",
+          "id" : "0E16B7FC-15E6-4586-A298-ED96DFD1C237"
+        },
+        {
+          "children" : [
+            {
+              "title" : "What went well",
+              "id" : "BD1A4E5E-40D2-4280-BBF4-4898C1A62C5E"
+            },
+            {
+              "title" : "What to improve",
+              "id" : "07379342-52FA-4D3F-868E-9EC514A4CEB8"
+            }
+          ],
+          "title" : "Review",
+          "id" : "8284AD0B-B6C9-4DC1-B416-EEA24B7BAB06"
+        }
+      ]
+    },
+    "spacing" : "standard",
+    "topicMaxWidth" : 260
+  }
+}

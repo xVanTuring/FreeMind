@@ -1,0 +1,183 @@
+{
+  "map" : {
+    "structure" : "logic-right",
+    "theme" : {
+      "main" : {
+        "fontSize" : 16,
+        "padV" : 8,
+        "text" : "auto",
+        "shape" : "roundedRect",
+        "borderWidth" : 0,
+        "weight" : "medium",
+        "padH" : 14,
+        "radius" : 8,
+        "border" : "none",
+        "fill" : "branch"
+      },
+      "branchColors" : [
+        "#1E6FD9",
+        "#0E9AA7",
+        "#3D5A80",
+        "#2A9D8F",
+        "#4361EE",
+        "#118AB2"
+      ],
+      "background" : "#F2F7FC",
+      "lineStyle" : "curve",
+      "linePaint" : "branch",
+      "mainLineWidth" : 2.5,
+      "central" : {
+        "fontSize" : 24,
+        "padV" : 14,
+        "text" : "#FFFFFF",
+        "shape" : "roundedRect",
+        "borderWidth" : 0,
+        "weight" : "semibold",
+        "padH" : 24,
+        "radius" : 12,
+        "border" : "none",
+        "fill" : "#0B3954"
+      },
+      "name" : "Ocean",
+      "sub" : {
+        "fontSize" : 13.5,
+        "padV" : 5,
+        "text" : "#0B2540",
+        "shape" : "roundedRect",
+        "borderWidth" : 0,
+        "weight" : "regular",
+        "padH" : 10,
+        "radius" : 6,
+        "border" : "none",
+        "fill" : "branch-soft"
+      },
+      "id" : "ocean",
+      "lineWidth" : 1.5
+    },
+    "root" : {
+      "children" : [
+        {
+          "title" : "Goals",
+          "id" : "B16B87E9-F265-4141-BE66-ED93DAA05EDB",
+          "children" : [
+            {
+              "id" : "44DB2DE8-C284-41A1-AE48-70EDD8094728",
+              "title" : "Business goal"
+            },
+            {
+              "id" : "B230CDFA-1CBA-4547-9816-F7F414117216",
+              "title" : "Success metrics"
+            }
+          ]
+        },
+        {
+          "title" : "Scope",
+          "id" : "55333352-C0B7-4CEA-9999-6E5AFD1E0DA7",
+          "children" : [
+            {
+              "id" : "F98F48C4-331D-48C6-9DCD-239955B84542",
+              "title" : "In scope"
+            },
+            {
+              "id" : "2720EB3C-D603-4916-88FF-E32C6935DA8A",
+              "title" : "Out of scope"
+            }
+          ]
+        },
+        {
+          "title" : "Milestones",
+          "id" : "0FC5EB75-84A7-4EFB-B4B0-0B75ACD219FE",
+          "children" : [
+            {
+              "id" : "4FB316A7-69B8-4854-9593-DF95092CD2BC",
+              "markers" : [
+                "task-100"
+              ],
+              "title" : "Kick-off"
+            },
+            {
+              "id" : "4BBD8A57-4D2E-412C-8117-B2EEB287BE79",
+              "markers" : [
+                "task-50"
+              ],
+              "title" : "Design"
+            },
+            {
+              "id" : "D1F09AEA-5298-46AD-9A35-2FC724ADF113",
+              "markers" : [
+                "task-0"
+              ],
+              "title" : "Build"
+            },
+            {
+              "id" : "52214AB6-4F72-43A0-A913-FB1E8B73BAD4",
+              "markers" : [
+                "task-0",
+                "flag-red"
+              ],
+              "title" : "Launch"
+            }
+          ]
+        },
+        {
+          "title" : "Team",
+          "id" : "B873ACDE-81D2-482F-BEA5-F0DFC9FC03E3",
+          "children" : [
+            {
+              "title" : "Owner",
+              "markers" : [
+                "symbol-person"
+              ],
+              "id" : "580880A3-0A16-49AC-BA08-4E58A858C5F1"
+            },
+            {
+              "title" : "Members",
+              "id" : "DD98AA2F-3E64-4198-82E6-896C3D9895F7"
+            }
+          ]
+        },
+        {
+          "title" : "Risks",
+          "id" : "3781AA1C-BCA8-4468-81C9-A7CFEA3458D6",
+          "children" : [
+            {
+              "markers" : [
+                "priority-1"
+              ],
+              "id" : "898DF5DB-027C-4B03-8BF5-7803BC0D439C",
+              "title" : "Risk 1"
+            },
+            {
+              "id" : "675F2CD1-0696-4EA5-B350-412F0F647C75",
+              "title" : "Mitigation"
+            }
+          ]
+        },
+        {
+          "title" : "Resources",
+          "id" : "AD1CF826-AEC9-4F25-AC0C-D8550B61BBAF",
+          "children" : [
+            {
+              "title" : "Budget",
+              "id" : "66795574-1744-4A18-924B-4740894272DB",
+              "markers" : [
+                "symbol-money"
+              ]
+            },
+            {
+              "title" : "Tools",
+              "id" : "88A2D0DE-2C1F-4CA3-968F-5C1E8C7EC6AD"
+            }
+          ]
+        }
+      ],
+      "title" : "Project Plan",
+      "id" : "0342E3EB-DD4A-498E-BB07-BAEBF252021C"
+    },
+    "spacing" : "standard",
+    "topicMaxWidth" : 260
+  },
+  "version" : 1,
+  "generator" : "FreeMind 1.0.0",
+  "format" : "freemind"
+}

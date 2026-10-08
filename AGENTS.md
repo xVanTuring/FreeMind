@@ -14,6 +14,9 @@ build/DerivedData/Build/Products/Debug/FreeMind.app/Contents/MacOS/FreeMind   # 
 
 - 渲染目检：`TEST_RUNNER_FREEMIND_RENDER_DIR=<目录> xcodebuild … test` 会把五种结构、全部风格、全部模板、检查器各页、
   模板库、设置窗口渲染成 PNG 写到该目录（`RenderSnapshotTests`），并生成一份带附件的 `sample.fmind`。
+- README 配图：`TEST_RUNNER_FREEMIND_SHOWCASE_DIR=<目录> xcodebuild … test -only-testing:FreeMindTests/ShowcaseTests`
+  生成示例导图（`docs/samples/` 里的就是它生成的）和 `structures.png`、`themes.png` 两张拼图；窗口截图（hero、welcome、
+  gallery、colors）是打开示例导图后用 `screencapture -l <窗口号>` 截的。README 有英文（`README.md`）和中文（`README.zh-CN.md`）两份，改一份要同步另一份。
 - 单元测试以 App 为宿主运行；`AppDelegate.isRunningTests` 为真时不弹任何窗口。
 - 新增界面文字后跑 `scripts/check-strings.sh`，确保 `zh-Hans.lproj/Localizable.strings` 有对应翻译。
 

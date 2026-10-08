@@ -1,100 +1,148 @@
-# FreeMind
+<p align="center">
+  <img src="Sources/FreeMind/Resources/Assets.xcassets/AppIcon.appiconset/icon_256.png" width="128" alt="FreeMind icon">
+</p>
 
-macOS 原生的思维导图应用，操作方式参照 XMind，键盘就能完成大部分编辑。
+<h1 align="center">FreeMind</h1>
 
-![主窗口](docs/images/window.png)
+<p align="center">
+  A native macOS mind-mapping app inspired by XMind. Most editing is done from the keyboard.<br>
+  <b>English</b> · <a href="README.zh-CN.md">简体中文</a>
+</p>
 
-## 功能
+![Main window with a sample map and the format panel](docs/images/hero.png)
 
-- **五种结构**：思维导图（左右平衡）、逻辑图（向右 / 向左）、组织结构图、树状图，随时切换
-- **12 套内置风格**：经典、彩虹、清新、海洋、森林、日落、糖果、商务、极简、纸墨、午夜、石墨；可以调整背景、分支配色、字体、线宽后存为自定义风格
-- **主题内容**：备注、超链接、附件、主题图片、标签、优先级 / 进度 / 旗帜 / 星星 / 符号标记、外框、联系线（带标签和可拖动的弧度）
-- **单独样式**：形状（圆角矩形、矩形、胶囊、椭圆、菱形、下划线、无边框）、填充、边框、文字颜色、字号、粗体斜体、分支颜色，支持拷贝 / 粘贴样式
-- **折叠状态随文件保存**，再次打开自动恢复；也会记住上次的缩放比例、位置和选中项
-- **专属 `.fmind` 格式**：macOS 包格式，附件直接存在文件里，移动、分享不丢附件（[格式说明](docs/format.md)）
-- **导入**：Markdown、OPML、XMind（新版和 XMind 8）、纯文本缩进大纲
-- **导出**：Markdown（可连同附件导出到文件夹）、OPML、PNG、PDF，以及打印
-- **欢迎窗口**：启动时列出最近打开的导图（带缩略图），单击即可打开；右键 Dock 图标可以新建、打开
-- **模板**：新建（⌘N）时打开模板库，内置快速上手、项目计划、会议记录、SWOT、周计划、读书笔记、头脑风暴、决策分析、组织架构；任何导图都可以“存为模板”
-- **查找**：⌘F 查找主题文字、标签和备注，自动展开被折叠的分支
-- **原生体验**：自动保存、版本浏览、撤销 / 重做、窗口标签页、全屏、中文输入法行内组字、深色模式界面
-- **Finder 集成**：Quick Look 扩展提供 .fmind 文件缩略图和空格预览（矢量 PDF）
-- 中英文界面（跟随系统语言）
+## Features
 
-| 组织结构图 | 树状图 | 纸墨风格 | 午夜风格 |
-|---|---|---|---|
-| ![](docs/images/org-chart.png) | ![](docs/images/tree.png) | ![](docs/images/theme-paper.png) | ![](docs/images/theme-midnight.png) |
+### Mapping
 
-## 常用操作
+- **Five structures**: mind map (balanced), logic chart (right / left), org chart and tree chart. Switch at any time.
+- **12 built-in themes**: Classic, Rainbow, Fresh, Ocean, Forest, Sunset, Candy, Business, Minimal, Ink & Paper, Midnight and Graphite. Adjust the background, branch colors, font and line width, then save the result as your own theme.
+- **Topic content**: notes, hyperlinks, attachments, images, labels, markers (priority, progress, flags, stars, symbols), boundaries, and relationships with labels and adjustable curves.
+- **Per-topic styling**: shape (rounded rectangle, rectangle, capsule, ellipse, diamond, underline, no border), fill, border, text color, font size, bold / italic and branch color. Styles can be copied and pasted.
+- **Keyboard first**: Tab adds a subtopic, Return adds a sibling, and typing on a selected topic edits it. Input methods compose text in place.
+- **Find**: ⌘F searches topic text, labels and notes, and expands collapsed branches to show matches.
 
-| 操作 | 快捷键 |
+### Files
+
+- **Own `.fmind` format**: a macOS package that keeps attachments inside the file, so nothing gets lost when you move or share it ([format spec, in Chinese](docs/format.md)).
+- **Collapsed branches are saved in the file** and restored when you reopen it, along with the zoom level, scroll position and selection.
+- **Import**: Markdown, OPML, XMind (current format and XMind 8) and plain indented outlines.
+- **Export**: Markdown (optionally with attachments copied to a folder), OPML, PNG and PDF, plus printing.
+- **Finder integration**: a Quick Look extension provides thumbnails and space-bar previews for `.fmind` files.
+
+### App
+
+- **Welcome window**: lists recent maps with thumbnails; click one to open it. Right-click the Dock icon for New Map and Open.
+- **Template gallery**: ⌘N lets you start from a blank map or a template. Any map can be saved as a template.
+- **Native macOS behavior**: autosave, version browsing, undo / redo, window tabs, full screen and dark mode.
+- English and Simplified Chinese interface, following the system language.
+
+## Screenshots
+
+### Welcome window
+
+Recent maps are listed at launch. Click one to continue where you left off.
+
+![Welcome window](docs/images/welcome.png)
+
+### Template gallery
+
+Templates include Getting Started, Project Plan, Meeting Notes, SWOT Analysis, Weekly Plan, Book Notes, Brainstorm, Decision Making and Org Chart.
+
+![Template gallery](docs/images/gallery.png)
+
+### Format panel
+
+One setting per row; colors open in a palette with the theme default, preset colors, and the system color panel for anything else.
+
+<img src="docs/images/colors.png" width="620" alt="Color palette in the format panel">
+
+### Five structures
+
+![Five structures](docs/images/structures.png)
+
+### Built-in themes (selection)
+
+![Built-in themes](docs/images/themes.png)
+
+## Keyboard shortcuts
+
+| Action | Shortcut |
 |---|---|
-| 插入子主题 | Tab |
-| 插入同级主题 | Return |
-| 在前面插入主题 | ⇧Return |
-| 插入父主题 | ⌘Return |
-| 编辑文字 | 空格 / F2 / 双击，或选中后直接打字 |
-| 编辑时换行 | ⇧Return |
-| 删除主题 | ⌫（⌥⌫ 只删主题、保留子主题） |
-| 移动选中项 | 方向键（加 ⇧ 扩展选择） |
-| 调整顺序 / 升降级 | ⌥↑ ⌥↓ / ⌥← ⌥→ |
-| 折叠 / 展开分支 | ⌘/（⌥⌘/ 全部展开，⌃⌘/ 全部折叠） |
-| 移动主题 | 直接拖动（按住 ⌥ 拖动为复制） |
-| 备注 / 超链接 / 附件 / 图片 / 标签 | ⌥⌘N / ⌘K / ⌥⌘A / ⇧⌘I / ⇧⌘L |
-| 优先级 | ⌘1 … ⌘6 |
-| 联系线 | ⌘L，再点目标主题（选中两个主题时直接连接） |
-| 外框 | ⌥⌘B |
-| 缩放 | ⌘+ ⌘- ⌘0，⌘9 缩放到合适大小，⌘ + 滚轮 |
-| 格式面板 | ⌥⌘I |
-| 欢迎窗口（最近打开） | ⇧⌘1 |
-| 平移画布 | 触控板滚动，或按住 ⌥ 拖动空白处 |
+| Insert subtopic | Tab |
+| Insert sibling topic | Return |
+| Insert topic before | ⇧Return |
+| Insert parent topic | ⌘Return |
+| Edit text | Space / F2 / double-click, or just start typing |
+| New line while editing | ⇧Return |
+| Delete topic | ⌫ (⌥⌫ deletes the topic but keeps its subtopics) |
+| Move selection | Arrow keys (add ⇧ to extend) |
+| Reorder / promote / demote | ⌥↑ ⌥↓ / ⌥← ⌥→ |
+| Collapse / expand branch | ⌘/ (⌥⌘/ expand all, ⌃⌘/ collapse all) |
+| Move topic | Drag it (hold ⌥ to copy) |
+| Note / link / attachment / image / labels | ⌥⌘N / ⌘K / ⌥⌘A / ⇧⌘I / ⇧⌘L |
+| Priority | ⌘1 … ⌘6 |
+| Relationship | ⌘L, then click the target topic (or select two topics first) |
+| Boundary | ⌥⌘B |
+| Zoom | ⌘+ ⌘- ⌘0, ⌘9 zoom to fit, ⌘ + scroll |
+| Format panel | ⌥⌘I |
+| New / open | ⌘N (opens the template gallery) / ⌘O |
+| Welcome window (recent maps) | ⇧⌘1 |
+| Pan the canvas | Scroll on the trackpad, or hold ⌥ and drag empty space |
 
-完整列表见菜单“帮助 ▸ 快捷键”。第一次启动会打开“快速上手”导图，以后可以从“帮助 ▸ 快速上手”再次打开。
+See Help ▸ Keyboard Shortcuts for the full list. The Getting Started map opens on first launch and is always available from Help ▸ Getting Started.
 
-## 构建
+## Sample maps
 
-需要 Xcode 16 以上、[XcodeGen](https://github.com/yonaskolb/XcodeGen)。最低支持 macOS 14。
+[`docs/samples/`](docs/samples) contains the maps used for the screenshots above. Open them in FreeMind to explore.
+
+## Building
+
+Requires macOS 14 or later, Xcode 16 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
 ```sh
-xcodegen                      # 由 project.yml 生成 FreeMind.xcodeproj
-xcodebuild -project FreeMind.xcodeproj -scheme FreeMind -configuration Debug build
+xcodegen                      # generates FreeMind.xcodeproj from project.yml
+xcodebuild -project FreeMind.xcodeproj -scheme FreeMind -configuration Release build
 xcodebuild -project FreeMind.xcodeproj -scheme FreeMind test
 ```
 
-其他脚本：
+Local builds are ad-hoc signed and run directly.
 
-- `scripts/make-icon.sh`：把 `Sources/FreeMind/Resources/AppIcon.svg` 栅格化为应用图标（需要 `rsvg-convert`）
-- `scripts/check-strings.sh`：检查所有界面文字是否都有中文翻译
+Helper scripts:
 
-## 项目结构
+- `scripts/make-icon.sh` renders `Sources/FreeMind/Resources/AppIcon.svg` into the app icon set (requires `rsvg-convert`).
+- `scripts/check-strings.sh` checks that every UI string has a Chinese translation.
+
+## Project layout
 
 ```
 Sources/FreeMind/
-├─ App/            启动、主菜单、文档控制器（新建走模板库、打开 Markdown/OPML/XMind 走导入）
-├─ Model/          主题树、标记、联系线（值类型，撤销直接保存快照）
-├─ Theme/          颜色描述、风格定义、内置风格、自定义风格库
-├─ Layout/         样式解析、文字测量、五种结构的布局算法
-├─ Canvas/         画布视图（绘制、选择、行内编辑、拖放、联系线交互）、渲染器、弹出编辑框
-├─ Document/       NSDocument 子类、.fmind 包读写、附件存储、导出
-├─ Editor/         编辑核心 MapEditor（所有修改与撤销）、窗口、工具栏、查找栏、状态栏
-├─ Inspector/      右侧格式面板（样式 / 导图 / 标记 / 内容）
-├─ ImportExport/   Markdown、OPML、XMind、图片导出
-├─ Templates/      内置模板、用户模板、模板库窗口
-├─ Settings/       偏好设置、设置窗口、快捷键窗口
-└─ Resources/      Info.plist、图标、中英文本地化
+├─ App/            Launch, main menu, welcome window, document controller
+├─ Model/          Topic tree, markers, relationships (value types; undo stores snapshots)
+├─ Theme/          Color descriptions, theme definitions, built-in and custom themes
+├─ Layout/         Style resolution, text measurement, layout for the five structures
+├─ Canvas/         Canvas view (drawing, selection, inline editing, drag and drop), renderer, popovers
+├─ Document/       NSDocument subclass, .fmind package I/O, attachment store, export
+├─ Editor/         MapEditor (all edits and undo), window, toolbar, find bar, status bar
+├─ Inspector/      Format panel (Style / Map / Markers / Content)
+├─ ImportExport/   Markdown, OPML, XMind, image export
+├─ Templates/      Built-in templates, user templates, template gallery
+├─ Settings/       Preferences, settings window, keyboard shortcuts window
+└─ Resources/      Info.plist, icons, English and Chinese localizations
 Extensions/
-├─ QuickLook/      空格预览扩展（数据型预览，输出 PDF）
-├─ Thumbnail/      Finder 缩略图扩展
-└─ Shared/         两个扩展共用的读取代码和沙盒 entitlements
+├─ QuickLook/      Space-bar preview extension (data-based, renders PDF)
+├─ Thumbnail/      Finder thumbnail extension
+└─ Shared/         Reading code and sandbox entitlements shared by both extensions
 ```
 
-## 许可协议
+## License
 
 Copyright © 2026 xVanTuring
 
-本程序是自由软件：你可以按照自由软件基金会发布的 GNU 通用公共许可协议（GPL）第 3 版，或（由你选择）任何更新的版本，
-重新发布和修改它。
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-发布本程序是希望它有用，但不提供任何担保，也不包括对适销性或特定用途适用性的默示担保。详情见 GNU 通用公共许可协议。
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-协议全文见 [LICENSE](LICENSE)（SPDX：`GPL-3.0-or-later`）。
+See [LICENSE](LICENSE) for the full text (SPDX: `GPL-3.0-or-later`).

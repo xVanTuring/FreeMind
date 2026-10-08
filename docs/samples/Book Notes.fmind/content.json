@@ -1,0 +1,154 @@
+{
+  "map" : {
+    "structure" : "mindmap",
+    "spacing" : "standard",
+    "topicMaxWidth" : 260,
+    "theme" : {
+      "background" : "#FBF6EC",
+      "linePaint" : "branch",
+      "name" : "Ink & Paper",
+      "central" : {
+        "borderWidth" : 2,
+        "fontSize" : 24,
+        "fill" : "none",
+        "weight" : "bold",
+        "radius" : 6,
+        "padH" : 22,
+        "text" : "#2B1D14",
+        "padV" : 12,
+        "border" : "#5C4033",
+        "shape" : "ellipse"
+      },
+      "lineStyle" : "curve",
+      "main" : {
+        "borderWidth" : 2.4,
+        "fontSize" : 17,
+        "fill" : "none",
+        "weight" : "semibold",
+        "radius" : 0,
+        "padH" : 4,
+        "text" : "branch-dark",
+        "padV" : 5,
+        "border" : "branch",
+        "shape" : "underline"
+      },
+      "fontFamily" : "Songti SC",
+      "id" : "paper",
+      "lineWidth" : 1.4,
+      "sub" : {
+        "borderWidth" : 1.4,
+        "fontSize" : 14.5,
+        "fill" : "none",
+        "weight" : "regular",
+        "radius" : 0,
+        "padH" : 4,
+        "text" : "#3B2F25",
+        "padV" : 4,
+        "border" : "branch",
+        "shape" : "underline"
+      },
+      "mainLineWidth" : 2.4,
+      "branchColors" : [
+        "#5C4033",
+        "#8B3A3A",
+        "#3E5641",
+        "#4A4E69",
+        "#8B5E3C"
+      ]
+    },
+    "root" : {
+      "children" : [
+        {
+          "title" : "About the book",
+          "id" : "76DEBF5E-FC19-4C48-B75C-B3BBBC455534",
+          "children" : [
+            {
+              "title" : "Author",
+              "id" : "DDF0ABAE-88D4-4A33-A6AA-DAFD2826F339"
+            },
+            {
+              "title" : "Why I read it",
+              "id" : "8295E589-EC1E-45DD-A38A-24C8FAA8874B"
+            }
+          ]
+        },
+        {
+          "title" : "Key ideas",
+          "id" : "C83B9459-A204-40BB-8D34-554A82224BF0",
+          "children" : [
+            {
+              "title" : "Idea 1",
+              "markers" : [
+                "symbol-idea"
+              ],
+              "id" : "108EAA93-93AF-4606-8392-673B6905775F"
+            },
+            {
+              "title" : "Idea 2",
+              "markers" : [
+                "symbol-idea"
+              ],
+              "id" : "7352DD75-57D6-4D5B-BFD2-EC35124E8711"
+            },
+            {
+              "title" : "Idea 3",
+              "markers" : [
+                "symbol-idea"
+              ],
+              "id" : "76747FD8-1494-4D79-8DA9-DD61ED61BEA1"
+            }
+          ]
+        },
+        {
+          "title" : "Quotes",
+          "id" : "8DE04DFF-5F15-44B9-8BB0-ACB023C50C0F",
+          "children" : [
+            {
+              "title" : "Quote",
+              "note" : "Page number and context",
+              "id" : "E55BD465-3FE4-4163-B734-B25DC4EB35D9"
+            }
+          ]
+        },
+        {
+          "title" : "My thoughts",
+          "id" : "E30B13DE-0D4A-416F-A874-ACF828BBD0E3",
+          "children" : [
+            {
+              "title" : "Agree",
+              "markers" : [
+                "symbol-like"
+              ],
+              "id" : "B476D738-7BDB-4F79-9D00-AC0F4DA35313"
+            },
+            {
+              "title" : "Question",
+              "markers" : [
+                "symbol-question"
+              ],
+              "id" : "96D6E88E-4228-4F46-AF2C-E5DDFD6398F3"
+            }
+          ]
+        },
+        {
+          "title" : "Apply",
+          "id" : "1002834A-9619-4BE8-82FF-19E6AD291914",
+          "children" : [
+            {
+              "markers" : [
+                "task-0"
+              ],
+              "title" : "Something to try",
+              "id" : "24472C5C-D225-4686-B313-2EE6D7093C15"
+            }
+          ]
+        }
+      ],
+      "id" : "E6E9B686-8EA4-4326-B34C-F39E7C52D95F",
+      "title" : "Book Title"
+    }
+  },
+  "version" : 1,
+  "generator" : "FreeMind 1.0.0",
+  "format" : "freemind"
+}

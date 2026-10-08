@@ -1,0 +1,127 @@
+{
+  "version" : 1,
+  "generator" : "FreeMind 1.0.0",
+  "format" : "freemind",
+  "map" : {
+    "spacing" : "standard",
+    "structure" : "org-down",
+    "topicMaxWidth" : 260,
+    "root" : {
+      "id" : "62B8253E-17D7-428C-B33B-C9A9F8291B48",
+      "title" : "CEO",
+      "children" : [
+        {
+          "children" : [
+            {
+              "title" : "Design",
+              "id" : "30C23CE1-564B-4B80-BE40-D3E6005C815F"
+            },
+            {
+              "title" : "Research",
+              "id" : "EDC42A82-2156-45E5-B937-BCAF918839C9"
+            }
+          ],
+          "id" : "CBC85CC4-5ADB-4AD6-99AC-ED63C31A95B9",
+          "title" : "Product"
+        },
+        {
+          "children" : [
+            {
+              "id" : "36B16DEE-DA6C-4522-8BBF-E4DE404E11C9",
+              "title" : "Frontend"
+            },
+            {
+              "id" : "92465EBF-1ED0-4D30-A400-D5CCEBD6C129",
+              "title" : "Backend"
+            },
+            {
+              "id" : "867FFBBA-03C1-4CFA-89C7-69AD97579576",
+              "title" : "QA"
+            }
+          ],
+          "id" : "FDCBB813-7F4A-4CA0-A762-09A248168513",
+          "title" : "Engineering"
+        },
+        {
+          "children" : [
+            {
+              "id" : "ED791BD0-362F-4DB6-964C-E93EDDBA0BFF",
+              "title" : "Brand"
+            },
+            {
+              "id" : "AD2A693E-FF5F-4E4A-BCE7-0B8142FB0F21",
+              "title" : "Growth"
+            }
+          ],
+          "id" : "0A39BB61-2CA0-40AA-9D07-C9C1E4D187D0",
+          "title" : "Marketing"
+        },
+        {
+          "children" : [
+            {
+              "title" : "Support",
+              "id" : "3F48FDEE-3E29-4A71-9367-2F5EA933E284"
+            },
+            {
+              "title" : "Finance",
+              "id" : "77F7A685-31EF-4175-85F3-9D94F551A51D"
+            }
+          ],
+          "id" : "8C2FC004-5442-4FC0-9656-B83FA450D14E",
+          "title" : "Operations"
+        }
+      ]
+    },
+    "theme" : {
+      "sub" : {
+        "fontSize" : 13.5,
+        "radius" : 2,
+        "fill" : "#FFFFFF",
+        "shape" : "rect",
+        "border" : "#B8C4D2",
+        "text" : "#273444",
+        "padV" : 6,
+        "weight" : "regular",
+        "padH" : 10,
+        "borderWidth" : 1
+      },
+      "background" : "#FFFFFF",
+      "linePaint" : "branch",
+      "id" : "business",
+      "lineStyle" : "elbow",
+      "lineWidth" : 1.2,
+      "main" : {
+        "fontSize" : 15,
+        "radius" : 2,
+        "fill" : "branch-soft",
+        "shape" : "rect",
+        "border" : "branch",
+        "text" : "#1B2A3A",
+        "padV" : 8,
+        "weight" : "semibold",
+        "padH" : 14,
+        "borderWidth" : 1.2
+      },
+      "mainLineWidth" : 1.8,
+      "name" : "Business",
+      "central" : {
+        "fontSize" : 22,
+        "radius" : 2,
+        "fill" : "#1F4E79",
+        "shape" : "rect",
+        "border" : "none",
+        "text" : "#FFFFFF",
+        "padV" : 14,
+        "weight" : "semibold",
+        "padH" : 24,
+        "borderWidth" : 0
+      },
+      "branchColors" : [
+        "#1F4E79",
+        "#2E75B6",
+        "#44546A",
+        "#2F5597"
+      ]
+    }
+  }
+}

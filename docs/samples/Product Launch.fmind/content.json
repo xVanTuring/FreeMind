@@ -1,0 +1,249 @@
+{
+  "view" : {
+    "zoom" : 1,
+    "selection" : [
+      "7536DC6E-CD4F-41E9-A17F-7BDEE5861E71"
+    ],
+    "centerY" : 0,
+    "centerX" : 0
+  },
+  "map" : {
+    "theme" : {
+      "id" : "classic",
+      "central" : {
+        "borderWidth" : 0,
+        "fill" : "#1E3A5F",
+        "border" : "none",
+        "fontSize" : 24,
+        "shape" : "roundedRect",
+        "padV" : 14,
+        "radius" : 10,
+        "weight" : "semibold",
+        "text" : "#FFFFFF",
+        "padH" : 24
+      },
+      "name" : "Classic",
+      "branchColors" : [
+        "#3B82F6",
+        "#F59E0B",
+        "#10B981",
+        "#8B5CF6",
+        "#EF4444",
+        "#06B6D4",
+        "#EC4899",
+        "#84CC16"
+      ],
+      "sub" : {
+        "borderWidth" : 1.5,
+        "fill" : "none",
+        "border" : "branch",
+        "fontSize" : 14,
+        "shape" : "underline",
+        "padV" : 4,
+        "radius" : 0,
+        "weight" : "regular",
+        "text" : "#2B3036",
+        "padH" : 4
+      },
+      "lineWidth" : 1.5,
+      "linePaint" : "branch",
+      "main" : {
+        "borderWidth" : 1.5,
+        "fill" : "branch-soft",
+        "border" : "branch",
+        "fontSize" : 16,
+        "shape" : "roundedRect",
+        "padV" : 8,
+        "radius" : 8,
+        "weight" : "medium",
+        "text" : "#1F2328",
+        "padH" : 14
+      },
+      "mainLineWidth" : 2.5,
+      "background" : "#FFFFFF",
+      "lineStyle" : "curve"
+    },
+    "root" : {
+      "title" : "Product Launch",
+      "id" : "F465E578-9A16-41F9-B9DB-E85DCF43C076",
+      "children" : [
+        {
+          "children" : [
+            {
+              "title" : "10k users in month one",
+              "image" : {
+                "id" : "7A2751B9-C562-4FBE-8936-F6E856154B95",
+                "name" : "growth.png",
+                "width" : 96,
+                "height" : 60
+              },
+              "id" : "D2C3952E-5224-4389-A711-3961C36A0765",
+              "markers" : [
+                "priority-1",
+                "flag-red"
+              ]
+            },
+            {
+              "title" : "Press coverage",
+              "id" : "7DA67524-F9D0-4517-862A-46860117741D",
+              "markers" : [
+                "star-orange"
+              ]
+            }
+          ],
+          "id" : "111826D9-B085-4EBA-A491-3C42FBAB41CD",
+          "title" : "Goals"
+        },
+        {
+          "children" : [
+            {
+              "markers" : [
+                "task-100"
+              ],
+              "id" : "643AB040-A2E1-4492-8F65-A418BB76F5DF",
+              "title" : "Beta — May"
+            },
+            {
+              "markers" : [
+                "task-50"
+              ],
+              "id" : "7536DC6E-CD4F-41E9-A17F-7BDEE5861E71",
+              "title" : "Launch — June 18"
+            },
+            {
+              "markers" : [
+                "task-0"
+              ],
+              "id" : "A57F2EBB-7CB2-4FEC-8006-8D4F2E00AF9B",
+              "title" : "Review — July"
+            }
+          ],
+          "id" : "F4546BBB-695B-4B82-BFDA-BB89262E55A6",
+          "title" : "Timeline"
+        },
+        {
+          "children" : [
+            {
+              "labels" : [
+                "Alice"
+              ],
+              "markers" : [
+                "symbol-person"
+              ],
+              "id" : "86F60CF8-74DF-46F2-8A94-6C1417D16409",
+              "title" : "Design"
+            },
+            {
+              "labels" : [
+                "Bob"
+              ],
+              "markers" : [
+                "symbol-person"
+              ],
+              "id" : "81BA6855-A504-4559-841A-97E0D89C2FFE",
+              "title" : "Engineering"
+            },
+            {
+              "labels" : [
+                "Carol"
+              ],
+              "markers" : [
+                "symbol-person"
+              ],
+              "id" : "31D8BCF5-3483-473B-912D-602C3CA0F486",
+              "title" : "Marketing"
+            }
+          ],
+          "id" : "1EFCE65E-6782-4750-9077-DC2B40E87C17",
+          "title" : "Team"
+        },
+        {
+          "children" : [
+            {
+              "link" : "https://example.com",
+              "title" : "Website",
+              "id" : "E12CCEA4-A026-47C5-857C-7738C2224068"
+            },
+            {
+              "title" : "Social media",
+              "id" : "F6286C66-DF96-4D98-BAB6-595B71E93F11"
+            },
+            {
+              "title" : "Newsletter",
+              "id" : "EE441D80-ACE7-49AF-8EAA-936D9E21910D"
+            }
+          ],
+          "style" : {
+            "boundary" : true
+          },
+          "id" : "68FF79E3-7F3D-4A57-BB83-98F7C2F57689",
+          "title" : "Channels"
+        },
+        {
+          "children" : [
+            {
+              "id" : "54790F64-A193-44FA-8D25-1378434922A7",
+              "note" : "Submit for review two weeks early.",
+              "title" : "App review delay",
+              "markers" : [
+                "symbol-important"
+              ]
+            },
+            {
+              "id" : "193FFB74-78B0-48F4-9209-579DF875E92C",
+              "markers" : [
+                "symbol-question"
+              ],
+              "title" : "Server load"
+            }
+          ],
+          "id" : "E16C6E6F-F2F8-453B-8BDF-34AE0B62D8A2",
+          "title" : "Risks"
+        },
+        {
+          "children" : [
+            {
+              "title" : "Ads",
+              "id" : "AA6F5B7E-20D3-427A-8E30-DDF8A89AD412"
+            },
+            {
+              "id" : "3D1A5EFF-74D6-448E-AD7C-1768F4549AE2",
+              "title" : "Events"
+            },
+            {
+              "id" : "6107D651-B32D-40F7-AB48-3427CBA7BE8F",
+              "title" : "Tools"
+            }
+          ],
+          "collapsed" : true,
+          "attachments" : [
+            {
+              "name" : "budget.csv",
+              "size" : 46,
+              "id" : "4DBB0C2D-A4AC-4069-9B65-276C002E4B7E"
+            }
+          ],
+          "markers" : [
+            "symbol-money"
+          ],
+          "id" : "EE5BCD58-B277-4ADF-A324-6F11302611D7",
+          "title" : "Budget"
+        }
+      ]
+    },
+    "spacing" : "standard",
+    "relationships" : [
+      {
+        "to" : "68FF79E3-7F3D-4A57-BB83-98F7C2F57689",
+        "id" : "E375F468-4268-43EA-8D70-4E4EFFE3C148",
+        "title" : "owns",
+        "from" : "31D8BCF5-3483-473B-912D-602C3CA0F486"
+      }
+    ],
+    "topicMaxWidth" : 260,
+    "structure" : "mindmap"
+  },
+  "format" : "freemind",
+  "generator" : "FreeMind 1.0.0",
+  "version" : 1
+}
