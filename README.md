@@ -35,6 +35,7 @@
 - **Welcome window**: lists recent maps with thumbnails; click one to open it. Right-click the Dock icon for New Map and Open.
 - **Template gallery**: ⌘N lets you start from a blank map or a template. Any map can be saved as a template.
 - **Native macOS behavior**: autosave, version browsing, undo / redo, window tabs, full screen and dark mode.
+- **AI agent access (MCP)**: FreeMind runs a local [MCP](https://modelcontextprotocol.io) server, so agents such as Claude Code can read your open maps and add, edit, move or delete topics. Every change an agent makes is one undo step. Set it up in Settings ▸ Agent ([details, in Chinese](docs/mcp.md)).
 - English and Simplified Chinese interface, following the system language.
 
 ## Screenshots
@@ -128,6 +129,7 @@ Sources/FreeMind/
 ├─ ImportExport/   Markdown, OPML, XMind, image export
 ├─ Templates/      Built-in templates, user templates, template gallery
 ├─ Settings/       Preferences, settings window, keyboard shortcuts window
+├─ MCP/            Local MCP server for AI agents (HTTP, JSON-RPC, tools)
 └─ Resources/      Info.plist, icons, English and Chinese localizations
 Extensions/
 ├─ QuickLook/      Space-bar preview extension (data-based, renders PDF)

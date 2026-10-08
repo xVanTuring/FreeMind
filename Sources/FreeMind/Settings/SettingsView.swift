@@ -11,6 +11,7 @@ final class SettingsWindowController: NSWindowController {
         tabs.addTabViewItem(Self.tab(GeneralSettings(), title: L("General"), symbol: "gearshape"))
         tabs.addTabViewItem(Self.tab(ExportSettings(), title: L("Export"), symbol: "square.and.arrow.up"))
         tabs.addTabViewItem(Self.tab(LibrarySettings(), title: L("Templates & Themes"), symbol: "square.grid.2x2"))
+        tabs.addTabViewItem(Self.tab(AgentSettings(), title: L("Agent"), symbol: "network"))
         let window = NSWindow(contentViewController: tabs)
         window.styleMask = [.titled, .closable]
         window.toolbarStyle = .preference
@@ -184,6 +185,96 @@ struct LibrarySettings: View {
             }
         }
         .onAppear { templates = TemplateLibrary.shared.userTemplates() }
+    }
+}
+
+/// MCP 服务：开关、写入权限、端口，以及给 Agent 用的接入命令和口令。
+struct AgentSettings: View {
+    @Bindable private var prefs = Preferences.shared
+    private let server = MCPServer.shared
+    @State private var port = Preferences.shared.mcpPort
+    /// 刚拷贝的是哪一项，按钮上短暂显示“已拷贝”。
+    @State private var copied: String?
+
+    var body: some View {
+        SettingsPane {
+            SettingsGroup(title: L("MCP Server")) {
+                SettingsRow(title: L("Let AI agents use FreeMind"), detail: status) {
+                    SettingsSwitch(isOn: Binding(get: { prefs.mcpEnabled }, set: { on in
+                        prefs.mcpEnabled = on
+                        if on { server.start() } else { server.stop() }
+                    }))
+                }
+                SettingsDivider()
+                SettingsRow(title: L("Allow agents to edit maps"),
+                            detail: L("When this is off, agents can only read. Each change an agent makes is one step you can undo with ⌘Z.")) {
+                    SettingsSwitch(isOn: $prefs.mcpAllowWrite)
+                }
+                SettingsDivider()
+                SettingsRow(title: L("Port"), detail: L("Only programs on this Mac can connect.")) {
+                    TextField(L("Port"), value: $port, format: .number.grouping(.never))
+                        .labelsHidden()
+                        .multilineTextAlignment(.trailing)
+                        .frame(width: 64)
+                        .onChange(of: port) { applyPort() }
+                }
+            }
+            SettingsGroup(title: L("Connect an Agent")) {
+                SettingsRow(title: L("Claude Code"), detail: L("Run the copied command once in Terminal.")) {
+                    copyButton("cli", L("Copy Command"), cliCommand)
+                }
+                SettingsDivider()
+                SettingsRow(title: L("Other agents"), detail: L("Add the copied JSON to the agent's MCP server settings.")) {
+                    copyButton("json", L("Copy JSON"), jsonConfig)
+                }
+                SettingsDivider()
+                SettingsRow(title: L("Access token"),
+                            detail: L("Agents must send this token. After you create a new one, set up your agents again.")) {
+                    copyButton("token", L("Copy"), prefs.mcpToken)
+                    Button(L("New Token")) {
+                        prefs.regenerateMCPToken()
+                        copied = nil
+                    }
+                }
+            }
+        }
+    }
+
+    private var status: String {
+        if let error = server.lastError { return error }
+        if server.isRunning { return LF("Running at %@", server.endpointURL) }
+        return prefs.mcpEnabled ? L("Starting…") : L("Off")
+    }
+
+    private var endpoint: String { "http://127.0.0.1:\(prefs.mcpPort)/mcp" }
+
+    private var cliCommand: String {
+        "claude mcp add --transport http freemind \(endpoint) --header \"Authorization: Bearer \(prefs.mcpToken)\""
+    }
+
+    private var jsonConfig: String {
+        let server: MCPObject = ["type": "http", "url": endpoint, "headers": ["Authorization": "Bearer \(prefs.mcpToken)"]]
+        return MCPJSON.string(["mcpServers": ["freemind": server]], pretty: true)
+    }
+
+    private func copyButton(_ id: String, _ title: String, _ text: String) -> some View {
+        Button(copied == id ? L("Copied") : title) {
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.setString(text, forType: .string)
+            copied = id
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { if copied == id { copied = nil } }
+        }
+    }
+
+    /// 端口改了就重启服务；不合法的值退回原来的端口。
+    private func applyPort() {
+        guard (1024...65535).contains(port) else {
+            port = prefs.mcpPort
+            return
+        }
+        guard port != prefs.mcpPort else { return }
+        prefs.mcpPort = port
+        server.restartIfRunning()
     }
 }
 

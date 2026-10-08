@@ -14,6 +14,12 @@ final class MindMapDocument: NSDocument {
     private var packageWrapper: FileWrapper?
     /// 打开文档时要恢复的视图状态。
     private(set) var restoredViewState: ViewState?
+    /// MCP 工具里指代这份文档的编号（`m1`、`m2`…），只在本次运行内有效。
+    let agentID: String = {
+        agentCounter += 1
+        return "m\(agentCounter)"
+    }()
+    private static var agentCounter = 0
 
     override init() {
         let prefs = Preferences.shared

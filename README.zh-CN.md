@@ -35,6 +35,7 @@
 - **欢迎窗口**：启动时列出最近打开的导图（带缩略图），单击即可打开；右键 Dock 图标可以新建、打开
 - **模板库**：新建（⌘N）时选择空白导图或模板，任何导图都可以“存为模板”
 - **原生体验**：自动保存、版本浏览、撤销 / 重做、窗口标签页、全屏、深色模式
+- **AI Agent 接入（MCP）**：FreeMind 在本机提供 [MCP](https://modelcontextprotocol.io) 服务，Claude Code 等 Agent 可以读取打开的导图，添加、修改、移动、删除主题；Agent 的每次修改都是一个撤销步骤。在“设置 ▸ Agent”里配置（[说明](docs/mcp.md)）
 - 中英文界面，跟随系统语言
 
 ## 截图
@@ -128,6 +129,7 @@ Sources/FreeMind/
 ├─ ImportExport/   Markdown、OPML、XMind、图片导出
 ├─ Templates/      内置模板、用户模板、模板库窗口
 ├─ Settings/       偏好设置、设置窗口、快捷键窗口
+├─ MCP/            给 AI Agent 用的本机 MCP 服务（HTTP、JSON-RPC、工具）
 └─ Resources/      Info.plist、图标、中英文本地化
 Extensions/
 ├─ QuickLook/      空格预览扩展（数据型预览，输出 PDF）

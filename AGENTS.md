@@ -43,6 +43,17 @@ build/DerivedData/Build/Products/Debug/FreeMind.app/Contents/MacOS/FreeMind   # 
   `DocumentController.addDocument` 时关闭欢迎窗口。Dock 右键菜单在 `AppDelegate.applicationDockMenu`。
 - 检查器（格式面板）用“名称 + 紧凑控件”的行（`InspectorRow`），颜色用 `ColorButton` 点开色板，不要平铺大块选项。
 
+## MCP 服务（AI Agent 接入）
+
+- `Sources/FreeMind/MCP/`，手写 JSON-RPC over HTTP（同 Perch / UniReader，不用 SDK），App 启动时按设置开启，
+  只监听 127.0.0.1:8775，令牌必填（存在 UserDefaults 的 `mcpToken`，原因见 `docs/mcp.md`）。工具列表和设计见 `docs/mcp.md`。
+- 写工具一律经 `MCPFacade.edit`：先在副本上改完（出错整个放弃），再一次 `MapEditor.perform`，一次调用 = 一个撤销步骤。
+  写之前用 `writableDocument` 提交用户的行内编辑。新增写工具时照这个做，不要直接调 `addChild` 这类会改选中、进入编辑的界面方法。
+- 写入闸门只在 `MCPCatalog.call` 一处（tier 为 `.write` / `.delete` 的工具）。
+- 新增工具后在 `MCPTests` 补测试；`testHTTPRoundTrip` 在随机端口上走真实 HTTP。
+- 本机实测：`build/.../Debug/FreeMind.app/Contents/MacOS/FreeMind -ApplePersistenceIgnoreState YES` 单独起一个实例
+  （不恢复窗口，免得和正在用的实例同时打开同一份文件），再用 curl 调 `http://127.0.0.1:8775/mcp`。
+
 ## Quick Look 扩展
 
 - `FreeMindQuickLook`（空格预览）和 `FreeMindThumbnail`（Finder 缩略图）两个 app-extension 只编译模型、布局、渲染、

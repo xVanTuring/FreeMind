@@ -15,6 +15,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         if Self.isRunningTests { return }
         let prefs = Preferences.shared
+        // MCP 服务：让本机的 AI Agent 读取和编辑打开着的导图（设置 › Agent）
+        if prefs.mcpEnabled { MCPServer.shared.start() }
         if !prefs.hasLaunchedBefore {
             prefs.hasLaunchedBefore = true
             // 第一次启动：打开“快速上手”导图（此时不再弹模板库）

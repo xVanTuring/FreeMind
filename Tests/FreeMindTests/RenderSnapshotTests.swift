@@ -115,6 +115,8 @@ final class RenderSnapshotTests: XCTestCase {
         try snapshot(GeneralSettings(), size: CGSize(width: 500, height: 520), name: "settings-general.png", dark: true)
         try snapshot(ExportSettings(), size: CGSize(width: 500, height: 420), name: "settings-export.png")
         try snapshot(LibrarySettings(), size: CGSize(width: 500, height: 360), name: "settings-library.png")
+        try snapshot(AgentSettings(), size: CGSize(width: 500, height: 440), name: "settings-agent.png")
+        try snapshot(AgentSettings(), size: CGSize(width: 500, height: 440), name: "settings-agent-dark.png", dark: true)
         try snapshot(KeyboardShortcutsView(), size: CGSize(width: 560, height: 900), name: "shortcuts.png")
     }
 

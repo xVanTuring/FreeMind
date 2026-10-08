@@ -490,3 +490,34 @@
 "New map (opens the template gallery)" = "新建导图（打开模板库）";
 "Open a map" = "打开导图";
 "Welcome window with recent maps" = "欢迎窗口（最近打开的导图）";
+
+/* MARK: - Agent（MCP 服务） */
+"Agent" = "Agent";
+"Agent: %@" = "Agent：%@";
+"MCP Server" = "MCP 服务";
+"Let AI agents use FreeMind" = "允许 AI Agent 使用 FreeMind";
+"Allow agents to edit maps" = "允许 Agent 修改导图";
+"When this is off, agents can only read. Each change an agent makes is one step you can undo with ⌘Z." = "关闭后 Agent 只能读取导图。Agent 的每次修改都是一个撤销步骤，可以用 ⌘Z 撤销。";
+"Port" = "端口";
+"Only programs on this Mac can connect." = "只有这台 Mac 上的程序可以连接。";
+"Connect an Agent" = "连接 Agent";
+"Claude Code" = "Claude Code";
+"Run the copied command once in Terminal." = "在终端里运行一次拷贝的命令。";
+"Copy Command" = "拷贝命令";
+"Other agents" = "其他 Agent";
+"Add the copied JSON to the agent's MCP server settings." = "把拷贝的 JSON 加到 Agent 的 MCP 服务器配置里。";
+"Copy JSON" = "拷贝 JSON";
+"Access token" = "访问令牌";
+"Agents must send this token. After you create a new one, set up your agents again." = "Agent 连接时必须带上这个令牌。生成新令牌后，需要重新配置已有的 Agent。";
+"New Token" = "生成新令牌";
+"Copied" = "已拷贝";
+"Running at %@" = "运行中：%@";
+"Starting…" = "正在启动…";
+"Off" = "已关闭";
+"Cannot listen on port %d: %@" = "无法监听端口 %d：%@";
+"Port %d is not valid. Use a number from 1024 to 65535." = "端口 %d 无效，请使用 1024 到 65535 之间的数字。";
+"Insert Topics" = "插入主题";
+"Edit Topics" = "编辑主题";
+"Delete Topics" = "删除主题";
+"Edit Relationship" = "编辑联系";
+"Change Map Format" = "更改导图格式";
