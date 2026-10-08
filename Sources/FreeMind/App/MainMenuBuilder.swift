@@ -68,11 +68,7 @@ enum MainMenuBuilder {
         add(menu, L("New"), #selector(NSDocumentController.newDocument(_:)), "n")
         add(menu, L("New from Template…"), #selector(AppDelegate.newFromTemplate(_:)), "n", [.command, .shift])
         add(menu, L("Open…"), #selector(NSDocumentController.openDocument(_:)), "o")
-        let recent = NSMenuItem(title: L("Open Recent"), action: nil, keyEquivalent: "")
-        let recentMenu = NSMenu(title: L("Open Recent"))
-        add(recentMenu, L("Clear Menu"), #selector(NSDocumentController.clearRecentDocuments(_:)))
-        recent.submenu = recentMenu
-        menu.addItem(recent)
+        // “打开最近使用”由 NSDocumentController 自动插在“打开…”后面（带最近文件列表和“清除菜单”），这里不再手动添加
         menu.addItem(.separator())
         add(menu, L("Close"), #selector(NSWindow.performClose(_:)), "w")
         add(menu, L("Save…"), #selector(NSDocument.save(_:)), "s")

@@ -13,10 +13,10 @@ final class TemplateGalleryController: NSWindowController, NSWindowDelegate {
 
     init() {
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 900, height: 640),
-                              styleMask: [.titled, .closable, .resizable, .fullSizeContentView],
+                              styleMask: [.titled, .closable, .resizable],
                               backing: .buffered, defer: false)
+        // 普通标题栏：内容可以滚动，铺到透明标题栏下面会和窗口按钮、标题叠在一起
         window.title = L("New Map")
-        window.titlebarAppearsTransparent = true
         window.minSize = NSSize(width: 820, height: 560)
         super.init(window: window)
         let hosting = NSHostingController(rootView: TemplateGalleryView(close: { [weak window] in window?.close() }))
@@ -61,7 +61,7 @@ struct TemplateGalleryView: View {
                     }
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 36)
+                .padding(.top, 18)
                 .padding(.bottom, 20)
             }
             Divider()
