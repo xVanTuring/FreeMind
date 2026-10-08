@@ -171,6 +171,38 @@ final class EditorTests: XCTestCase {
         XCTAssertEqual(layout.toCenter, CGPoint(x: editor.layout.nodes[b]!.frame.midX, y: editor.layout.nodes[b]!.frame.midY))
     }
 
+    /// 直接拖动联系线：抓住的曲线点跟着鼠标走，一次拖动只占一个撤销步骤。
+    func testDraggingRelationshipMovesGrabbedPoint() throws {
+        let a = editor.map.root.children[0].id, b = editor.map.root.children[2].id
+        step { editor.addRelationship(from: a, to: b) }
+        let id = try XCTUnwrap(editor.selectedRelationship)
+        let start = try XCTUnwrap(editor.layout.relationship(id))
+        for t: CGFloat in [0.5, 0.3] {
+            let grabbed = try XCTUnwrap(editor.layout.relationship(id)).point(at: t)
+            let target = CGPoint(x: grabbed.x + 60, y: grabbed.y - 90)
+            // 和画布一样，每个拖动事件按当前布局重新计算；端点在主题边框上滑动的偏差几次之内就补上。
+            // App 里撤销分组按事件自动建立，合并掉的事件不注册撤销、也就没有分组，这里一次拖动放进一个分组。
+            step {
+                for _ in 0..<5 {
+                    guard let r = editor.layout.relationship(id) else { return }
+                    let (c1, c2) = r.controlOffsets(moving: t, to: target)
+                    editor.updateRelationship(id, actionName: "Reshape", coalesce: "drag-\(t)") {
+                        $0.control1 = c1
+                        $0.control2 = c2
+                    }
+                }
+            }
+            let moved = try XCTUnwrap(editor.layout.relationship(id)).point(at: t)
+            XCTAssertEqual(moved.x, target.x, accuracy: 1)
+            XCTAssertEqual(moved.y, target.y, accuracy: 1)
+        }
+        // 两次拖动各是一步撤销
+        doc.undoManager?.undo()
+        doc.undoManager?.undo()
+        XCTAssertNil(editor.map.relationships.first?.control1)
+        XCTAssertEqual(editor.layout.relationship(id)?.c1, start.c1)
+    }
+
     func testFreshIDsKeepRelationships() {
         var map = editor.map
         map.relationships = [Relationship(from: map.root.children[0].id, to: map.root.children[1].id)]

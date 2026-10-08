@@ -2,21 +2,15 @@ import AppKit
 import SwiftUI
 
 /// NSPopover 里放 SwiftUI 视图用的控制器（自动按内容计算大小）。
-final class HostingPopoverController<Content: View>: NSViewController {
-    private let rootView: Content
-
-    init(rootView: Content) {
-        self.rootView = rootView
-        super.init(nibName: nil, bundle: nil)
+/// 必须用 NSHostingController：NSHostingView 的 .preferredContentSize 不会更新视图控制器的 preferredContentSize，
+/// 弹出框拿到 0×0 后用默认大小显示，内容被居中裁掉两边。
+final class HostingPopoverController<Content: View>: NSHostingController<Content> {
+    override init(rootView: Content) {
+        super.init(rootView: rootView)
+        sizingOptions = [.preferredContentSize]
     }
 
     required init?(coder: NSCoder) { fatalError() }
-
-    override func loadView() {
-        let hosting = NSHostingView(rootView: rootView)
-        hosting.sizingOptions = [.preferredContentSize]
-        view = hosting
-    }
 }
 
 /// 备注编辑。

@@ -58,6 +58,15 @@ final class RegressionTests: XCTestCase {
         XCTAssertEqual(doc.editor.map.root.children[0].title, "编辑中的标题")
     }
 
+    /// 弹出框按 SwiftUI 内容的理想大小显示：备注框是 380×260，大小不对时内容会被居中裁掉两边。
+    func testPopoverControllerReportsContentSize() {
+        let doc = MindMapDocument()
+        doc.editor.load(MindMap.blank(title: "Root"))
+        let controller = HostingPopoverController(rootView: NotePopoverView(editor: doc.editor, topicID: doc.editor.rootID))
+        controller.view.layoutSubtreeIfNeeded()
+        XCTAssertEqual(controller.preferredContentSize, CGSize(width: 380, height: 260))
+    }
+
     /// 取消编辑后，编辑期间临时加的“已修改”计数要抵消。
     func testCancelledEditDoesNotLeaveDocumentEdited() {
         let doc = MindMapDocument()

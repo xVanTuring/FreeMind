@@ -42,6 +42,20 @@ final class MindMapCanvasView: NSView {
     var relationshipCursor: CGPoint = .zero
     /// 正在拖动联系线的控制柄（which = 1 / 2），session 用于把一次拖动合并成一步撤销。
     var controlDrag: (id: UUID, which: Int, session: String)?
+
+    /// 直接拖动联系线（线本身或标签）：按下时抓住的曲线点跟着鼠标走，标签随之移动。
+    struct RelationshipDrag {
+        var id: UUID
+        /// 抓住的曲线参数；点在标签上时是 0.5（标签在曲线中点）。
+        var t: CGFloat
+        /// 按下时抓住的曲线点和鼠标位置（布局坐标）。
+        var anchor: CGPoint
+        var startPoint: CGPoint
+        var session: String
+        var started = false
+    }
+
+    var relationshipDrag: RelationshipDrag?
     /// 悬停提示 tag → 对应的主题和图标。
     var toolTipTargets: [NSView.ToolTipTag: (UUID, Indicator)] = [:]
     var marquee: (start: CGPoint, current: CGPoint, base: [UUID])?
@@ -494,10 +508,18 @@ final class MindMapCanvasView: NSView {
             return
         }
 
-        // 联系线
+        // 联系线：单击选中，按住拖动改变弧度，双击编辑标签
         if let rel = mapLayout.relationship(at: p) {
             editor.selectRelationship(rel)
-            if event.clickCount >= 2 { showRelationshipLabelPopover(for: rel) }
+            if event.clickCount >= 2 {
+                showRelationshipLabelPopover(for: rel)
+            } else if let r = mapLayout.relationship(rel) {
+                // 靠近端点时同样的移动需要很大的控制点位移，所以只抓中段
+                let onLabel = r.labelRect?.insetBy(dx: -2, dy: -2).contains(p) ?? false
+                let t = onLabel ? 0.5 : min(max(r.nearestParameter(to: p), 0.15), 0.85)
+                relationshipDrag = RelationshipDrag(id: rel, t: t, anchor: r.point(at: t), startPoint: p,
+                                                    session: UUID().uuidString)
+            }
             return
         }
 
@@ -542,6 +564,21 @@ final class MindMapCanvasView: NSView {
             autoscroll(with: event)
             return
         }
+        if var drag = relationshipDrag, let r = mapLayout.relationship(drag.id) {
+            if !drag.started {
+                guard hypot(p.x - drag.startPoint.x, p.y - drag.startPoint.y) > 3 else { return }
+                drag.started = true
+                relationshipDrag = drag
+            }
+            let target = CGPoint(x: drag.anchor.x + p.x - drag.startPoint.x, y: drag.anchor.y + p.y - drag.startPoint.y)
+            let (c1, c2) = r.controlOffsets(moving: drag.t, to: target)
+            editor.updateRelationship(drag.id, actionName: L("Reshape Relationship"), coalesce: drag.session) { rel in
+                rel.control1 = c1
+                rel.control2 = c2
+            }
+            autoscroll(with: event)
+            return
+        }
         if var drag = pendingDrag {
             if !drag.started {
                 let d = hypot(p.x - drag.startPoint.x, p.y - drag.startPoint.y)
@@ -573,6 +610,7 @@ final class MindMapCanvasView: NSView {
             marquee = nil
             clickedSelected = nil
             controlDrag = nil
+            relationshipDrag = nil
             needsDisplay = true
         }
         if panning != nil {

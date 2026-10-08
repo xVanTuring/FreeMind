@@ -95,6 +95,29 @@ struct RelationshipLayout {
         }
         return best
     }
+
+    /// 曲线上离 p 最近的点对应的参数 t（采样）。
+    func nearestParameter(to p: CGPoint) -> CGFloat {
+        var best = (t: CGFloat(0.5), d: CGFloat.greatestFiniteMagnitude)
+        for i in 0...48 {
+            let t = CGFloat(i) / 48
+            let q = point(at: t)
+            let d = hypot(q.x - p.x, q.y - p.y)
+            if d < best.d { best = (t, d) }
+        }
+        return best.t
+    }
+
+    /// 把曲线上参数 t 处的点移到 target 所需的控制点（存成相对主题中心的偏移，同 Relationship.control1 / control2）。
+    /// 两个控制点平移同样的 d 时，该点移动 3t(1-t)·d；端点会随控制点方向在主题边框上滑动，
+    /// 结果略有偏差，拖动时每次按当前位置重新计算，偏差在下一次就补上了。
+    func controlOffsets(moving t: CGFloat, to target: CGPoint) -> (Relationship.Offset, Relationship.Offset) {
+        let current = point(at: t)
+        let k = 1 / (3 * t * (1 - t))
+        let dx = (target.x - current.x) * k, dy = (target.y - current.y) * k
+        return (Relationship.Offset(dx: Double(c1.x + dx - fromCenter.x), dy: Double(c1.y + dy - fromCenter.y)),
+                Relationship.Offset(dx: Double(c2.x + dx - toCenter.x), dy: Double(c2.y + dy - toCenter.y)))
+    }
 }
 
 /// 一次完整布局的结果。坐标以根主题中心为原点。
