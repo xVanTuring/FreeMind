@@ -12,6 +12,12 @@ final class DocumentController: NSDocumentController {
         }
     }
 
+    /// 新建、打开、导入任何导图后关闭欢迎窗口。
+    override func addDocument(_ document: NSDocument) {
+        super.addDocument(document)
+        WelcomeWindowController.close()
+    }
+
     /// 直接新建空白导图（不经过模板库）。
     func createBlankDocument() {
         var map = MindMap.blank(structure: Preferences.shared.defaultStructure, theme: Preferences.shared.defaultTheme)

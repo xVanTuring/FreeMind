@@ -42,7 +42,6 @@ struct TemplateGalleryView: View {
     @State private var themeID = Preferences.shared.defaultThemeID
     @State private var userTemplates = TemplateLibrary.shared.userTemplates()
     @State private var themes = ThemeLibrary.shared.allThemes
-    @State private var showOnNew = Preferences.shared.showTemplateGalleryOnNew
 
     private let library = TemplateLibrary.shared
     private let columns = [GridItem(.adaptive(minimum: 180, maximum: 240), spacing: 16)]
@@ -73,10 +72,6 @@ struct TemplateGalleryView: View {
                 }
                 .labelsHidden()
                 .fixedSize()
-                Toggle(L("Show when creating a new map"), isOn: $showOnNew)
-                    .toggleStyle(.checkbox)
-                    .fixedSize()
-                    .onChange(of: showOnNew) { Preferences.shared.showTemplateGalleryOnNew = showOnNew }
                 Spacer(minLength: 12)
                 Button(L("Open…")) {
                     close()
@@ -89,6 +84,8 @@ struct TemplateGalleryView: View {
             .padding(.vertical, 12)
         }
         .frame(minWidth: 820, idealWidth: 940, minHeight: 560, idealHeight: 680)
+        // 打开窗口时键盘焦点落在风格菜单上，不显示焦点框
+        .focusEffectDisabled()
     }
 
     @ViewBuilder

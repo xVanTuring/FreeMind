@@ -464,3 +464,24 @@
 "More Colors…" = "更多颜色…";
 "Change Theme…" = "更换风格…";
 "Remove individual formatting so the topic follows the theme." = "清除单独设置的格式，让主题恢复为风格默认样式。";
+
+/* 欢迎窗口 */
+"Welcome to FreeMind" = "欢迎使用 FreeMind";
+"Version %@" = "版本 %@";
+"New Map…" = "新建导图…";
+"Start from a blank map or a template" = "从空白导图或模板开始";
+"Open maps, Markdown, OPML or XMind" = "打开导图，或导入 Markdown、OPML、XMind";
+"Learn the basics in a few minutes" = "几分钟了解基本操作";
+"Show this window when FreeMind starts" = "启动 FreeMind 时显示此窗口";
+"Recent Maps" = "最近打开";
+"No recent maps" = "还没有最近打开的导图";
+"Maps you open will appear here." = "打开过的导图会显示在这里。";
+"Remove from Recent Maps" = "从最近打开中移除";
+"Clear Recent Maps" = "清除最近打开记录";
+"Startup" = "启动";
+"Show the welcome window when FreeMind starts" = "启动时显示欢迎窗口";
+"The welcome window lists recent maps. When it is off, FreeMind starts with a new map." = "欢迎窗口会列出最近打开的导图。关闭后，启动时直接新建导图。";
+"Maps" = "导图";
+"New map (opens the template gallery)" = "新建导图（打开模板库）";
+"Open a map" = "打开导图";
+"Welcome window with recent maps" = "欢迎窗口（最近打开的导图）";

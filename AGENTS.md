@@ -31,6 +31,10 @@ build/DerivedData/Build/Products/Debug/FreeMind.app/Contents/MacOS/FreeMind   # 
   结束编辑才提交为一步撤销。选中主题后直接打字会进入编辑并把按键转交输入框（支持中文输入法组字）。
 - 包格式读写见 `docs/format.md`。保存时在原有 FileWrapper 上增量更新，附件未变化时由 NSDocument 硬链接。
 - 菜单命令走响应链，画布是第一响应者；工具栏按钮直接以画布为 target（检查器有焦点时也能用）。
+- **启动与新建**：启动时没有打开的导图 → 欢迎窗口（`WelcomeWindow.swift`，最近列表来自 `NSDocumentController.recentDocumentURLs`，
+  缩略图复用 `MapPreviewLoader`）；⌘N → `DocumentController.newDocument` → 模板库。任何文档加入
+  `DocumentController.addDocument` 时关闭欢迎窗口。Dock 右键菜单在 `AppDelegate.applicationDockMenu`。
+- 检查器（格式面板）用“名称 + 紧凑控件”的行（`InspectorRow`），颜色用 `ColorButton` 点开色板，不要平铺大块选项。
 
 ## Quick Look 扩展
 

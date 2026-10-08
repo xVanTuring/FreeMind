@@ -273,6 +273,8 @@ enum MainMenuBuilder {
         add(menu, L("Minimize"), #selector(NSWindow.performMiniaturize(_:)), "m")
         add(menu, L("Zoom"), #selector(NSWindow.performZoom(_:)))
         menu.addItem(.separator())
+        add(menu, L("Welcome to FreeMind"), #selector(AppDelegate.showWelcome(_:)), "1", [.command, .shift])
+        menu.addItem(.separator())
         add(menu, L("Bring All to Front"), #selector(NSApplication.arrangeInFront(_:)))
         return menu
     }

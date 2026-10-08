@@ -1,124 +1,280 @@
 import AppKit
 import SwiftUI
 
-/// 设置窗口。
-struct SettingsView: View {
-    var body: some View {
-        TabView {
-            GeneralSettings()
-                .tabItem { Label(L("General"), systemImage: "gearshape") }
-            ExportSettings()
-                .tabItem { Label(L("Export"), systemImage: "square.and.arrow.up") }
-            LibrarySettings()
-                .tabItem { Label(L("Templates & Themes"), systemImage: "square.grid.2x2") }
-        }
-        .frame(width: 560, height: 440)
+/// 设置窗口：工具栏图标切换页面，窗口高度随页面内容变化。
+final class SettingsWindowController: NSWindowController {
+    static let shared = SettingsWindowController()
+
+    private init() {
+        let tabs = NSTabViewController()
+        tabs.tabStyle = .toolbar
+        tabs.addTabViewItem(Self.tab(GeneralSettings(), title: L("General"), symbol: "gearshape"))
+        tabs.addTabViewItem(Self.tab(ExportSettings(), title: L("Export"), symbol: "square.and.arrow.up"))
+        tabs.addTabViewItem(Self.tab(LibrarySettings(), title: L("Templates & Themes"), symbol: "square.grid.2x2"))
+        let window = NSWindow(contentViewController: tabs)
+        window.styleMask = [.titled, .closable]
+        window.toolbarStyle = .preference
+        window.isReleasedWhenClosed = false
+        super.init(window: window)
+        window.center()
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    func show() {
+        showWindow(nil)
+        window?.makeKeyAndOrderFront(nil)
+    }
+
+    private static func tab<V: View>(_ view: V, title: String, symbol: String) -> NSTabViewItem {
+        let hosting = NSHostingController(rootView: view)
+        // 每页按内容给出窗口大小，切换页面时窗口跟着变
+        hosting.sizingOptions = [.preferredContentSize]
+        hosting.title = title
+        let item = NSTabViewItem(viewController: hosting)
+        item.label = title
+        item.image = NSImage(systemSymbolName: symbol, accessibilityDescription: title)
+        return item
     }
 }
 
-private struct GeneralSettings: View {
+// MARK: - 页面
+
+struct GeneralSettings: View {
     @Bindable private var prefs = Preferences.shared
     @State private var themes = ThemeLibrary.shared
 
     var body: some View {
-        Form {
-            Section(L("New Maps")) {
-                Toggle(L("Show the template gallery when creating a new map"), isOn: $prefs.showTemplateGalleryOnNew)
-                Picker(L("Default structure"), selection: $prefs.defaultStructure) {
-                    ForEach(MapStructure.allCases) { Label($0.title, systemImage: $0.symbolName).tag($0) }
-                }
-                Picker(L("Default theme"), selection: $prefs.defaultThemeID) {
-                    ForEach(themes.allThemes) { Text($0.displayName).tag($0.id) }
-                }
-                Picker(L("Default spacing"), selection: $prefs.defaultSpacing) {
-                    ForEach(MapSpacing.allCases) { Text($0.title).tag($0) }
+        SettingsPane {
+            SettingsGroup(title: L("Startup")) {
+                SettingsRow(title: L("Show the welcome window when FreeMind starts"),
+                            detail: L("The welcome window lists recent maps. When it is off, FreeMind starts with a new map.")) {
+                    SettingsSwitch(isOn: $prefs.showWelcomeOnLaunch)
                 }
             }
-            Section(L("Opening Maps")) {
-                Toggle(L("Restore zoom level and position"), isOn: $prefs.restoreViewState)
-                Text(L("Collapsed branches are always saved in the file and restored."))
-                    .font(.caption).foregroundStyle(.secondary)
+            SettingsGroup(title: L("New Maps")) {
+                SettingsRow(title: L("Show the template gallery when creating a new map")) {
+                    SettingsSwitch(isOn: $prefs.showTemplateGalleryOnNew)
+                }
+                SettingsDivider()
+                SettingsRow(title: L("Default structure")) {
+                    Picker(L("Default structure"), selection: $prefs.defaultStructure) {
+                        ForEach(MapStructure.allCases) { Label($0.title, systemImage: $0.symbolName).tag($0) }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
+                }
+                SettingsDivider()
+                SettingsRow(title: L("Default theme")) {
+                    Picker(L("Default theme"), selection: $prefs.defaultThemeID) {
+                        ForEach(themes.allThemes) { Text($0.displayName).tag($0.id) }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
+                }
+                SettingsDivider()
+                SettingsRow(title: L("Default spacing")) {
+                    Picker(L("Default spacing"), selection: $prefs.defaultSpacing) {
+                        ForEach(MapSpacing.allCases) { Text($0.title).tag($0) }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
+                }
+            }
+            SettingsGroup(title: L("Opening Maps")) {
+                SettingsRow(title: L("Restore zoom level and position"),
+                            detail: L("Collapsed branches are always saved in the file and restored.")) {
+                    SettingsSwitch(isOn: $prefs.restoreViewState)
+                }
             }
         }
-        .formStyle(.grouped)
     }
 }
 
-private struct ExportSettings: View {
+struct ExportSettings: View {
     @Bindable private var prefs = Preferences.shared
 
     var body: some View {
-        Form {
-            Section(L("Markdown")) {
-                Picker(L("Use headings for"), selection: $prefs.markdownHeadingLevels) {
-                    Text(L("None (lists only)")).tag(0)
-                    ForEach(1...6, id: \.self) { Text(LF("%d levels", $0)).tag($0) }
+        SettingsPane {
+            SettingsGroup(title: L("Markdown")) {
+                SettingsRow(title: L("Use headings for"), detail: L("Deeper levels are exported as nested lists.")) {
+                    Picker(L("Use headings for"), selection: $prefs.markdownHeadingLevels) {
+                        Text(L("None (lists only)")).tag(0)
+                        ForEach(1...6, id: \.self) { Text(LF("%d levels", $0)).tag($0) }
+                    }
+                    .labelsHidden()
+                    .fixedSize()
                 }
-                Text(L("Deeper levels are exported as nested lists."))
-                    .font(.caption).foregroundStyle(.secondary)
-                Toggle(L("Include notes"), isOn: $prefs.markdownIncludeNotes)
-                Toggle(L("Include labels"), isOn: $prefs.markdownIncludeLabels)
-                Toggle(L("Export attachments and images to a folder"), isOn: $prefs.markdownExportAttachments)
+                SettingsDivider()
+                SettingsRow(title: L("Include notes")) { SettingsSwitch(isOn: $prefs.markdownIncludeNotes) }
+                SettingsDivider()
+                SettingsRow(title: L("Include labels")) { SettingsSwitch(isOn: $prefs.markdownIncludeLabels) }
+                SettingsDivider()
+                SettingsRow(title: L("Export attachments and images to a folder")) {
+                    SettingsSwitch(isOn: $prefs.markdownExportAttachments)
+                }
             }
-            Section(L("Image")) {
-                Picker(L("PNG resolution"), selection: $prefs.pngScale) {
-                    Text("1×").tag(1)
-                    Text("2×").tag(2)
-                    Text("3×").tag(3)
-                    Text("4×").tag(4)
+            SettingsGroup(title: L("Image")) {
+                SettingsRow(title: L("PNG resolution")) {
+                    Picker(L("PNG resolution"), selection: $prefs.pngScale) {
+                        ForEach(1...4, id: \.self) { Text("\($0)×").tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .fixedSize()
                 }
-                .pickerStyle(.segmented)
             }
         }
-        .formStyle(.grouped)
     }
 }
 
-private struct LibrarySettings: View {
+struct LibrarySettings: View {
     @State private var templates = TemplateLibrary.shared.userTemplates()
     @State private var themes = ThemeLibrary.shared
 
     var body: some View {
-        Form {
-            Section(L("My Templates")) {
+        SettingsPane {
+            SettingsGroup(title: L("My Templates")) {
                 if templates.isEmpty {
-                    Text(L("No templates yet. Use File ▸ Save as Template to create one."))
-                        .foregroundStyle(.secondary)
+                    SettingsEmptyRow(text: L("No templates yet. Use File ▸ Save as Template to create one."))
                 }
                 ForEach(templates) { template in
-                    HStack {
-                        Image(systemName: "doc.richtext")
-                        Text(template.name)
-                        Spacer()
-                        Button(L("Show in Finder")) {
+                    SettingsRow(title: template.name) {
+                        Button {
                             if let url = template.url { NSWorkspace.shared.activateFileViewerSelecting([url]) }
-                        }
-                        Button(L("Delete"), role: .destructive) {
+                        } label: { Image(systemName: "folder") }
+                            .buttonStyle(.borderless)
+                            .help(L("Show in Finder"))
+                        Button {
                             try? TemplateLibrary.shared.deleteUserTemplate(template)
                             templates = TemplateLibrary.shared.userTemplates()
-                        }
+                        } label: { Image(systemName: "trash") }
+                            .buttonStyle(.borderless)
+                            .help(L("Delete"))
                     }
+                    SettingsDivider()
                 }
-                Button(L("Open Templates Folder")) { NSWorkspace.shared.open(AppDirectories.templates) }
+                HStack {
+                    Spacer()
+                    Button(L("Open Templates Folder")) { NSWorkspace.shared.open(AppDirectories.templates) }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
             }
-            Section(L("Custom Themes")) {
+            SettingsGroup(title: L("Custom Themes")) {
                 if themes.customThemes.isEmpty {
-                    Text(L("No custom themes yet. Adjust a theme in the format panel, then choose Save as Custom Theme."))
-                        .foregroundStyle(.secondary)
+                    SettingsEmptyRow(text: L("No custom themes yet. Adjust a theme in the format panel, then choose Save as Custom Theme."))
                 }
-                ForEach(themes.customThemes) { theme in
-                    HStack {
+                ForEach(Array(themes.customThemes.enumerated()), id: \.element.id) { index, theme in
+                    if index > 0 { SettingsDivider() }
+                    HStack(spacing: 10) {
                         Image(nsImage: ThemePreview.image(for: theme, size: CGSize(width: 100, height: 60)))
-                            .resizable().frame(width: 50, height: 30).clipShape(RoundedRectangle(cornerRadius: 4))
+                            .resizable()
+                            .frame(width: 50, height: 30)
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
                         Text(theme.displayName)
                         Spacer()
-                        Button(L("Delete"), role: .destructive) { themes.delete(id: theme.id) }
+                        Button { themes.delete(id: theme.id) } label: { Image(systemName: "trash") }
+                            .buttonStyle(.borderless)
+                            .help(L("Delete"))
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
                 }
             }
         }
-        .formStyle(.grouped)
         .onAppear { templates = TemplateLibrary.shared.userTemplates() }
+    }
+}
+
+// MARK: - 通用组件
+
+/// 一页设置：固定宽度，高度随内容。
+struct SettingsPane<Content: View>: View {
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) { content }
+            .padding(20)
+            .frame(width: 500, alignment: .topLeading)
+            .fixedSize(horizontal: false, vertical: true)
+            // 打开窗口 / 切换页面时键盘焦点落在第一个控件上，不显示焦点框
+            .focusEffectDisabled()
+    }
+}
+
+/// 一组设置：小标题 + 圆角底板。组内各行之间用 `SettingsDivider` 分隔。
+struct SettingsGroup<Content: View>: View {
+    let title: String
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .padding(.leading, 4)
+            VStack(spacing: 0) { content }
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.045)))
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary.opacity(0.08)))
+        }
+    }
+}
+
+/// 一行设置：左边名称（可带说明），右边控件。
+struct SettingsRow<Control: View>: View {
+    let title: String
+    var detail: String?
+    @ViewBuilder var control: Control
+
+    var body: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                if let detail {
+                    Text(detail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            Spacer(minLength: 12)
+            control
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .frame(minHeight: 40)
+    }
+}
+
+struct SettingsDivider: View {
+    var body: some View {
+        Divider().padding(.leading, 12)
+    }
+}
+
+struct SettingsSwitch: View {
+    @Binding var isOn: Bool
+
+    var body: some View {
+        Toggle("", isOn: $isOn)
+            .toggleStyle(.switch)
+            .controlSize(.small)
+            .labelsHidden()
+    }
+}
+
+/// 组里没有内容时的提示行。
+struct SettingsEmptyRow: View {
+    let text: String
+
+    var body: some View {
+        Text(text)
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
     }
 }
 
@@ -158,6 +314,10 @@ struct KeyboardShortcutsView: View {
                 ("⌘+ / ⌘-", L("Zoom in / out")), ("⌘0", L("Actual size")), ("⌘9", L("Zoom to fit")),
                 (L("⌘ + scroll"), L("Zoom with the mouse wheel")), ("⌘F / ⌘G", L("Find / find next")),
                 ("⌥⌘I", L("Show or hide the format panel")),
+            ]),
+            Group(title: L("Maps"), items: [
+                ("⌘N", L("New map (opens the template gallery)")), ("⌘O", L("Open a map")),
+                ("⇧⌘1", L("Welcome window with recent maps")),
             ]),
         ]
     }

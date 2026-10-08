@@ -100,8 +100,21 @@ final class RenderSnapshotTests: XCTestCase {
         try snapshot(ScrollView { ThemeGrid(selectedID: "classic", themes: ThemeLibrary.shared.allThemes, onSelect: { _ in }).padding(12) }
                         .frame(width: 340, height: 460),
                      size: CGSize(width: 340, height: 460), name: "popover-themes.png")
+        var recents: [URL] = []
+        for (name, make) in [("项目计划", BuiltinTemplates.projectPlan), ("Weekly Plan", BuiltinTemplates.weeklyPlan)] {
+            let recentDoc = MindMapDocument()
+            recentDoc.editor.load(make())
+            let url = dir.appendingPathComponent("\(name).fmind")
+            try? FileManager.default.removeItem(at: url)
+            try recentDoc.write(to: url, ofType: DocumentTypes.map)
+            recents.append(url)
+        }
+        try snapshot(WelcomeView(recents: recents, close: {}), size: CGSize(width: 800, height: 480), name: "welcome.png")
+        try snapshot(WelcomeView(recents: [], close: {}), size: CGSize(width: 800, height: 480), name: "welcome-empty-dark.png", dark: true)
         try snapshot(TemplateGalleryView(close: {}), size: CGSize(width: 940, height: 680), name: "gallery.png")
-        try snapshot(SettingsView(), size: CGSize(width: 560, height: 440), name: "settings.png")
+        try snapshot(GeneralSettings(), size: CGSize(width: 500, height: 520), name: "settings-general.png", dark: true)
+        try snapshot(ExportSettings(), size: CGSize(width: 500, height: 420), name: "settings-export.png")
+        try snapshot(LibrarySettings(), size: CGSize(width: 500, height: 360), name: "settings-library.png")
         try snapshot(KeyboardShortcutsView(), size: CGSize(width: 560, height: 900), name: "shortcuts.png")
     }
 

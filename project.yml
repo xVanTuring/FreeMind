@@ -30,6 +30,8 @@ targets:
           - "Resources/Info.plist"
           - "Resources/FreeMind.entitlements"
           - "Resources/AppIcon.svg"
+      # 欢迎窗口的最近导图缩略图与 Quick Look 共用读取代码
+      - path: Extensions/Shared/MapPreviewLoader.swift
     dependencies:
       - target: FreeMindQuickLook
         embed: true
