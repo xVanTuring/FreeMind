@@ -44,6 +44,8 @@ final class MapViewController: NSViewController {
         scrollView.hasVerticalScroller = true
         scrollView.hasHorizontalScroller = true
         scrollView.autohidesScrollers = true
+        // 默认会把触控板滚动锁定在起手时的主方向（只能水平或垂直）；导图是二维画布，要能斜着任意拖
+        scrollView.usesPredominantAxisScrolling = false
         scrollView.allowsMagnification = true
         scrollView.minMagnification = 0.1
         scrollView.maxMagnification = 4

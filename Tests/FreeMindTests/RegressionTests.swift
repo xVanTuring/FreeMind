@@ -67,6 +67,25 @@ final class RegressionTests: XCTestCase {
         XCTAssertEqual(controller.preferredContentSize, CGSize(width: 380, height: 260))
     }
 
+    /// 单实例锁：已有人持锁时再加锁失败（两个 FreeMind 进程不能同时运行），释放后可以重新拿到。
+    func testSingleInstanceLock() throws {
+        let url = tempDir.appendingPathComponent("instance.lock")
+        let first = try XCTUnwrap(SingleInstanceLock.lock(url, retryFor: 0))
+        XCTAssertNil(SingleInstanceLock.lock(url, retryFor: 0), "已经有实例持锁时应该失败")
+        close(first)
+        let again = try XCTUnwrap(SingleInstanceLock.lock(url, retryFor: 0), "持锁的进程退出后应该能重新拿到")
+        close(again)
+    }
+
+    /// 触控板双指滚动可以斜着拖：画布的滚动视图不能锁定主方向。
+    func testCanvasScrollsInAnyDirection() {
+        let doc = MindMapDocument()
+        doc.editor.load(MindMap.blank(title: "Root"))
+        let controller = MapViewController(editor: doc.editor, images: { _ in nil })
+        _ = controller.view
+        XCTAssertFalse(controller.scrollView.usesPredominantAxisScrolling)
+    }
+
     /// 取消编辑后，编辑期间临时加的“已修改”计数要抵消。
     func testCancelledEditDoesNotLeaveDocumentEdited() {
         let doc = MindMapDocument()

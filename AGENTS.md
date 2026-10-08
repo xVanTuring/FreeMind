@@ -51,8 +51,18 @@ build/DerivedData/Build/Products/Debug/FreeMind.app/Contents/MacOS/FreeMind   # 
   写之前用 `writableDocument` 提交用户的行内编辑。新增写工具时照这个做，不要直接调 `addChild` 这类会改选中、进入编辑的界面方法。
 - 写入闸门只在 `MCPCatalog.call` 一处（tier 为 `.write` / `.delete` 的工具）。
 - 新增工具后在 `MCPTests` 补测试；`testHTTPRoundTrip` 在随机端口上走真实 HTTP。
-- 本机实测：`build/.../Debug/FreeMind.app/Contents/MacOS/FreeMind -ApplePersistenceIgnoreState YES` 单独起一个实例
-  （不恢复窗口，免得和正在用的实例同时打开同一份文件），再用 curl 调 `http://127.0.0.1:8775/mcp`。
+- 本机实测：`build/.../Debug/FreeMind.app/Contents/MacOS/FreeMind -ApplePersistenceIgnoreState YES` 起一个实例
+  （不恢复窗口），再用 curl 调 `http://127.0.0.1:8775/mcp`。FreeMind 是单实例的（见下文），已有实例在运行时新进程会直接退出，
+  所以先确认没有 FreeMind 在运行，或者请用户退出正在用的那个。
+
+## 单实例
+
+- 同 Perch，先开的留下：`main.swift` 最早期用 `SingleInstanceLock` 在 `~/Library/Application Support/FreeMind/instance.lock`
+  上抢 `flock`，抢不到就发分布式通知让已在运行的实例调到前面（没有窗口时显示欢迎窗口），自己退出。
+- 单元测试（`AppDelegate.isRunningTests`）不检查，测试宿主可以和正在使用的 FreeMind 同时运行。
+- 开发时不要在用户的 FreeMind 运行期间往它所在的 `build/DerivedData` 里编译：正在运行的 App 的包被替换后，
+  Dock 图标会变成空白。用户开着时换一个 `-derivedDataPath`（加 `-clonedSourcePackagesDirPath build/DerivedData/SourcePackages
+  -disableAutomaticPackageResolution` 复用已解析的 Sparkle 包）。
 
 ## 发布与自动更新
 

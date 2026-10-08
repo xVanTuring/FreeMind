@@ -19,6 +19,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if prefs.mcpEnabled { MCPServer.shared.start() }
         // 自动更新：菜单构建时已经创建（“检查更新…”以它为 target），这里只是确保它在启动时就开始工作
         _ = UpdaterService.shared
+        DistributedNotificationCenter.default().addObserver(
+            self, selector: #selector(handleSecondLaunch(_:)), name: SingleInstanceLock.secondLaunchNotification, object: nil)
         if !prefs.hasLaunchedBefore {
             prefs.hasLaunchedBefore = true
             // 第一次启动：打开“快速上手”导图（此时不再弹模板库）
@@ -28,6 +30,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private var isFirstLaunch = false
+
+    /// 用户又打开了一次 FreeMind（那个进程抢不到单实例锁，已经退出）：调到前面；
+    /// 没有窗口时和点 Dock 图标一样，显示欢迎窗口或新建导图。
+    @objc private func handleSecondLaunch(_ note: Notification) {
+        NSApp.unhide(nil)
+        NSApp.activate()
+        if !NSApp.windows.contains(where: { $0.isVisible && $0.canBecomeMain }) {
+            _ = applicationOpenUntitledFile(NSApp)
+        }
+    }
 
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { !Self.isRunningTests }
 
