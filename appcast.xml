@@ -8,5 +8,73 @@
     <description>Updates for FreeMind, a native macOS mind-mapping app.</description>
     <language>en</language>
     <!-- BEGIN-ITEMS (release.sh inserts new entries here, newest first) -->
+    <item>
+      <title>v1.0.0</title>
+      <pubDate>Thu, 08 Oct 2026 09:03:47 +0000</pubDate>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description xml:lang="zh"><![CDATA[
+<h3>FreeMind 1.0.0</h3>
+<p>FreeMind 的第一个正式版本：macOS 原生的思维导图应用，操作方式参照 XMind，键盘就能完成大部分编辑。需要 macOS 14 或更高版本。</p>
+<h4>画导图</h4>
+<ul>
+<li>五种结构：思维导图、逻辑图（向右 / 向左）、组织结构图、树状图，随时切换</li>
+<li>12 套内置风格，背景、分支配色、字体、线宽都能调整，再存成自定义风格</li>
+<li>备注、超链接、附件、主题图片、标签、标记、外框、联系线</li>
+<li>Tab 加子主题、Return 加同级主题，选中后直接打字就能改文字，支持中文输入法</li>
+<li>⌘F 查找主题文字、标签和备注</li>
+</ul>
+<h4>文件</h4>
+<ul>
+<li><code>.fmind</code> 包格式，附件直接存在文件里；折叠状态、缩放比例和位置随文件保存</li>
+<li>导入 Markdown、OPML、XMind（新版和 XMind 8）、纯文本缩进大纲</li>
+<li>导出 Markdown、OPML、PNG、PDF，以及打印</li>
+<li>Finder 里可以看到 <code>.fmind</code> 的缩略图，按空格预览</li>
+</ul>
+<h4>其他</h4>
+<ul>
+<li>欢迎窗口列出最近打开的导图；新建时可以从模板库选模板</li>
+<li>自动保存、版本浏览、撤销 / 重做、窗口标签页、深色模式</li>
+<li>本机 MCP 服务，Claude Code 等 AI Agent 可以读取和编辑打开的导图（设置 ▸ Agent）</li>
+<li>自动检查更新（FreeMind ▸ 检查更新…）</li>
+<li>中英文界面，跟随系统语言</li>
+</ul>
+<h4>安装</h4>
+<p>下载 <code>FreeMind-1.0.0.dmg</code>，打开后把 FreeMind 拖进“应用程序”。App 已用 Developer ID 签名并经过 Apple 公证。</p>
+<p><a href="https://github.com/xVanTuring/FreeMind/releases/tag/v1.0.0">在 GitHub 上查看这次发布 →</a></p>
+      ]]></description>
+      <description xml:lang="en"><![CDATA[
+<h3>FreeMind 1.0.0</h3>
+<p>The first release of FreeMind, a native macOS mind-mapping app modeled on XMind, built so that most editing can be done from the keyboard. Requires macOS 14 or later.</p>
+<h4>Mapping</h4>
+<ul>
+<li>Five structures: mind map, logic chart (right / left), org chart and tree chart, switchable at any time</li>
+<li>12 built-in themes; adjust background, branch colors, fonts and line widths, then save your own</li>
+<li>Notes, hyperlinks, attachments, topic images, labels, markers, boundaries and relationships</li>
+<li>Tab adds a child, Return adds a sibling, and typing on a selected topic edits it (input methods supported)</li>
+<li>⌘F searches topic text, labels and notes</li>
+</ul>
+<h4>Files</h4>
+<ul>
+<li><code>.fmind</code> package format with attachments stored inside; fold state, zoom and scroll position are saved with the file</li>
+<li>Import Markdown, OPML, XMind (current and XMind 8) and indented plain-text outlines</li>
+<li>Export Markdown, OPML, PNG and PDF, or print</li>
+<li>Finder thumbnails and Quick Look previews for <code>.fmind</code> files</li>
+</ul>
+<h4>More</h4>
+<ul>
+<li>Welcome window with recent maps; pick a template when creating a new map</li>
+<li>Autosave, version browsing, undo / redo, window tabs and dark mode</li>
+<li>Local MCP server so AI agents such as Claude Code can read and edit open maps (Settings ▸ Agent)</li>
+<li>Automatic update checks (FreeMind ▸ Check for Updates…)</li>
+<li>English and Chinese interface, following the system language</li>
+</ul>
+<h4>Install</h4>
+<p>Download <code>FreeMind-1.0.0.dmg</code>, open it and drag FreeMind into Applications. The app is signed with Developer ID and notarized by Apple.</p>
+<p><a href="https://github.com/xVanTuring/FreeMind/releases/tag/v1.0.0">View the release on GitHub →</a></p>
+      ]]></description>
+      <enclosure url="https://github.com/xVanTuring/FreeMind/releases/download/v1.0.0/FreeMind-1.0.0.zip" length="3921689" type="application/octet-stream" sparkle:edSignature="sD0M1xb2BObxBh45j4wJYbE4NwQiv0Sxd+MMdLul4VCsBiBKS1+FCBeTzy24fhjvkpdBnUKS0VTK9L80QUgxAQ==" />
+    </item>
   </channel>
 </rss>
