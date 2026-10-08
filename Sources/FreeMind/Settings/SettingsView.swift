@@ -420,7 +420,7 @@ struct KeyboardShortcutsView: View {
             Group(title: L("View"), items: [
                 ("⌘+ / ⌘-", L("Zoom in / out")), ("⌘0", L("Actual size")), ("⌘9", L("Zoom to fit")),
                 (L("⌘ + scroll"), L("Zoom with the mouse wheel")), ("⌘F / ⌘G", L("Find / find next")),
-                ("⌥⌘I", L("Show or hide the format panel")),
+                ("⌥⌘I", L("Show or hide the format panel")), ("⌥⌘L", L("Show or hide relationships")),
             ]),
             Group(title: L("Maps"), items: [
                 ("⌘N", L("New map (opens the template gallery)")), ("⌘O", L("Open a map")),

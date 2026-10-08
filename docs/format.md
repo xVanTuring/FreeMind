@@ -35,7 +35,8 @@ FreeMind 的专属格式是一个 **macOS package**（目录包）：在 Finder 
     "topicMaxWidth": 260,        // 主题文字最大宽度（pt）
     "theme": { … },              // 完整内嵌的主题，见下文
     "root": { … },               // 中心主题（Topic）
-    "relationships": [ … ]       // 可选，联系线
+    "relationships": [ … ],      // 可选，联系线
+    "relationshipsHidden": true  // 可选，隐藏联系线（只影响显示，联系线数据照常保存）；没有这个字段表示显示
   },
   "view": {                      // 可选，打开时恢复的视图
     "zoom": 1.0,
@@ -112,6 +113,7 @@ FreeMind 的专属格式是一个 **macOS package**（目录包）：在 Finder 
 | `id` `from` `to` | UUID；`from` / `to` 为主题 id |
 | `title` | 标签文字 |
 | `control1` / `control2` | 可选，`{dx, dy}`：两个控制点分别相对起点主题、终点主题中心的偏移；省略表示自动弧度 |
+| `labelPosition` | 可选，0…1：标签中心在曲线上的位置（贝塞尔参数，0.5 是中点）；省略表示自动放置，避开其他标签和主题。用户手动调整过联系线形状时写入 |
 | `color` | 可选，颜色（Paint） |
 | `dashed` | 默认 `true` |
 | `arrowStart` / `arrowEnd` | 默认 `false` / `true` |

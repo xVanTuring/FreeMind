@@ -44,67 +44,76 @@ struct MapRenderer {
 
     // MARK: 联系线
 
+    /// 先画所有的线，再画所有的标签，最后画选中线的控制柄：标签不会被后画的线压住。
     private func drawRelationships(_ ctx: CGContext, in rect: CGRect, state: RenderState) {
-        for r in layout.relationships where r.bounds.intersects(rect) {
-            let selected = state.selectedRelationship == r.id
-            let path = CGMutablePath()
-            path.move(to: r.p0)
-            path.addCurve(to: r.p3, control1: r.c1, control2: r.c2)
-            ctx.saveGState()
-            ctx.setLineCap(.round)
-            if selected {
-                ctx.addPath(path)
-                ctx.setStrokeColor(state.accent.withAlphaComponent(0.3).cgColor)
-                ctx.setLineWidth(8)
-                ctx.strokePath()
-            }
+        let visible = layout.relationships.filter { $0.bounds.intersects(rect) }
+        for r in visible { drawRelationshipLine(r, ctx: ctx, state: state) }
+        for r in visible { drawRelationshipLabel(r, ctx: ctx) }
+        if let r = visible.first(where: { $0.id == state.selectedRelationship }) { drawControlHandles(r, ctx: ctx, state: state) }
+    }
+
+    private func drawRelationshipLine(_ r: RelationshipLayout, ctx: CGContext, state: RenderState) {
+        let path = CGMutablePath()
+        path.move(to: r.p0)
+        path.addCurve(to: r.p3, control1: r.c1, control2: r.c2)
+        ctx.saveGState()
+        ctx.setLineCap(.round)
+        if state.selectedRelationship == r.id {
             ctx.addPath(path)
-            ctx.setStrokeColor(r.color.cgColor)
-            ctx.setLineWidth(2)
-            if r.dashed { ctx.setLineDash(phase: 0, lengths: [7, 5]) }
+            ctx.setStrokeColor(state.accent.withAlphaComponent(0.3).cgColor)
+            ctx.setLineWidth(8)
             ctx.strokePath()
-            ctx.setLineDash(phase: 0, lengths: [])
-            ctx.setFillColor(r.color.cgColor)
-            if r.arrowEnd { drawArrow(ctx, tip: r.p3, from: r.c2 == r.p3 ? r.p0 : r.c2) }
-            if r.arrowStart { drawArrow(ctx, tip: r.p0, from: r.c1 == r.p0 ? r.p3 : r.c1) }
-
-            if let label = r.labelRect {
-                let bg = CGPath(roundedRect: label, cornerWidth: label.height / 2, cornerHeight: label.height / 2, transform: nil)
-                ctx.addPath(bg)
-                ctx.setFillColor(layout.background.cgColor)
-                ctx.fillPath()
-                ctx.addPath(bg)
-                ctx.setStrokeColor(r.color.withAlphaComponent(0.6).cgColor)
-                ctx.setLineWidth(1)
-                ctx.strokePath()
-                let paragraph = NSMutableParagraphStyle()
-                paragraph.alignment = .center
-                let text = NSAttributedString(string: r.title, attributes: [
-                    .font: RelationshipLayout.labelFont, .foregroundColor: r.color, .paragraphStyle: paragraph,
-                ])
-                text.draw(with: label.insetBy(dx: 6, dy: 3), options: [.usesLineFragmentOrigin, .usesFontLeading])
-            }
-
-            if selected {
-                // 控制柄
-                ctx.setStrokeColor(state.accent.withAlphaComponent(0.7).cgColor)
-                ctx.setLineWidth(1)
-                ctx.move(to: r.p0)
-                ctx.addLine(to: r.c1)
-                ctx.move(to: r.p3)
-                ctx.addLine(to: r.c2)
-                ctx.strokePath()
-                for c in [r.c1, r.c2] {
-                    let handle = CGRect(x: c.x - 5, y: c.y - 5, width: 10, height: 10)
-                    ctx.setFillColor(NSColor.white.cgColor)
-                    ctx.fillEllipse(in: handle)
-                    ctx.setStrokeColor(state.accent.cgColor)
-                    ctx.setLineWidth(2)
-                    ctx.strokeEllipse(in: handle)
-                }
-            }
-            ctx.restoreGState()
         }
+        ctx.addPath(path)
+        ctx.setStrokeColor(r.color.cgColor)
+        ctx.setLineWidth(2)
+        if r.dashed { ctx.setLineDash(phase: 0, lengths: [7, 5]) }
+        ctx.strokePath()
+        ctx.setLineDash(phase: 0, lengths: [])
+        ctx.setFillColor(r.color.cgColor)
+        if r.arrowEnd { drawArrow(ctx, tip: r.p3, from: r.c2 == r.p3 ? r.p0 : r.c2) }
+        if r.arrowStart { drawArrow(ctx, tip: r.p0, from: r.c1 == r.p0 ? r.p3 : r.c1) }
+        ctx.restoreGState()
+    }
+
+    private func drawRelationshipLabel(_ r: RelationshipLayout, ctx: CGContext) {
+        guard let label = r.labelRect else { return }
+        ctx.saveGState()
+        let bg = CGPath(roundedRect: label, cornerWidth: label.height / 2, cornerHeight: label.height / 2, transform: nil)
+        ctx.addPath(bg)
+        ctx.setFillColor(layout.background.cgColor)
+        ctx.fillPath()
+        ctx.addPath(bg)
+        ctx.setStrokeColor(r.color.withAlphaComponent(0.6).cgColor)
+        ctx.setLineWidth(1)
+        ctx.strokePath()
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        let text = NSAttributedString(string: r.title, attributes: [
+            .font: RelationshipLayout.labelFont, .foregroundColor: r.color, .paragraphStyle: paragraph,
+        ])
+        text.draw(with: label.insetBy(dx: 6, dy: 3), options: [.usesLineFragmentOrigin, .usesFontLeading])
+        ctx.restoreGState()
+    }
+
+    private func drawControlHandles(_ r: RelationshipLayout, ctx: CGContext, state: RenderState) {
+        ctx.saveGState()
+        ctx.setStrokeColor(state.accent.withAlphaComponent(0.7).cgColor)
+        ctx.setLineWidth(1)
+        ctx.move(to: r.p0)
+        ctx.addLine(to: r.c1)
+        ctx.move(to: r.p3)
+        ctx.addLine(to: r.c2)
+        ctx.strokePath()
+        for c in [r.c1, r.c2] {
+            let handle = CGRect(x: c.x - 5, y: c.y - 5, width: 10, height: 10)
+            ctx.setFillColor(NSColor.white.cgColor)
+            ctx.fillEllipse(in: handle)
+            ctx.setStrokeColor(state.accent.cgColor)
+            ctx.setLineWidth(2)
+            ctx.strokeEllipse(in: handle)
+        }
+        ctx.restoreGState()
     }
 
     private func drawArrow(_ ctx: CGContext, tip: CGPoint, from: CGPoint) {

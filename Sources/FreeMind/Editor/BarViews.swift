@@ -13,6 +13,15 @@ struct StatusBarView: View {
             if editor.selection.count > 1 {
                 Text(LF("%d selected", editor.selection.count))
             }
+            // 联系线隐藏着时提醒一下，点一下重新显示
+            if editor.map.relationshipsHidden, !editor.map.relationships.isEmpty {
+                Button { editor.setRelationshipsHidden(false) } label: {
+                    Label(LF("%d relationships hidden", editor.map.relationships.count), systemImage: "eye.slash")
+                        .monospacedDigit()
+                }
+                .buttonStyle(.plain)
+                .help(L("Show relationships (⌥⌘L)"))
+            }
             Divider().frame(height: 12)
             Text(hint)
                 .lineLimit(1)

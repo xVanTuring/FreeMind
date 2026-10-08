@@ -258,6 +258,18 @@ final class MCPTests: XCTestCase {
         XCTAssertTrue(badTheme.isError)
     }
 
+    /// 用户隐藏了联系线：get_map 说明一下；Agent 新建联系线时和界面上一样自动显示。
+    func testHiddenRelationships() async throws {
+        _ = try await call("add_relationship", ["from_id": id("Alpha"), "to_id": id("Beta")])
+        doc.editor.setRelationshipsHidden(true)
+        let outline = try await call("get_map")
+        XCTAssertTrue(outline.text.contains("1 relationship (hidden on the canvas)"), outline.text)
+        let added = try await call("add_relationship", ["from_id": id("Beta"), "to_id": id("Alpha")])
+        XCTAssertFalse(added.isError, added.text)
+        XCTAssertFalse(map.relationshipsHidden)
+        XCTAssertEqual(doc.editor.layout.relationships.count, 2)
+    }
+
     func testFoldAndSelect() async throws {
         _ = try await call("fold_topics", ["action": "collapse", "topic_ids": [id("Alpha")]])
         XCTAssertTrue(map.root.children[0].collapsed)

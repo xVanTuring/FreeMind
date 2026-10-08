@@ -108,7 +108,8 @@ struct LayoutEngine {
     }
 
     private func layoutRelationships(into layout: inout MapLayout) {
-        guard !map.relationships.isEmpty else { return }
+        // 隐藏时不进布局：不画、点不中，也不占画布和导出图片的范围
+        guard !map.relationships.isEmpty, !map.relationshipsHidden else { return }
         // 端点被折叠隐藏时，连到最近的可见祖先
         var parent: [UUID: UUID] = [:]
         func walk(_ t: Topic) {
@@ -129,6 +130,7 @@ struct LayoutEngine {
 
         let theme = map.theme
         let defaultColor = Self.defaultRelationshipColor(dark: theme.isDark)
+        var labels: [UUID: (size: CGSize, pinned: Double?)] = [:]
         for rel in map.relationships {
             guard let a = visibleNode(rel.from), let b = visibleNode(rel.to), a.id != b.id else { continue }
             let ca = CGPoint(x: a.frame.midX, y: a.frame.midY)
@@ -190,15 +192,60 @@ struct LayoutEngine {
             let p0 = Self.boundaryPoint(a.frame.insetBy(dx: -3, dy: -3), toward: c1)
             let p3 = Self.boundaryPoint(b.frame.insetBy(dx: -3, dy: -3), toward: c2)
             let color = rel.color?.resolve(branch: defaultColor, background: theme.backgroundColor) ?? defaultColor
-            var r = RelationshipLayout(id: rel.id, from: rel.from, to: rel.to, p0: p0, c1: c1, c2: c2, p3: p3,
+            let r = RelationshipLayout(id: rel.id, from: rel.from, to: rel.to, p0: p0, c1: c1, c2: c2, p3: p3,
                                        color: color, dashed: rel.dashed, arrowStart: rel.arrowStart, arrowEnd: rel.arrowEnd,
                                        title: rel.title, labelRect: nil, fromCenter: ca, toCenter: cb)
-            if labelSize != .zero {
-                let mid = r.point(at: 0.5)
-                r.labelRect = CGRect(x: mid.x - labelSize.width / 2, y: mid.y - labelSize.height / 2,
-                                     width: labelSize.width, height: labelSize.height)
-            }
+            if labelSize != .zero { labels[rel.id] = (labelSize, rel.labelPosition) }
             layout.relationships.append(r)
+        }
+        placeRelationshipLabels(&layout, labels: labels)
+    }
+
+    /// 自动放置时依次尝试的曲线位置：从中点开始，前后交替往两端挪。
+    static let labelCandidates: [CGFloat] = [0.5, 0.42, 0.58, 0.34, 0.66, 0.26, 0.74, 0.18, 0.82]
+
+    /// 联系线标签互相避让。用户固定过位置的标签先放；其余的按联系线的先后，沿自己的曲线从中点往两端找
+    /// 第一个不压其他标签、不压主题的位置（标签始终在自己的线上，看得出属于哪条线）；都会压到时选压得最少的。
+    private func placeRelationshipLabels(_ layout: inout MapLayout, labels: [UUID: (size: CGSize, pinned: Double?)]) {
+        guard !labels.isEmpty else { return }
+        func box(_ r: RelationshipLayout, _ t: CGFloat, _ size: CGSize) -> CGRect {
+            let p = r.point(at: t)
+            return CGRect(x: p.x - size.width / 2, y: p.y - size.height / 2, width: size.width, height: size.height)
+        }
+        var placed: [CGRect] = []
+        for i in layout.relationships.indices {
+            guard let label = labels[layout.relationships[i].id], let pinned = label.pinned else { continue }
+            let t = CGFloat(min(max(pinned, 0.02), 0.98))
+            let rect = box(layout.relationships[i], t, label.size)
+            layout.relationships[i].labelT = t
+            layout.relationships[i].labelRect = rect
+            placed.append(rect)
+        }
+        let topics = layout.nodes.values.map(\.frame)
+        for i in layout.relationships.indices {
+            guard let label = labels[layout.relationships[i].id], label.pinned == nil else { continue }
+            let r = layout.relationships[i]
+            var best: (t: CGFloat, rect: CGRect, cost: CGFloat)?
+            for t in Self.labelCandidates {
+                let rect = box(r, t, label.size)
+                // 留一点间距；压到别的标签比压到主题更难看，算得更重
+                let padded = rect.insetBy(dx: -4, dy: -2)
+                var cost: CGFloat = 0
+                for other in placed where other.intersects(padded) {
+                    let o = other.intersection(padded)
+                    cost += o.width * o.height * 3
+                }
+                for frame in topics where frame.intersects(padded) {
+                    let o = frame.intersection(padded)
+                    cost += o.width * o.height
+                }
+                if best == nil || cost < best!.cost { best = (t, rect, cost) }
+                if cost == 0 { break }
+            }
+            guard let best else { continue }
+            layout.relationships[i].labelT = best.t
+            layout.relationships[i].labelRect = best.rect
+            placed.append(best.rect)
         }
     }
 

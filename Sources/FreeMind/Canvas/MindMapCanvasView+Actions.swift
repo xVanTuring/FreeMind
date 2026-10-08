@@ -36,7 +36,7 @@ extension MindMapCanvasView: NSMenuItemValidation {
 
     @objc func resetRelationshipShape(_ sender: Any?) {
         guard let id = editor.selectedRelationship else { return }
-        editor.updateRelationship(id, actionName: L("Reshape Relationship")) { $0.control1 = nil; $0.control2 = nil }
+        editor.resetRelationshipShape(id)
     }
 
     @objc func reverseRelationship(_ sender: Any?) {
@@ -44,12 +44,23 @@ extension MindMapCanvasView: NSMenuItemValidation {
         editor.updateRelationship(id, actionName: L("Reverse Relationship")) { r in
             swap(&r.from, &r.to)
             swap(&r.control1, &r.control2)
+            // 曲线方向反过来，标签留在原处
+            r.labelPosition = r.labelPosition.map { 1 - $0 }
         }
+    }
+
+    /// ⌥⌘L：显示 / 隐藏全部联系线（菜单项带勾选状态）。
+    @objc func toggleRelationships(_ sender: Any?) {
+        editor.setRelationshipsHidden(!editor.map.relationshipsHidden)
+    }
+
+    @objc func hideRelationships(_ sender: Any?) {
+        editor.setRelationshipsHidden(true)
     }
 
     func showRelationshipLabelPopover(for id: UUID) {
         guard let r = mapLayout.relationship(id) else { return }
-        let mid = r.point(at: 0.5)
+        let mid = r.point(at: r.labelT)
         let anchor = viewRect(CGRect(x: mid.x - 4, y: mid.y - 4, width: 8, height: 8))
         let popover = NSPopover()
         popover.behavior = .transient
@@ -63,6 +74,7 @@ extension MindMapCanvasView: NSMenuItemValidation {
         menu.addItem(withTitle: L("Edit Label…"), action: #selector(editRelationshipLabel(_:)), keyEquivalent: "")
         menu.addItem(withTitle: L("Reverse Direction"), action: #selector(reverseRelationship(_:)), keyEquivalent: "")
         menu.addItem(withTitle: L("Reset Shape"), action: #selector(resetRelationshipShape(_:)), keyEquivalent: "")
+        menu.addItem(withTitle: L("Hide All Relationships"), action: #selector(hideRelationships(_:)), keyEquivalent: "")
         menu.addItem(.separator())
         menu.addItem(withTitle: L("Delete Relationship"), action: #selector(delete(_:)), keyEquivalent: "")
         return menu
@@ -273,6 +285,11 @@ extension MindMapCanvasView: NSMenuItemValidation {
             return hasSelection && editor.selection.count <= 2
         case #selector(editRelationshipLabel(_:)), #selector(resetRelationshipShape(_:)), #selector(reverseRelationship(_:)):
             return editor.selectedRelationship != nil
+        case #selector(toggleRelationships(_:)):
+            item.state = editor.map.relationshipsHidden ? .off : .on
+            return !editor.map.relationships.isEmpty
+        case #selector(hideRelationships(_:)):
+            return !editor.map.relationshipsHidden
         case #selector(deleteTopicOnly(_:)):
             return single && notRoot
         case #selector(copy(_:)):
@@ -398,6 +415,9 @@ extension MindMapCanvasView: NSMenuItemValidation {
         menu.addItem(.separator())
         menu.addItem(withTitle: L("Expand All"), action: #selector(expandAll(_:)), keyEquivalent: "")
         menu.addItem(withTitle: L("Collapse All"), action: #selector(collapseAll(_:)), keyEquivalent: "")
+        if !editor.map.relationships.isEmpty {
+            menu.addItem(withTitle: L("Show Relationships"), action: #selector(toggleRelationships(_:)), keyEquivalent: "")
+        }
         menu.addItem(withTitle: L("Zoom to Fit"), action: #selector(MapViewController.zoomToFit(_:)), keyEquivalent: "")
         return menu
     }

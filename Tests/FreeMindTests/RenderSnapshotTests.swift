@@ -44,6 +44,28 @@ final class RenderSnapshotTests: XCTestCase {
         }
     }
 
+    /// 联系线标签密集的情况：左右分支之间连很多条带标签的联系线。
+    /// relationship-labels.png 是自动避让的效果，relationship-labels-midpoint.png 是全部放在中点（避让前）的对照。
+    func testRenderRelationshipLabels() throws {
+        let dir = try outputDir()
+        var map = MindMap(root: Topic(title: "软件质量", children: [
+            Topic(title: "质量属性", children: ["正确性", "可靠性", "效率", "可维护性"].map { Topic(title: $0) }),
+            Topic(title: "评审与测试", children: ["需求评审", "设计评审", "单元测试", "覆盖测试"].map { Topic(title: $0) }),
+            Topic(title: "度量", children: ["复杂性", "模块性", "规模"].map { Topic(title: $0) }),
+            Topic(title: "过程", children: ["原型", "迭代", "维护"].map { Topic(title: $0) }),
+        ]))
+        let topic = { (title: String) in map.allTopics.first { $0.title == title }!.id }
+        let pairs = [("正确性", "原型", "建立原型可减少完善性维护"), ("可靠性", "迭代", "独立测试小组"),
+                     ("效率", "复杂性", "MBT 常用状态图生成用例"), ("可维护性", "模块性", "做覆盖测试先画流程图"),
+                     ("单元测试", "维护", "单元测试以详细设计文档为指导"), ("需求评审", "规模", "评审发现的问题"),
+                     // 两端相同的几条线，标签默认会叠在同一个位置
+                     ("效率", "复杂性", "复杂度影响效率"), ("效率", "复杂性", "状态图")]
+        map.relationships = pairs.map { Relationship(from: topic($0.0), to: topic($0.1), title: $0.2) }
+        try render(map, to: dir.appendingPathComponent("relationship-labels.png"))
+        for i in map.relationships.indices { map.relationships[i].labelPosition = 0.5 }
+        try render(map, to: dir.appendingPathComponent("relationship-labels-midpoint.png"))
+    }
+
     /// 生成一份带附件、图片、折叠分支的示例文档，供手工打开测试。
     func testWriteSampleDocument() throws {
         let dir = try outputDir()

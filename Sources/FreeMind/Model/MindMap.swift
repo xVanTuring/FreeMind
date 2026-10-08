@@ -70,6 +70,8 @@ struct MindMap: Equatable {
     var topicMaxWidth: Double
     /// 主题之间的联系线。
     var relationships: [Relationship]
+    /// 画布上隐藏联系线（导出、打印、缩略图同样不画）。和折叠一样只影响显示，不进入撤销栈，随文件保存。
+    var relationshipsHidden = false
 
     init(root: Topic, structure: MapStructure = .mindMap, theme: Theme = .classic,
          spacing: MapSpacing = .standard, lineStyle: LineStyle? = nil, topicMaxWidth: Double = 260,
@@ -93,7 +95,7 @@ struct MindMap: Equatable {
 
 extension MindMap: Codable {
     private enum CodingKeys: String, CodingKey {
-        case root, structure, theme, spacing, lineStyle, topicMaxWidth, relationships
+        case root, structure, theme, spacing, lineStyle, topicMaxWidth, relationships, relationshipsHidden
     }
 
     init(from decoder: Decoder) throws {
@@ -106,6 +108,7 @@ extension MindMap: Codable {
         topicMaxWidth = try c.decodeIfPresent(Double.self, forKey: .topicMaxWidth) ?? 260
         // 逐条容错：某一条联系线数据损坏时只丢弃那一条，不影响其他联系线
         relationships = (try c.decodeIfPresent([Lossy<Relationship>].self, forKey: .relationships) ?? []).compactMap(\.value)
+        relationshipsHidden = (try? c.decodeIfPresent(Bool.self, forKey: .relationshipsHidden)) ?? false
     }
 
     func encode(to encoder: Encoder) throws {
@@ -117,6 +120,7 @@ extension MindMap: Codable {
         try c.encode(theme, forKey: .theme)
         try c.encode(root, forKey: .root)
         if !relationships.isEmpty { try c.encode(relationships, forKey: .relationships) }
+        if relationshipsHidden { try c.encode(true, forKey: .relationshipsHidden) }
     }
 }
 

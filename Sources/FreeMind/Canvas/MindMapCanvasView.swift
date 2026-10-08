@@ -210,6 +210,11 @@ final class MindMapCanvasView: NSView {
         needsDisplay = true
     }
 
+    /// 手动调整联系线时把标签固定在当前位置：自动避让会随曲线变化重新挑位置，不固定的话拖动中标签会跳。
+    private func pinLabel(_ rel: inout Relationship, _ r: RelationshipLayout) {
+        if rel.labelPosition == nil, r.labelRect != nil { rel.labelPosition = Double(r.labelT) }
+    }
+
     /// 选中的联系线的控制柄命中测试。
     private func controlHandleHit(at p: CGPoint) -> Int? {
         guard let r = mapLayout.relationship(editor.selectedRelationship) else { return nil }
@@ -516,7 +521,7 @@ final class MindMapCanvasView: NSView {
             } else if let r = mapLayout.relationship(rel) {
                 // 靠近端点时同样的移动需要很大的控制点位移，所以只抓中段
                 let onLabel = r.labelRect?.insetBy(dx: -2, dy: -2).contains(p) ?? false
-                let t = onLabel ? 0.5 : min(max(r.nearestParameter(to: p), 0.15), 0.85)
+                let t = onLabel ? min(max(r.labelT, 0.15), 0.85) : min(max(r.nearestParameter(to: p), 0.15), 0.85)
                 relationshipDrag = RelationshipDrag(id: rel, t: t, anchor: r.point(at: t), startPoint: p,
                                                     session: UUID().uuidString)
             }
@@ -553,6 +558,7 @@ final class MindMapCanvasView: NSView {
             let base = drag.which == 1 ? r.fromCenter : r.toCenter
             let offset = Relationship.Offset(dx: Double(p.x - base.x), dy: Double(p.y - base.y))
             editor.updateRelationship(drag.id, actionName: L("Reshape Relationship"), coalesce: drag.session) { rel in
+                pinLabel(&rel, r)
                 if drag.which == 1 {
                     rel.control1 = offset
                     if rel.control2 == nil { rel.control2 = Relationship.Offset(dx: Double(r.c2.x - r.toCenter.x), dy: Double(r.c2.y - r.toCenter.y)) }
@@ -573,6 +579,7 @@ final class MindMapCanvasView: NSView {
             let target = CGPoint(x: drag.anchor.x + p.x - drag.startPoint.x, y: drag.anchor.y + p.y - drag.startPoint.y)
             let (c1, c2) = r.controlOffsets(moving: drag.t, to: target)
             editor.updateRelationship(drag.id, actionName: L("Reshape Relationship"), coalesce: drag.session) { rel in
+                pinLabel(&rel, r)
                 rel.control1 = c1
                 rel.control2 = c2
             }

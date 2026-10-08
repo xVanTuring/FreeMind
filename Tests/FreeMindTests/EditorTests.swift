@@ -203,6 +203,65 @@ final class EditorTests: XCTestCase {
         XCTAssertEqual(editor.layout.relationship(id)?.c1, start.c1)
     }
 
+    /// 隐藏联系线：不进布局（不画、点不中）、取消选中、不进撤销栈但随文件保存；新建联系线时自动显示。
+    func testHidingRelationships() throws {
+        let a = editor.map.root.children[0].id, b = editor.map.root.children[2].id
+        step { editor.addRelationship(from: a, to: b) }
+        XCTAssertNotNil(editor.selectedRelationship)
+        editor.setRelationshipsHidden(true)
+        XCTAssertTrue(editor.layout.relationships.isEmpty)
+        XCTAssertNil(editor.selectedRelationship)
+        XCTAssertEqual(editor.map.relationships.count, 1, "隐藏只影响显示，联系线数据还在")
+        XCTAssertTrue(doc.isDocumentEdited)
+        // 撤销别的修改时，联系线保持隐藏
+        step { editor.setTitle(a, "新标题") }
+        doc.undoManager?.undo()
+        XCTAssertTrue(editor.map.relationshipsHidden)
+        // 随文件保存；显示状态不写这个字段
+        let data = try DocumentContent(map: editor.map, view: nil).encoded()
+        XCTAssertTrue(try DocumentContent.decode(data).map.relationshipsHidden)
+        // 新建联系线时自动显示
+        step { editor.addRelationship(from: b, to: a) }
+        XCTAssertFalse(editor.map.relationshipsHidden)
+        XCTAssertEqual(editor.layout.relationships.count, 2)
+        let shown = try DocumentContent(map: editor.map, view: nil).encoded()
+        XCTAssertFalse(String(decoding: shown, as: UTF8.self).contains("relationshipsHidden"))
+    }
+
+    /// 联系线标签自动避让：同样两端的几条联系线，标签沿各自的曲线错开，互不重叠；
+    /// 固定过位置的标签不动，其他标签让开；重置弧度后回到自动放置。
+    func testRelationshipLabelsAvoidEachOther() throws {
+        let a = editor.map.root.children[0].id, b = editor.map.root.children[2].id
+        for title in ["关系一", "关系二", "关系三"] {
+            step { editor.addRelationship(from: a, to: b) }
+            let id = try XCTUnwrap(editor.selectedRelationship)
+            step { editor.updateRelationship(id, actionName: "Label") { $0.title = title } }
+        }
+        func labels() -> [(t: CGFloat, rect: CGRect)] {
+            editor.layout.relationships.compactMap { r in r.labelRect.map { (r.labelT, $0) } }
+        }
+        var placed = labels()
+        XCTAssertEqual(placed.count, 3)
+        XCTAssertEqual(placed[0].t, 0.5, "第一条标签在中点")
+        for i in placed.indices {
+            for j in placed.indices where j > i {
+                XCTAssertFalse(placed[i].rect.intersects(placed[j].rect), "标签 \(i) 和 \(j) 重叠")
+            }
+        }
+
+        // 第二条固定在中点：它不动，第一条让开
+        let second = editor.map.relationships[1].id
+        step { editor.updateRelationship(second, actionName: "Pin") { $0.labelPosition = 0.5 } }
+        placed = labels()
+        XCTAssertEqual(placed[1].t, 0.5)
+        XCTAssertNotEqual(placed[0].t, 0.5)
+        XCTAssertFalse(placed[0].rect.intersects(placed[1].rect))
+
+        step { editor.resetRelationshipShape(second) }
+        XCTAssertNil(editor.map.relationships[1].labelPosition)
+        XCTAssertEqual(labels()[0].t, 0.5)
+    }
+
     func testFreshIDsKeepRelationships() {
         var map = editor.map
         map.relationships = [Relationship(from: map.root.children[0].id, to: map.root.children[1].id)]
@@ -216,6 +275,7 @@ final class EditorTests: XCTestCase {
         var map = editor.map
         var rel = Relationship(from: map.root.children[0].id, to: map.root.children[1].id, title: "因果")
         rel.control1 = .init(dx: 10, dy: -20)
+        rel.labelPosition = 0.3
         rel.dashed = false
         map.relationships = [rel]
         let data = try DocumentContent(map: map, view: nil).encoded()

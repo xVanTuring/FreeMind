@@ -155,12 +155,10 @@ struct RelationshipInspector: View {
 
         InspectorFooter {
             HStack {
-                Button(L("Reset Shape")) {
-                    editor.updateRelationship(id, actionName: L("Reshape Relationship")) { $0.control1 = nil; $0.control2 = nil }
-                }
+                Button(L("Reset Shape")) { editor.resetRelationshipShape(id) }
                 Button(L("Delete Relationship"), role: .destructive) { editor.deleteRelationship(id) }
             }
-            Text(L("Drag the round handles on the canvas to change the curve."))
+            Text(L("Drag the line, its label or the round handles on the canvas to change the curve."))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }

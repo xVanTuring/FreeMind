@@ -257,6 +257,8 @@ enum MainMenuBuilder {
         add(menu, L("Zoom to Fit"), #selector(MapViewController.zoomToFit(_:)), "9")
         add(menu, L("Center Map"), #selector(MapViewController.centerMap(_:)), "8")
         menu.addItem(.separator())
+        add(menu, L("Show Relationships"), #selector(MindMapCanvasView.toggleRelationships(_:)), "l", [.command, .option])
+        menu.addItem(.separator())
         add(menu, L("Show Format Panel"), #selector(MapWindowController.toggleFormatPanel(_:)), "i", [.command, .option])
         add(menu, L("Show Toolbar"), #selector(NSWindow.toggleToolbarShown(_:)), "t", [.command, .option])
         add(menu, L("Customize Toolbar…"), #selector(NSWindow.runToolbarCustomizationPalette(_:)))

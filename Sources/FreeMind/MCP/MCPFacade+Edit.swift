@@ -292,7 +292,11 @@ extension MCPFacade {
         let to = try topicID(try args.requiredString("to_id"), in: map)
         guard from != to else { throw MCPToolError("A relationship needs two different topics.") }
         let relationship = Relationship(from: from, to: to, title: try args.string("title") ?? "")
-        try edit(doc, L("Add Relationship")) { $0.relationships.append(relationship) }
+        // 和界面上新建联系线一样：联系线隐藏着时一并显示出来
+        try edit(doc, L("Add Relationship")) {
+            $0.relationships.append(relationship)
+            $0.relationshipsHidden = false
+        }
         return MCPToolResult(text: "Added relationship [\(Self.shortID(relationship.id))].",
                              structured: ["relationship_id": Self.shortID(relationship.id)])
     }

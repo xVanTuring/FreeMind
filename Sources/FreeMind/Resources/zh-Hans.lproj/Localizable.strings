@@ -409,7 +409,7 @@
 "Arrow at end" = "终点显示箭头";
 "Change Line Color" = "更改线条颜色";
 "Change Arrow" = "更改箭头";
-"Drag the round handles on the canvas to change the curve." = "在画布上拖动圆形控制柄可以调整弧度。";
+"Drag the line, its label or the round handles on the canvas to change the curve." = "在画布上拖动联系线、它的标签或圆形控制柄，都可以调整弧度。";
 "Connect two topics with a relationship line (⌘L)" = "用联系线连接两个主题（⌘L）";
 "Connect two topics" = "连接两个主题";
 
@@ -530,3 +530,12 @@
 "Check Now" = "立即检查";
 "Not checked yet" = "还没有检查过";
 "Last checked %@" = "上次检查：%@";
+
+/* 显示 / 隐藏联系线 */
+"Relationships" = "联系线";
+"Show Relationships" = "显示联系线";
+"Hide All Relationships" = "隐藏所有联系线";
+"%d relationships hidden" = "已隐藏 %d 条联系线";
+"Show relationships (⌥⌘L)" = "显示联系线（⌥⌘L）";
+"Show or hide relationships" = "显示或隐藏联系线";
+"Show or hide relationships (⌥⌘L)" = "显示或隐藏联系线（⌥⌘L）";

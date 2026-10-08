@@ -144,7 +144,10 @@ final class MCPFacade {
                      "structure: \(map.structure.rawValue)",
                      "theme: \(map.theme.displayName)",
                      Self.count(map.topicCount, "topic")]
-        if !map.relationships.isEmpty { parts.append(Self.count(map.relationships.count, "relationship")) }
+        if !map.relationships.isEmpty {
+            // 用户隐藏了联系线时告诉 Agent：render_map 的图里看不到它们
+            parts.append(Self.count(map.relationships.count, "relationship") + (map.relationshipsHidden ? " (hidden on the canvas)" : ""))
+        }
         return parts.joined(separator: " · ")
     }
 

@@ -61,7 +61,7 @@ open it and drag FreeMind into the Applications folder.
 
 - **Five structures**: mind map (balanced), logic chart (right / left), org chart and tree chart. Switch at any time.
 - **12 built-in themes**: Classic, Rainbow, Fresh, Ocean, Forest, Sunset, Candy, Business, Minimal, Ink & Paper, Midnight and Graphite. Adjust the background, branch colors, font and line width, then save the result as your own theme.
-- **Topic content**: notes, hyperlinks, attachments, images, labels, markers (priority, progress, flags, stars, symbols), boundaries, and relationships with labels and adjustable curves.
+- **Topic content**: notes, hyperlinks, attachments, images, labels, markers (priority, progress, flags, stars, symbols), boundaries, and relationships with labels (labels move apart automatically so they don't overlap; drag a line or its label to reshape it, or hide them all when they get in the way).
 - **Per-topic styling**: shape (rounded rectangle, rectangle, capsule, ellipse, diamond, underline, no border), fill, border, text color, font size, bold / italic and branch color. Styles can be copied and pasted.
 - **Keyboard first**: Tab adds a subtopic, Return adds a sibling, and typing on a selected topic edits it. Input methods compose text in place.
 - **Find**: ⌘F searches topic text, labels and notes, and expands collapsed branches to show matches.
@@ -128,6 +128,7 @@ One setting per row; colors open in a palette with the theme default, preset col
 | Note / link / attachment / image / labels | ⌥⌘N / ⌘K / ⌥⌘A / ⇧⌘I / ⇧⌘L |
 | Priority | ⌘1 … ⌘6 |
 | Relationship | ⌘L, then click the target topic (or select two topics first) |
+| Show / hide relationships | ⌥⌘L |
 | Boundary | ⌥⌘B |
 | Zoom | ⌘+ ⌘- ⌘0, ⌘9 zoom to fit, ⌘ + scroll |
 | Format panel | ⌥⌘I |

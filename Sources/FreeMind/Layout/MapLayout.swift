@@ -69,6 +69,8 @@ struct RelationshipLayout {
     /// 主题中心（拖动控制点时换算偏移用）。
     let fromCenter: CGPoint
     let toCenter: CGPoint
+    /// 标签中心在曲线上的参数（自动避让时不一定是中点）。
+    var labelT: CGFloat = 0.5
 
     static let labelFont = NSFont.systemFont(ofSize: 12, weight: .medium)
 
@@ -154,10 +156,12 @@ struct MapLayout {
         return relationships.first { $0.id == id }
     }
 
-    /// 命中测试：点在联系线（或其标签）附近。
+    /// 命中测试：点在联系线（或其标签）附近。标签画在所有线的上面，所以先查标签。
     func relationship(at p: CGPoint, tolerance: CGFloat = 6) -> UUID? {
         for r in relationships.reversed() {
             if let label = r.labelRect, label.insetBy(dx: -2, dy: -2).contains(p) { return r.id }
+        }
+        for r in relationships.reversed() {
             guard r.bounds.insetBy(dx: -tolerance, dy: -tolerance).contains(p) else { continue }
             if r.distance(to: p) <= tolerance { return r.id }
         }

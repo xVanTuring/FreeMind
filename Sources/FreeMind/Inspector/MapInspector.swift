@@ -123,6 +123,15 @@ struct MapInspector: View {
                 Text(String(format: "%.1f", theme.lineWidth)).monospacedDigit().foregroundStyle(.secondary)
                     .frame(width: 30, alignment: .trailing)
             }
+            InspectorRow(title: L("Relationships")) {
+                Toggle(L("Show Relationships"), isOn: Binding(
+                    get: { !map.relationshipsHidden },
+                    set: { editor.setRelationshipsHidden(!$0) }))
+                    .toggleStyle(.switch)
+                    .controlSize(.small)
+                    .labelsHidden()
+                    .help(L("Show or hide relationships (⌥⌘L)"))
+            }
         }
 
         InspectorFooter {

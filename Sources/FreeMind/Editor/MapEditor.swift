@@ -193,6 +193,8 @@ final class MapEditor {
         target.root.mutateAll { t in
             if let c = folded[t.id] { t.collapsed = c }
         }
+        // 联系线的显示 / 隐藏同样不进入撤销栈
+        target.relationshipsHidden = map.relationshipsHidden
         map = target
         let index = map.buildIndex()
         selection = snapshot.selection.filter { index[$0] != nil }
@@ -745,6 +747,8 @@ final class MapEditor {
 
     func addRelationship(from: UUID, to: UUID) {
         guard from != to, map.contains(from), map.contains(to) else { return }
+        // 联系线隐藏着时新建一条：先显示出来，否则看不到刚建的线
+        if map.relationshipsHidden { setRelationshipsHidden(false) }
         let relationship = Relationship(from: from, to: to)
         perform(L("Add Relationship"), select: []) { $0.relationships.append(relationship) }
         selectRelationship(relationship.id)
@@ -756,9 +760,24 @@ final class MapEditor {
         }
     }
 
+    /// 恢复自动弧度，标签也回到自动放置（避开其他标签）。
+    func resetRelationshipShape(_ id: UUID) {
+        updateRelationship(id, actionName: L("Reshape Relationship")) { r in
+            r.control1 = nil
+            r.control2 = nil
+            r.labelPosition = nil
+        }
+    }
+
     func deleteRelationship(_ id: UUID) {
         perform(L("Delete Relationship")) { $0.relationships.removeAll { $0.id == id } }
         selectRelationship(nil)
+    }
+
+    /// 显示 / 隐藏全部联系线。和折叠一样不进入撤销栈，但会标记文档已修改，随文件保存。
+    func setRelationshipsHidden(_ hidden: Bool) {
+        if hidden, selectedRelationship != nil { selectRelationship(nil) }
+        performWithoutUndo { $0.relationshipsHidden = hidden }
     }
 
     // MARK: - 查找

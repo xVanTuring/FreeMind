@@ -9,6 +9,9 @@ struct Relationship: Identifiable, Equatable {
     /// 两个控制点相对于起点 / 终点的偏移；nil 表示自动弧度。
     var control1: Offset?
     var control2: Offset?
+    /// 标签在曲线上的位置（贝塞尔参数 0…1）；nil 表示自动放置，避开其他标签和主题。
+    /// 用户拖动联系线时固定下来，拖动过程中标签不会跳走。
+    var labelPosition: Double?
     var color: Paint?
     var dashed: Bool
     var arrowStart: Bool
@@ -26,6 +29,7 @@ struct Relationship: Identifiable, Equatable {
         self.title = title
         self.control1 = nil
         self.control2 = nil
+        self.labelPosition = nil
         self.color = nil
         self.dashed = true
         self.arrowStart = false
@@ -35,7 +39,7 @@ struct Relationship: Identifiable, Equatable {
 
 extension Relationship: Codable {
     private enum CodingKeys: String, CodingKey {
-        case id, from, to, title, control1, control2, color, dashed, arrowStart, arrowEnd
+        case id, from, to, title, control1, control2, labelPosition, color, dashed, arrowStart, arrowEnd
     }
 
     init(from decoder: Decoder) throws {
@@ -46,6 +50,7 @@ extension Relationship: Codable {
         title = try c.decodeIfPresent(String.self, forKey: .title) ?? ""
         control1 = try c.decodeIfPresent(Offset.self, forKey: .control1)
         control2 = try c.decodeIfPresent(Offset.self, forKey: .control2)
+        labelPosition = (try? c.decodeIfPresent(Double.self, forKey: .labelPosition)).flatMap { $0 }.map { min(max($0, 0), 1) }
         color = try c.decodeIfPresent(Paint.self, forKey: .color)
         dashed = try c.decodeIfPresent(Bool.self, forKey: .dashed) ?? true
         arrowStart = try c.decodeIfPresent(Bool.self, forKey: .arrowStart) ?? false
@@ -60,6 +65,7 @@ extension Relationship: Codable {
         if !title.isEmpty { try c.encode(title, forKey: .title) }
         try c.encodeIfPresent(control1, forKey: .control1)
         try c.encodeIfPresent(control2, forKey: .control2)
+        try c.encodeIfPresent(labelPosition, forKey: .labelPosition)
         try c.encodeIfPresent(color, forKey: .color)
         if !dashed { try c.encode(false, forKey: .dashed) }
         if arrowStart { try c.encode(true, forKey: .arrowStart) }
