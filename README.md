@@ -11,6 +11,50 @@
 
 ![Main window with a sample map and the format panel](docs/images/hero.png)
 
+## Highlights
+
+### AI agents can edit your maps (MCP)
+
+FreeMind runs a local [MCP](https://modelcontextprotocol.io) server. Once connected, AI agents that support MCP,
+such as Claude Code and Codex, can read and edit the maps you have open:
+
+- Read a whole map or a single branch, search topics, and render the map as an image to check the result
+- Add, edit, move and delete topics; set markers, labels, notes, relationships and formatting
+- Create maps, open or import Markdown / OPML / XMind files, and save
+
+For example, ask the agent to "turn these meeting notes into a mind map" or "give every unfinished task a priority".
+Every change an agent makes is one undo step, so ⌘Z takes it back.
+
+To connect, open Settings ▸ Agent, click Copy Command and run it once in Terminal to add FreeMind to Claude Code;
+other agents can use the configuration from Copy JSON. Only programs on your own Mac can connect, and every request
+must carry the access token. Turn off "Allow agents to edit maps" to give agents read-only access.
+See the [MCP guide (in Chinese)](docs/mcp.md).
+
+### Local only, no cloud
+
+- Your maps are `.fmind` files on your Mac. There is no account and no server, and FreeMind never uploads your maps anywhere.
+- Editing, saving, importing and exporting all work offline. The only time FreeMind goes online on its own is a daily
+  check for a new version on GitHub, which you can turn off in Settings ▸ General ("Check for updates automatically").
+- When you connect an AI agent, the map content it reads is handled by the model service that agent uses; that part
+  depends on the agent you choose.
+
+### Sync and back up with iCloud Drive
+
+FreeMind has no sync service of its own. To keep maps in sync across your Macs or keep a backup in the cloud, save them
+to iCloud Drive (choose iCloud Drive in the sidebar of the Save dialog). A `.fmind` map is a single file in Finder with
+its attachments stored inside, so they are synced and backed up together.
+
+Don't edit the same map on two Macs at the same time; before you continue on another Mac, wait for iCloud to finish syncing.
+
+## Download
+
+Get the latest `FreeMind-<version>.dmg` from the [Releases](https://github.com/xVanTuring/FreeMind/releases/latest) page,
+open it and drag FreeMind into the Applications folder.
+
+- Requires macOS 14 or later.
+- The app is signed with Developer ID and notarized by Apple, so it opens without a security warning.
+- Once installed, FreeMind tells you when a new version is available, so you don't need to download it again by hand.
+
 ## Features
 
 ### Mapping
@@ -36,7 +80,6 @@
 - **Template gallery**: ⌘N lets you start from a blank map or a template. Any map can be saved as a template.
 - **Native macOS behavior**: autosave, version browsing, undo / redo, window tabs, full screen and dark mode.
 - **Automatic updates**: signed and notarized releases on GitHub; the app checks for new versions daily (FreeMind ▸ Check for Updates…).
-- **AI agent access (MCP)**: FreeMind runs a local [MCP](https://modelcontextprotocol.io) server, so agents such as Claude Code can read your open maps and add, edit, move or delete topics. Every change an agent makes is one undo step. Set it up in Settings ▸ Agent ([details, in Chinese](docs/mcp.md)).
 - English and Simplified Chinese interface, following the system language.
 
 ## Screenshots
@@ -98,46 +141,9 @@ See Help ▸ Keyboard Shortcuts for the full list. The Getting Started map opens
 
 [`docs/samples/`](docs/samples) contains the maps used for the screenshots above. Open them in FreeMind to explore.
 
-## Building
+## Development
 
-Requires macOS 14 or later, Xcode 16 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
-
-```sh
-xcodegen                      # generates FreeMind.xcodeproj from project.yml
-xcodebuild -project FreeMind.xcodeproj -scheme FreeMind -configuration Release build
-xcodebuild -project FreeMind.xcodeproj -scheme FreeMind test
-```
-
-Local builds are ad-hoc signed and run directly. The first build resolves the [Sparkle](https://sparkle-project.org) package used for automatic updates.
-
-Helper scripts:
-
-- `scripts/make-icon.sh` renders `Sources/FreeMind/Resources/AppIcon.svg` into the app icon set (requires `rsvg-convert`).
-- `scripts/check-strings.sh` checks that every UI string has a Chinese translation.
-- `scripts/package.sh` builds a Developer ID signed, notarized `.zip` and `.dmg`; `scripts/release.sh` publishes a GitHub release and the Sparkle update feed ([details, in Chinese](docs/release.md)).
-
-## Project layout
-
-```
-Sources/FreeMind/
-├─ App/            Launch, main menu, welcome window, document controller
-├─ Model/          Topic tree, markers, relationships (value types; undo stores snapshots)
-├─ Theme/          Color descriptions, theme definitions, built-in and custom themes
-├─ Layout/         Style resolution, text measurement, layout for the five structures
-├─ Canvas/         Canvas view (drawing, selection, inline editing, drag and drop), renderer, popovers
-├─ Document/       NSDocument subclass, .fmind package I/O, attachment store, export
-├─ Editor/         MapEditor (all edits and undo), window, toolbar, find bar, status bar
-├─ Inspector/      Format panel (Style / Map / Markers / Content)
-├─ ImportExport/   Markdown, OPML, XMind, image export
-├─ Templates/      Built-in templates, user templates, template gallery
-├─ Settings/       Preferences, settings window, keyboard shortcuts window
-├─ MCP/            Local MCP server for AI agents (HTTP, JSON-RPC, tools)
-└─ Resources/      Info.plist, icons, English and Chinese localizations
-Extensions/
-├─ QuickLook/      Space-bar preview extension (data-based, renders PDF)
-├─ Thumbnail/      Finder thumbnail extension
-└─ Shared/         Reading code and sandbox entitlements shared by both extensions
-```
+Build instructions, helper scripts, related documents and the project layout are in [Dev.md](Dev.md) (in Chinese).
 
 ## License
 

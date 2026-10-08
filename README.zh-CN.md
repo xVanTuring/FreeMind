@@ -11,6 +11,47 @@
 
 ![主窗口：示例导图和右侧格式面板](docs/images/hero.png)
 
+## 特点
+
+### AI Agent 可以直接编辑导图（MCP）
+
+FreeMind 在本机提供 [MCP](https://modelcontextprotocol.io) 服务。Claude Code、Codex 等支持 MCP 的 AI Agent 接入后，
+可以直接读取和修改你打开的导图：
+
+- 读取整张导图或某个分支，查找主题，把导图画成图片查看效果
+- 添加、修改、移动、删除主题，设置标记、标签、备注、联系线和格式
+- 新建导图，打开或导入 Markdown / OPML / XMind 文件，保存导图
+
+比如可以让 Agent“把这份会议记录整理成导图”，或者“给所有没完成的任务标上优先级”。
+Agent 的每次修改都是一个撤销步骤，不满意按 ⌘Z 就能撤回。
+
+接入方法：打开“设置 ▸ Agent”，点“拷贝命令”，在终端里运行一次，FreeMind 就加进了 Claude Code；
+其他 Agent 用“拷贝 JSON”得到的配置。服务只接受这台 Mac 上的程序连接，每个请求都要带访问令牌；
+关掉“允许 Agent 修改导图”后，Agent 只能读取。详见 [MCP 说明](docs/mcp.md)。
+
+### 完全本地，没有云端
+
+- 导图就是保存在你 Mac 上的 `.fmind` 文件。不需要注册帐号，没有服务器，FreeMind 不会把你的导图上传到任何地方
+- 编辑、保存、导入、导出都不需要联网。FreeMind 唯一会主动联网的地方是每天检查一次 GitHub 上有没有新版本，
+  可以在“设置 ▸ 通用”里关掉“自动检查更新”
+- 接入 AI Agent 后，Agent 读到的导图内容会交给它所用的模型服务处理，这部分取决于你选用的 Agent
+
+### 用 iCloud 云盘同步和备份
+
+FreeMind 不自带同步服务。想在几台 Mac 之间同步，或者在云端留一份备份，
+把导图保存到 iCloud 云盘即可（存储时在左侧边栏选“iCloud 云盘”）。`.fmind` 在 Finder 里是一个文件，附件也存在里面，同步和备份时会一起带上。
+
+同一份导图不要在两台 Mac 上同时编辑；换到另一台 Mac 继续编辑前，先等 iCloud 同步完成。
+
+## 下载
+
+到 [Releases](https://github.com/xVanTuring/FreeMind/releases/latest) 页面下载最新版本的 `FreeMind-<版本>.dmg`，
+打开后把 FreeMind 拖进“应用程序”文件夹。
+
+- 需要 macOS 14 或更高版本
+- App 已用 Developer ID 签名并经过 Apple 公证，可以直接打开
+- 装好之后，有新版本时 App 会提示更新，不用再手动下载
+
 ## 功能
 
 ### 画导图
@@ -36,7 +77,6 @@
 - **模板库**：新建（⌘N）时选择空白导图或模板，任何导图都可以“存为模板”
 - **原生体验**：自动保存、版本浏览、撤销 / 重做、窗口标签页、全屏、深色模式
 - **自动更新**：GitHub 上发布经过签名和公证的版本，App 每天自动检查新版本（FreeMind ▸ 检查更新…）
-- **AI Agent 接入（MCP）**：FreeMind 在本机提供 [MCP](https://modelcontextprotocol.io) 服务，Claude Code 等 Agent 可以读取打开的导图，添加、修改、移动、删除主题；Agent 的每次修改都是一个撤销步骤。在“设置 ▸ Agent”里配置（[说明](docs/mcp.md)）
 - 中英文界面，跟随系统语言
 
 ## 截图
@@ -98,46 +138,9 @@
 
 [`docs/samples/`](docs/samples) 里有几份示例导图（英文内容），上面的截图就是用它们拍的，可以直接用 FreeMind 打开。
 
-## 构建
+## 开发
 
-需要 macOS 14 以上、Xcode 16 以上和 [XcodeGen](https://github.com/yonaskolb/XcodeGen)。
-
-```sh
-xcodegen                      # 由 project.yml 生成 FreeMind.xcodeproj
-xcodebuild -project FreeMind.xcodeproj -scheme FreeMind -configuration Release build
-xcodebuild -project FreeMind.xcodeproj -scheme FreeMind test
-```
-
-本地构建使用 ad-hoc 签名，可以直接运行。第一次构建会解析自动更新用的 [Sparkle](https://sparkle-project.org) 包。
-
-其他脚本：
-
-- `scripts/make-icon.sh`：把 `Sources/FreeMind/Resources/AppIcon.svg` 栅格化为应用图标（需要 `rsvg-convert`）
-- `scripts/check-strings.sh`：检查所有界面文字是否都有中文翻译
-- `scripts/package.sh`：打出 Developer ID 签名并经过公证的 `.zip` 和 `.dmg`；`scripts/release.sh`：发布 GitHub release 并更新 Sparkle 的更新源（[说明](docs/release.md)）
-
-## 项目结构
-
-```
-Sources/FreeMind/
-├─ App/            启动、主菜单、欢迎窗口、文档控制器（新建走模板库，打开 Markdown/OPML/XMind 走导入）
-├─ Model/          主题树、标记、联系线（值类型，撤销直接保存快照）
-├─ Theme/          颜色描述、风格定义、内置风格、自定义风格库
-├─ Layout/         样式解析、文字测量、五种结构的布局算法
-├─ Canvas/         画布视图（绘制、选择、行内编辑、拖放、联系线交互）、渲染器、弹出编辑框
-├─ Document/       NSDocument 子类、.fmind 包读写、附件存储、导出
-├─ Editor/         编辑核心 MapEditor（所有修改与撤销）、窗口、工具栏、查找栏、状态栏
-├─ Inspector/      右侧格式面板（样式 / 导图 / 标记 / 内容）
-├─ ImportExport/   Markdown、OPML、XMind、图片导出
-├─ Templates/      内置模板、用户模板、模板库窗口
-├─ Settings/       偏好设置、设置窗口、快捷键窗口
-├─ MCP/            给 AI Agent 用的本机 MCP 服务（HTTP、JSON-RPC、工具）
-└─ Resources/      Info.plist、图标、中英文本地化
-Extensions/
-├─ QuickLook/      空格预览扩展（数据型预览，输出 PDF）
-├─ Thumbnail/      Finder 缩略图扩展
-└─ Shared/         两个扩展共用的读取代码和沙盒 entitlements
-```
+构建方法、脚本、相关文档和项目结构见 [Dev.md](Dev.md)。
 
 ## 许可协议
 
