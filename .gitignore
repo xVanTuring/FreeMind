@@ -1,0 +1,10 @@
+# Xcode / xcodegen
+build/
+DerivedData/
+FreeMind.xcodeproj/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+
+# 本机的 Claude Code 设置
+.claude/settings.local.json

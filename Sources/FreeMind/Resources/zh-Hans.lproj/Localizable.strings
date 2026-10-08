@@ -1,0 +1,466 @@
+/* FreeMind 简体中文本地化。key 为英文原文。
+   术语：Topic = 主题，Theme = 风格（避免与“主题”混淆），Boundary = 外框，Marker = 标记，Label = 标签。 */
+
+/* MARK: - 通用 */
+"Cancel" = "取消";
+"Done" = "完成";
+"Save" = "保存";
+"Open" = "打开";
+"Remove" = "移除";
+"Delete" = "删除";
+"Create" = "创建";
+"Import" = "导入";
+"Attach" = "附加";
+"Insert" = "插入";
+"None" = "无";
+"System" = "系统默认";
+"Settings" = "设置";
+"General" = "通用";
+"Copy" = "拷贝";
+"%@ Copy" = "%@ 副本";
+
+/* MARK: - 应用菜单 */
+"About FreeMind" = "关于 FreeMind";
+"Settings…" = "设置…";
+"Services" = "服务";
+"Hide FreeMind" = "隐藏 FreeMind";
+"Hide Others" = "隐藏其他";
+"Show All" = "全部显示";
+"Quit FreeMind" = "退出 FreeMind";
+
+/* MARK: - 文件菜单 */
+"File" = "文件";
+"New" = "新建";
+"New from Template…" = "从模板新建…";
+"Open…" = "打开…";
+"Open Recent" = "打开最近使用";
+"Clear Menu" = "清除菜单";
+"Close" = "关闭";
+"Save…" = "存储…";
+"Duplicate" = "复制";
+"Rename…" = "重新命名…";
+"Move To…" = "移到…";
+"Revert To" = "复原到";
+"Last Saved Version" = "上次存储的版本";
+"Browse All Versions…" = "浏览所有版本…";
+"Import…" = "导入…";
+"Export" = "导出";
+"Markdown…" = "Markdown…";
+"OPML…" = "OPML…";
+"PNG Image…" = "PNG 图片…";
+"PDF…" = "PDF…";
+"Copy as Markdown" = "拷贝为 Markdown";
+"Save as Template…" = "存为模板…";
+"Page Setup…" = "页面设置…";
+"Print…" = "打印…";
+
+/* MARK: - 编辑菜单 */
+"Edit" = "编辑";
+"Undo" = "撤销";
+"Redo" = "重做";
+"Cut" = "剪切";
+"Paste" = "粘贴";
+"Delete Topic Only" = "仅删除主题（保留子主题）";
+"Select All" = "全选";
+"Select Siblings" = "选择同级主题";
+"Select Children" = "选择子主题";
+"Select Central Topic" = "选择中心主题";
+"Copy Style" = "拷贝样式";
+"Paste Style" = "粘贴样式";
+"Find" = "查找";
+"Find…" = "查找…";
+"Find Next" = "查找下一个";
+"Find Previous" = "查找上一个";
+"Use Selection for Find" = "用所选内容查找";
+
+/* MARK: - 插入菜单 */
+"Topic" = "主题";
+"Subtopic" = "子主题";
+"Topic Before" = "前置主题";
+"Parent Topic" = "父主题";
+"Note…" = "备注…";
+"Hyperlink…" = "超链接…";
+"Labels…" = "标签…";
+"Attach File…" = "附件…";
+"Image…" = "图片…";
+"Marker" = "标记";
+"Boundary" = "外框";
+"Open Hyperlink" = "打开超链接";
+"Remove Hyperlink" = "移除超链接";
+"Remove Image" = "移除图片";
+
+/* MARK: - 修改菜单 */
+"Modify" = "修改";
+"Edit Text" = "编辑文字";
+"Move Up" = "上移";
+"Move Down" = "下移";
+"Promote" = "升级";
+"Demote" = "降级";
+"Collapse Branch" = "折叠分支";
+"Expand Branch" = "展开分支";
+"Expand All" = "全部展开";
+"Collapse All" = "全部折叠";
+"Show Levels" = "显示层级";
+"Level %d" = "第 %d 层";
+"Bold" = "粗体";
+"Italic" = "斜体";
+"Reset Style" = "重置样式";
+"Structure" = "结构";
+"Theme" = "风格";
+
+/* MARK: - 显示 / 窗口 / 帮助 */
+"View" = "显示";
+"Zoom In" = "放大";
+"Zoom Out" = "缩小";
+"Actual Size" = "实际大小";
+"Zoom to Fit" = "缩放到合适大小";
+"Center Map" = "居中显示导图";
+"Show Format Panel" = "显示格式面板";
+"Hide Format Panel" = "隐藏格式面板";
+"Show Toolbar" = "显示工具栏";
+"Customize Toolbar…" = "自定义工具栏…";
+"Enter Full Screen" = "进入全屏幕";
+"Window" = "窗口";
+"Minimize" = "最小化";
+"Zoom" = "缩放";
+"Bring All to Front" = "前置全部窗口";
+"Help" = "帮助";
+"Getting Started" = "快速上手";
+"Keyboard Shortcuts" = "快捷键";
+
+/* MARK: - 工具栏 */
+"Note" = "备注";
+"Link" = "链接";
+"Attachment" = "附件";
+"Image" = "图片";
+"Fold" = "折叠";
+"Format" = "格式";
+"Insert a sibling topic (Return)" = "插入同级主题（Return）";
+"Insert a subtopic (Tab)" = "插入子主题（Tab）";
+"Add or edit a note (⌥⌘N)" = "添加或编辑备注（⌥⌘N）";
+"Add a hyperlink (⌘K)" = "添加超链接（⌘K）";
+"Attach files to the topic (⌥⌘A)" = "给主题添加附件（⌥⌘A）";
+"Insert an image (⇧⌘I)" = "插入图片（⇧⌘I）";
+"Collapse or expand the branch (⌘/)" = "折叠或展开分支（⌘/）";
+"Find topics (⌘F)" = "查找主题（⌘F）";
+"Add priority, progress and other markers" = "添加优先级、进度等标记";
+"Change how the map is laid out" = "更改导图的布局方式";
+"Change the colors and style of the whole map" = "更改整张导图的配色和样式";
+"Export as Markdown, OPML, PNG or PDF" = "导出为 Markdown、OPML、PNG 或 PDF";
+"Zoom out (⌘-) / zoom in (⌘+)" = "缩小（⌘-）/ 放大（⌘+）";
+"Show or hide the format panel (⌥⌘I)" = "显示或隐藏格式面板（⌥⌘I）";
+
+/* MARK: - 默认主题文字 */
+"Central Topic" = "中心主题";
+"Main Topic" = "分支主题";
+"Main Topic %d" = "分支主题 %d";
+
+/* MARK: - 撤销操作名 */
+"Edit Topic" = "编辑主题";
+"Insert Subtopic" = "插入子主题";
+"Insert Topic" = "插入主题";
+"Insert Topic Before" = "插入前置主题";
+"Insert Parent Topic" = "插入父主题";
+"Insert Main Topic" = "插入分支主题";
+"Move Topics" = "移动主题";
+"Copy Topics" = "复制主题";
+"Edit Note" = "编辑备注";
+"Set Hyperlink" = "设置超链接";
+"Edit Labels" = "编辑标签";
+"Add Marker" = "添加标记";
+"Remove Marker" = "移除标记";
+"Clear Markers" = "清除标记";
+"Add Attachment" = "添加附件";
+"Add Attachments" = "添加附件";
+"Remove Attachment" = "移除附件";
+"Rename Attachment" = "重命名附件";
+"Insert Image" = "插入图片";
+"Resize Image" = "调整图片大小";
+"Format Topic" = "设置主题格式";
+"Change Shape" = "更改形状";
+"Change Fill" = "更改填充色";
+"Change Border" = "更改边框";
+"Change Font Size" = "更改字号";
+"Change Text Color" = "更改文字颜色";
+"Change Branch Color" = "更改分支颜色";
+"Change Theme" = "更改风格";
+"Customize Theme" = "自定义风格";
+"Reset All Styles" = "重置全部样式";
+"Change Structure" = "更改结构";
+"Change Spacing" = "更改间距";
+"Change Line Style" = "更改连线样式";
+"Change Topic Width" = "更改主题宽度";
+"Add Boundary" = "添加外框";
+"Remove Boundary" = "移除外框";
+"Add Link" = "添加链接";
+"Add Topics" = "添加主题";
+
+/* MARK: - 结构 / 间距 / 形状 / 连线 */
+"Mind Map" = "思维导图";
+"Logic Chart (Right)" = "逻辑图（向右）";
+"Logic Chart (Left)" = "逻辑图（向左）";
+"Org Chart" = "组织结构图";
+"Tree Chart" = "树状图";
+"Compact" = "紧凑";
+"Standard" = "标准";
+"Loose" = "宽松";
+"Rounded Rectangle" = "圆角矩形";
+"Rectangle" = "矩形";
+"Capsule" = "胶囊";
+"Ellipse" = "椭圆";
+"Diamond" = "菱形";
+"Underline" = "下划线";
+"No Border" = "无边框";
+"Curve" = "曲线";
+"Straight" = "直线";
+"Elbow" = "折线";
+"Rounded Elbow" = "圆角折线";
+
+/* MARK: - 风格名称 */
+"Classic" = "经典";
+"Rainbow" = "彩虹";
+"Fresh" = "清新";
+"Ocean" = "海洋";
+"Forest" = "森林";
+"Sunset" = "日落";
+"Candy" = "糖果";
+"Business" = "商务";
+"Minimal" = "极简";
+"Ink & Paper" = "纸墨";
+"Midnight" = "午夜";
+"Graphite" = "石墨";
+"Calm" = "柔和";
+"Earth" = "大地";
+"Warm" = "暖色";
+"Pastel" = "粉彩";
+"Mono" = "单色";
+"My Theme" = "我的风格";
+
+/* MARK: - 标记 */
+"Priority" = "优先级";
+"Progress" = "进度";
+"Flag" = "旗帜";
+"Star" = "星星";
+"Symbol" = "符号";
+"Priority %@" = "优先级 %@";
+"Progress %@%%" = "进度 %@%%";
+"Red" = "红色";
+"Orange" = "橙色";
+"Yellow" = "黄色";
+"Green" = "绿色";
+"Blue" = "蓝色";
+"Purple" = "紫色";
+"Gray" = "灰色";
+"Question" = "疑问";
+"Important" = "重要";
+"Idea" = "想法";
+"Rejected" = "否决";
+"Love" = "喜爱";
+"Like" = "赞同";
+"Dislike" = "反对";
+"Pin" = "置顶";
+"Time" = "时间";
+"Person" = "人员";
+"Cost" = "费用";
+
+/* MARK: - 状态栏 / 查找栏 */
+"%d topics" = "%d 个主题";
+"%d selected" = "已选 %d 个";
+"Return to finish · ⇧Return for a new line · Tab to add a subtopic · Esc to cancel" = "Return 完成 · ⇧Return 换行 · Tab 添加子主题 · Esc 取消";
+"Click a topic to select it · Double-click blank space to fit the map" = "单击主题以选中 · 双击空白处缩放到合适大小";
+"Tab subtopic · Return sibling · Space edit · ⌘/ fold · Drag to move" = "Tab 子主题 · Return 同级主题 · 空格 编辑 · ⌘/ 折叠 · 拖动可移动";
+"Find topics" = "查找主题";
+"Include notes" = "包括备注";
+"Previous (⇧⌘G)" = "上一个（⇧⌘G）";
+"Next (⌘G)" = "下一个（⌘G）";
+"No matches" = "没有匹配项";
+"%d of %d" = "第 %d 个，共 %d 个";
+"%d matches" = "%d 个匹配项";
+
+/* MARK: - 检查器 */
+"Style" = "样式";
+"Map" = "导图";
+"Markers" = "标记";
+"Content" = "内容";
+"Select a topic first" = "请先选择一个主题";
+"Theme Default" = "跟随风格";
+"Custom…" = "自定义…";
+"Shape" = "形状";
+"Fill" = "填充";
+"Border" = "边框";
+"Text" = "文字";
+"Size" = "字号";
+"Bold (⌘B)" = "粗体（⌘B）";
+"Italic (⌘I)" = "斜体（⌘I）";
+"Branch Color" = "分支颜色";
+"Colors the lines and topics of this whole branch." = "改变整个分支的连线和主题颜色。";
+"Draw a boundary around this branch" = "在这个分支外面画一个外框";
+"Width" = "宽度";
+"Reset All Topic Styles" = "重置所有主题的样式";
+"Remove individual formatting so every topic follows the theme." = "清除单独设置的格式，让所有主题都跟随风格。";
+"Lines" = "连线";
+"Line Style" = "连线样式";
+"Layout" = "布局";
+"Spacing" = "间距";
+"Topic Width" = "主题宽度";
+"Save as Custom Theme…" = "存为自定义风格…";
+"Save Custom Theme" = "保存自定义风格";
+"Theme Name" = "风格名称";
+"The theme will be available for all your maps." = "保存后可以在所有导图中使用这个风格。";
+"Background" = "背景";
+"Branch Colors" = "分支配色";
+"Font" = "字体";
+"Line Width" = "线宽";
+"Delete Theme" = "删除风格";
+"Labels" = "标签";
+"Separate labels with commas" = "多个标签用逗号分隔";
+"Used in this map" = "本导图中已用的标签";
+"Press Return to apply. Labels appear under the topic." = "按 Return 应用，标签显示在主题下方。";
+"Hyperlink" = "超链接";
+"https://example.com or a file path" = "https://example.com 或文件路径";
+"Press Return to apply." = "按 Return 应用。";
+"Replace…" = "替换…";
+"Insert Image…" = "插入图片…";
+"Attachments" = "附件";
+"No attachments. Drop files here or onto a topic." = "没有附件。可以把文件拖到这里或拖到主题上。";
+"Quick Look" = "快速查看";
+"Quick Look “%@”" = "快速查看“%@”";
+"Manage Attachments…" = "管理附件…";
+"Click to open · ⌥-click to edit" = "单击打开 · 按住 ⌥ 单击可编辑";
+"Save a Copy…" = "存储副本…";
+"Double-click to open" = "双击打开";
+"Notes are saved automatically. Markdown is kept as plain text." = "备注会自动保存，Markdown 按纯文本保留。";
+
+/* MARK: - 预览示例文字 */
+"Plan" = "计划";
+"Goal" = "目标";
+"Notes" = "笔记";
+"Detail" = "细节";
+"Step" = "步骤";
+
+/* MARK: - 附件 / 图片 / 错误 */
+"Choose files to attach to the topic. They are copied into the map file." = "选择要附加到主题的文件，文件会复制到导图文件中。";
+"“%@” is a folder. Only files can be attached." = "“%@”是文件夹，只能附加文件。";
+"“%@” is not an image FreeMind can read." = "FreeMind 无法读取图片“%@”。";
+"Pasted Image" = "粘贴的图片";
+"Some attachments were too large to copy and were left out." = "部分附件太大，没有一起复制。";
+"Attach those files to the pasted topics again." = "请给粘贴后的主题重新添加这些附件。";
+"This map was created by a newer version of FreeMind." = "这张导图由更新版本的 FreeMind 创建。";
+"Please update FreeMind to open it." = "请更新 FreeMind 后再打开。";
+"The XMind file could not be unpacked." = "无法解压这个 XMind 文件。";
+"This file does not look like an XMind workbook." = "这个文件不是有效的 XMind 文件。";
+"The XMind file contains no maps." = "这个 XMind 文件中没有导图。";
+"Choose a Markdown, OPML, XMind or text file to turn into a mind map." = "选择要转换为导图的 Markdown、OPML、XMind 或纯文本文件。";
+
+/* MARK: - 导出 / 模板 */
+"Headings for:" = "用标题表示：";
+"None (lists only)" = "不用标题（只用列表）";
+"%d levels" = "前 %d 层";
+"Export attachments and images to a folder" = "把附件和图片导出到文件夹";
+"Save as Template" = "存为模板";
+"The template will appear in the template gallery when you create a new map." = "新建导图时，可以在模板库中找到这个模板。";
+"New Map" = "新建导图";
+"Blank" = "空白导图";
+"Blank map" = "空白导图";
+"Templates" = "模板";
+"My Templates" = "我的模板";
+"My template" = "我的模板";
+"Theme for blank maps:" = "空白导图的风格：";
+"Show when creating a new map" = "新建导图时显示";
+"Show in Finder" = "在访达中显示";
+"Delete Template" = "删除模板";
+
+/* MARK: - 设置窗口 */
+"Templates & Themes" = "模板与风格";
+"New Maps" = "新建导图";
+"Show the template gallery when creating a new map" = "新建导图时显示模板库";
+"Default structure" = "默认结构";
+"Default theme" = "默认风格";
+"Default spacing" = "默认间距";
+"Opening Maps" = "打开导图";
+"Restore zoom level and position" = "恢复上次的缩放比例和位置";
+"Collapsed branches are always saved in the file and restored." = "分支的折叠状态始终保存在文件中，打开时自动恢复。";
+"Markdown" = "Markdown";
+"Use headings for" = "用标题表示";
+"Deeper levels are exported as nested lists." = "更深的层级导出为嵌套列表。";
+"Include labels" = "包括标签";
+"PNG resolution" = "PNG 分辨率";
+"No templates yet. Use File ▸ Save as Template to create one." = "还没有模板。可以通过“文件 ▸ 存为模板…”创建。";
+"Open Templates Folder" = "打开模板文件夹";
+"Custom Themes" = "自定义风格";
+"No custom themes yet. Adjust a theme in the format panel, then choose Save as Custom Theme." = "还没有自定义风格。在格式面板中调整风格后，选择“存为自定义风格…”即可保存。";
+
+/* MARK: - 联系线 */
+"Relationship" = "联系";
+"Add Relationship" = "添加联系";
+"Delete Relationship" = "删除联系";
+"Reshape Relationship" = "调整联系弧度";
+"Reverse Relationship" = "反转联系方向";
+"Edit Relationship Label" = "编辑联系标签";
+"Relationship Label" = "联系标签";
+"Describe how the two topics are related" = "说明两个主题之间的关系";
+"Edit Label…" = "编辑标签…";
+"Reverse Direction" = "反转方向";
+"Reset Shape" = "重置弧度";
+"Line Color" = "线条颜色";
+"Line" = "线条";
+"Dashed line" = "虚线";
+"Arrow at start" = "起点显示箭头";
+"Arrow at end" = "终点显示箭头";
+"Change Line Color" = "更改线条颜色";
+"Change Arrow" = "更改箭头";
+"Drag the round handles on the canvas to change the curve." = "在画布上拖动圆形控制柄可以调整弧度。";
+"Connect two topics with a relationship line (⌘L)" = "用联系线连接两个主题（⌘L）";
+"Connect two topics" = "连接两个主题";
+
+/* MARK: - 快捷键窗口 */
+"Add Topics" = "添加主题";
+"Insert subtopic" = "插入子主题";
+"Insert sibling topic" = "插入同级主题";
+"Insert topic before" = "在前面插入主题";
+"Insert parent topic" = "插入父主题";
+"Duplicate topic" = "复制主题";
+"Space / F2" = "空格 / F2";
+"Edit topic text" = "编辑主题文字";
+"Type" = "直接打字";
+"Replace topic text" = "替换主题文字";
+"New line while editing" = "编辑时换行";
+"Cancel editing" = "放弃编辑";
+"Delete topic" = "删除主题";
+"Delete topic but keep its subtopics" = "删除主题但保留子主题";
+"Undo / Redo" = "撤销 / 重做";
+"Navigate & Organize" = "导航与整理";
+"Move selection" = "移动选中项";
+"Extend selection" = "扩展选择";
+"Move topic up / down" = "上移 / 下移主题";
+"Promote / demote topic" = "升级 / 降级主题";
+"Collapse or expand branch" = "折叠或展开分支";
+"Expand all" = "全部展开";
+"Collapse all" = "全部折叠";
+"Select all / select siblings" = "全选 / 选择同级主题";
+"Select central topic" = "选择中心主题";
+"Drag" = "拖动";
+"Move topic; hold ⌥ to copy" = "移动主题；按住 ⌥ 复制";
+"⌥ + drag blank space" = "⌥ + 拖动空白处";
+"Pan the map" = "平移导图";
+"Topic Content" = "主题内容";
+"Attach file" = "添加附件";
+"Insert image" = "插入图片";
+"Priority 1 to 6" = "优先级 1 至 6";
+"Bold / italic" = "粗体 / 斜体";
+"Copy / paste style" = "拷贝 / 粘贴样式";
+"Zoom in / out" = "放大 / 缩小";
+"Actual size" = "实际大小";
+"Zoom to fit" = "缩放到合适大小";
+"⌘ + scroll" = "⌘ + 滚轮";
+"Zoom with the mouse wheel" = "用鼠标滚轮缩放";
+"Find / find next" = "查找 / 查找下一个";
+"Show or hide the format panel" = "显示或隐藏格式面板";
+
+/* 格式面板 */
+"Branch" = "分支";
+"Color" = "颜色";
+"Font Style" = "字形";
+"More Colors…" = "更多颜色…";
+"Change Theme…" = "更换风格…";
+"Remove individual formatting so the topic follows the theme." = "清除单独设置的格式，让主题恢复为风格默认样式。";

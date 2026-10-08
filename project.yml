@@ -1,0 +1,202 @@
+name: FreeMind
+options:
+  bundleIdPrefix: tech.xvanturing
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    # Hardened Runtime 是 Developer ID 公证的硬性要求，开发阶段就打开。
+    ENABLE_HARDENED_RUNTIME: YES
+    DEVELOPMENT_TEAM: T8F5T6HKG8
+    DEAD_CODE_STRIPPING: YES
+    GENERATE_INFOPLIST_FILE: NO
+    SWIFT_STRICT_CONCURRENCY: minimal
+    # 本地开发用 ad-hoc 签名即可运行；发布时再走 Developer ID。
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+
+targets:
+  FreeMind:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/FreeMind
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/FreeMind.entitlements"
+          - "Resources/AppIcon.svg"
+    dependencies:
+      - target: FreeMindQuickLook
+        embed: true
+      - target: FreeMindThumbnail
+        embed: true
+    settings:
+      base:
+        PRODUCT_NAME: FreeMind
+        PRODUCT_BUNDLE_IDENTIFIER: tech.xvanturing.FreeMind
+        CODE_SIGN_ENTITLEMENTS: Sources/FreeMind/Resources/FreeMind.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_FILE: Sources/FreeMind/Resources/Info.plist
+    info:
+      path: Sources/FreeMind/Resources/Info.plist
+      properties:
+        CFBundleName: FreeMind
+        CFBundleDisplayName: FreeMind
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        CFBundlePackageType: APPL
+        CFBundleDevelopmentRegion: en
+        CFBundleAllowMixedLocalizations: true
+        LSMinimumSystemVersion: "14.0"
+        LSApplicationCategoryType: public.app-category.productivity
+        NSHumanReadableCopyright: "© 2026 xVanTuring"
+        NSPrincipalClass: NSApplication
+        CFBundleIconName: AppIcon
+        # ── 文档类型 ─────────────────────────────────────────────
+        # .fmind 是本应用的专属格式：一个 package（目录包），Finder 里显示为单个文件。
+        # Markdown / OPML / XMind 只声明为 Viewer：打开时导入成新的未命名导图。
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: FreeMind Mind Map
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Owner
+            LSTypeIsPackage: true
+            LSItemContentTypes: [tech.xvanturing.freemind.map]
+            NSDocumentClass: $(PRODUCT_MODULE_NAME).MindMapDocument
+          - CFBundleTypeName: Markdown Document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [net.daringfireball.markdown]
+            NSDocumentClass: $(PRODUCT_MODULE_NAME).MindMapDocument
+          - CFBundleTypeName: OPML Outline
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [org.opml.opml]
+            NSDocumentClass: $(PRODUCT_MODULE_NAME).MindMapDocument
+          - CFBundleTypeName: XMind Workbook
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [tech.xvanturing.freemind.xmind-import]
+            NSDocumentClass: $(PRODUCT_MODULE_NAME).MindMapDocument
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: tech.xvanturing.freemind.map
+            UTTypeDescription: FreeMind Mind Map
+            UTTypeConformsTo: [com.apple.package, public.composite-content]
+            UTTypeTagSpecification:
+              public.filename-extension: [fmind]
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: net.daringfireball.markdown
+            UTTypeDescription: Markdown Document
+            UTTypeConformsTo: [public.plain-text]
+            UTTypeTagSpecification:
+              public.filename-extension: [md, markdown, mdown]
+              public.mime-type: [text/markdown]
+          - UTTypeIdentifier: org.opml.opml
+            UTTypeDescription: OPML Outline
+            UTTypeConformsTo: [public.xml]
+            UTTypeTagSpecification:
+              public.filename-extension: [opml]
+          - UTTypeIdentifier: tech.xvanturing.freemind.xmind-import
+            UTTypeDescription: XMind Workbook
+            UTTypeConformsTo: [public.data, public.zip-archive]
+            UTTypeTagSpecification:
+              public.filename-extension: [xmind]
+
+  # ── Quick Look：Finder 空格预览 / 文件缩略图 ─────────────────────
+  # 两个扩展都只编译“模型 + 布局 + 渲染”这部分代码，直接读 .fmind 包，不依赖 NSDocument。
+  FreeMindQuickLook:
+    type: app-extension
+    platform: macOS
+    sources:
+      - Extensions/QuickLook
+      - Extensions/Shared/MapPreviewLoader.swift
+      - Sources/FreeMind/Model
+      - Sources/FreeMind/Layout
+      - Sources/FreeMind/Theme/Paint.swift
+      - Sources/FreeMind/Theme/Theme.swift
+      - Sources/FreeMind/Theme/BuiltinThemes.swift
+      - Sources/FreeMind/Canvas/MapRenderer.swift
+      - Sources/FreeMind/Canvas/MapExportView.swift
+      - Sources/FreeMind/Document/DocumentFormat.swift
+      - Sources/FreeMind/Support/L.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tech.xvanturing.FreeMind.QuickLook
+        CODE_SIGN_ENTITLEMENTS: Extensions/Shared/Extension.entitlements
+        INFOPLIST_FILE: Extensions/QuickLook/Info.plist
+        SKIP_INSTALL: YES
+    info:
+      path: Extensions/QuickLook/Info.plist
+      properties:
+        CFBundleDisplayName: FreeMind Quick Look
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
+          NSExtensionAttributes:
+            QLIsDataBasedPreview: true
+            QLSupportsSearchableItems: false
+            QLSupportedContentTypes: [tech.xvanturing.freemind.map]
+
+  FreeMindThumbnail:
+    type: app-extension
+    platform: macOS
+    sources:
+      - Extensions/Thumbnail
+      - Extensions/Shared/MapPreviewLoader.swift
+      - Sources/FreeMind/Model
+      - Sources/FreeMind/Layout
+      - Sources/FreeMind/Theme/Paint.swift
+      - Sources/FreeMind/Theme/Theme.swift
+      - Sources/FreeMind/Theme/BuiltinThemes.swift
+      - Sources/FreeMind/Canvas/MapRenderer.swift
+      - Sources/FreeMind/Canvas/MapExportView.swift
+      - Sources/FreeMind/Document/DocumentFormat.swift
+      - Sources/FreeMind/Support/L.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tech.xvanturing.FreeMind.Thumbnail
+        CODE_SIGN_ENTITLEMENTS: Extensions/Shared/Extension.entitlements
+        INFOPLIST_FILE: Extensions/Thumbnail/Info.plist
+        SKIP_INSTALL: YES
+    info:
+      path: Extensions/Thumbnail/Info.plist
+      properties:
+        CFBundleDisplayName: FreeMind Thumbnail
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.thumbnail
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ThumbnailProvider
+          NSExtensionAttributes:
+            QLThumbnailMinimumDimension: 0
+            QLSupportedContentTypes: [tech.xvanturing.freemind.map]
+
+  FreeMindTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/FreeMindTests
+    dependencies:
+      - target: FreeMind
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tech.xvanturing.FreeMindTests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/FreeMind.app/Contents/MacOS/FreeMind
+        BUNDLE_LOADER: $(TEST_HOST)
+
+schemes:
+  FreeMind:
+    build:
+      targets:
+        FreeMind: all
+        FreeMindTests: [test]
+    test:
+      targets:
+        - FreeMindTests
