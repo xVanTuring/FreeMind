@@ -56,7 +56,7 @@ targets:
         CFBundleAllowMixedLocalizations: true
         LSMinimumSystemVersion: "14.0"
         LSApplicationCategoryType: public.app-category.productivity
-        NSHumanReadableCopyright: "© 2026 xVanTuring"
+        NSHumanReadableCopyright: "© 2026 xVanTuring. Licensed under the GNU GPL v3 or later."
         NSPrincipalClass: NSApplication
         CFBundleIconName: AppIcon
         # ── 文档类型 ─────────────────────────────────────────────

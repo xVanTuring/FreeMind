@@ -87,3 +87,14 @@ Extensions/
 ├─ Thumbnail/      Finder 缩略图扩展
 └─ Shared/         两个扩展共用的读取代码和沙盒 entitlements
 ```
+
+## 许可协议
+
+Copyright © 2026 xVanTuring
+
+本程序是自由软件：你可以按照自由软件基金会发布的 GNU 通用公共许可协议（GPL）第 3 版，或（由你选择）任何更新的版本，
+重新发布和修改它。
+
+发布本程序是希望它有用，但不提供任何担保，也不包括对适销性或特定用途适用性的默示担保。详情见 GNU 通用公共许可协议。
+
+协议全文见 [LICENSE](LICENSE)（SPDX：`GPL-3.0-or-later`）。
