@@ -329,7 +329,7 @@
 "Click to open · ⌥-click to edit" = "单击打开 · 按住 ⌥ 单击可编辑";
 "Save a Copy…" = "存储副本…";
 "Double-click to open" = "双击打开";
-"Notes are saved automatically. Markdown is kept as plain text." = "备注会自动保存，Markdown 按纯文本保留。";
+"Notes are saved automatically. Supports Markdown, $formulas$ and code highlighting." = "备注会自动保存，支持 Markdown、$公式$ 和代码高亮。";
 
 /* MARK: - 预览示例文字 */
 "Plan" = "计划";

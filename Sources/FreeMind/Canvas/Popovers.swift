@@ -28,11 +28,12 @@ struct NotePopoverView: View {
             }
             NoteTextView(text: Binding(
                 get: { editor.map.topic(topicID)?.note ?? "" },
-                set: { editor.setNote(topicID, $0) }))
+                set: { editor.setNote(topicID, $0) }),
+                documentId: topicID.uuidString, focusOnAppear: true)
                 .padding(6)
                 .background(RoundedRectangle(cornerRadius: 6).fill(Color(nsColor: .textBackgroundColor)))
                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color(nsColor: .separatorColor)))
-            Text(L("Notes are saved automatically. Markdown is kept as plain text."))
+            Text(L("Notes are saved automatically. Supports Markdown, $formulas$ and code highlighting."))
                 .font(.caption).foregroundStyle(.secondary)
         }
         .padding(12)

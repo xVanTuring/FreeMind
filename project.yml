@@ -13,6 +13,12 @@ packages:
   Sparkle:
     url: https://github.com/sparkle-project/Sparkle.git
     from: "2.9.1"
+  # 备注的所见即所得 Markdown 编辑器（同 Perch / UniReader 共用的 fork，锁定确切版本，0.x 的小版本也可能有破坏性变更）。
+  # 三个 product：核心 MarkdownEngine、代码高亮 MarkdownEngineCodeBlocks（HighlighterSwift）、公式 MarkdownEngineLatex（SwiftMath）。
+  # 只链接到 App target，Quick Look 扩展不引用。
+  MarkdownEngine:
+    url: https://github.com/xVanTuring/swift-markdown-engine
+    exactVersion: 0.14.0-xvan.1
 
 settings:
   base:
@@ -50,6 +56,12 @@ targets:
       - target: FreeMindThumbnail
         embed: true
       - package: Sparkle
+      - package: MarkdownEngine
+        product: MarkdownEngine
+      - package: MarkdownEngine
+        product: MarkdownEngineCodeBlocks
+      - package: MarkdownEngine
+        product: MarkdownEngineLatex
     settings:
       base:
         PRODUCT_NAME: FreeMind

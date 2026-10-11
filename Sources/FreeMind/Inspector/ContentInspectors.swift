@@ -78,7 +78,8 @@ struct ContentInspector: View {
             InspectorSection(title: L("Note")) {
                 NoteTextView(text: Binding(
                     get: { editor.map.topic(topic.id)?.note ?? "" },
-                    set: { editor.setNote(topic.id, $0) }))
+                    set: { editor.setNote(topic.id, $0) }),
+                    documentId: topic.id.uuidString)
                     .padding(4)
                     .frame(minHeight: 140)
                     .background(RoundedRectangle(cornerRadius: 6).fill(Color(nsColor: .textBackgroundColor)))
