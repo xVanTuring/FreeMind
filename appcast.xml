@@ -9,6 +9,40 @@
     <language>en</language>
     <!-- BEGIN-ITEMS (release.sh inserts new entries here, newest first) -->
     <item>
+      <title>v1.2.0</title>
+      <pubDate>Sun, 11 Oct 2026 10:16:00 +0000</pubDate>
+      <sparkle:version>4</sparkle:version>
+      <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description xml:lang="zh"><![CDATA[
+<h3>FreeMind 1.2.0</h3>
+<h4>备注支持 Markdown</h4>
+<ul>
+<li>备注框换成所见即所得的 Markdown 编辑器：边输入边显示标题、粗体、斜体、列表、引用、链接</li>
+<li>支持 <code>==高亮==</code> 和 <code>~~删除线~~</code></li>
+<li>代码块按语言着色：在 <code>`</code> 后写上语言名即可，比如 <code>`</code>swift</li>
+<li>支持数学公式：行内写 <code>$E=mc^2$</code>，独占一行写 <code>$$ … $$</code></li>
+<li>打开备注弹窗后光标直接在输入框里，可以马上输入</li>
+<li>原有备注不受影响，文件里保存的仍然是 Markdown 文本</li>
+</ul>
+<p><a href="https://github.com/xVanTuring/FreeMind/releases/tag/v1.2.0">在 GitHub 上查看这次发布 →</a></p>
+      ]]></description>
+      <description xml:lang="en"><![CDATA[
+<h3>FreeMind 1.2.0</h3>
+<h4>Markdown in notes</h4>
+<ul>
+<li>The note box is now a live Markdown editor: headings, bold, italic, lists, quotes and links are shown as you type</li>
+<li>Supports <code>==highlight==</code> and <code>~~strikethrough~~</code></li>
+<li>Code blocks are colored by language: put the language name after the opening <code>`</code>, for example <code>`</code>swift</li>
+<li>Math formulas: write <code>$E=mc^2$</code> inline, or put <code>$$ … $$</code> on its own lines for a block</li>
+<li>The cursor is in the note box as soon as the note popover opens, so you can start typing right away</li>
+<li>Existing notes are unaffected; files still store the note as Markdown text</li>
+</ul>
+<p><a href="https://github.com/xVanTuring/FreeMind/releases/tag/v1.2.0">View the release on GitHub →</a></p>
+      ]]></description>
+      <enclosure url="https://github.com/xVanTuring/FreeMind/releases/download/v1.2.0/FreeMind-1.2.0.zip" length="10345178" type="application/octet-stream" sparkle:edSignature="3APml9HY0k0B5oVQX1WKIn7uoPzAccLQN1EkQs6r/Alnr8CVM39TRE0PgtbnigxbsfArKU0ZtfmRCJ6aQrQdDg==" />
+    </item>
+    <item>
       <title>v1.1.0</title>
       <pubDate>Thu, 08 Oct 2026 11:20:44 +0000</pubDate>
       <sparkle:version>3</sparkle:version>
