@@ -20,6 +20,7 @@ final class Preferences {
         static let mdAttachments = "markdownExportAttachments"
         static let mdLabels = "markdownIncludeLabels"
         static let restoreView = "restoreViewState"
+        static let minimap = "showMinimap"
         static let pngScale = "pngScale"
         static let hasLaunched = "hasLaunchedBefore"
         static let galleryReset = "templateGalleryPreferenceReset"
@@ -42,6 +43,8 @@ final class Preferences {
     var markdownIncludeLabels: Bool { didSet { defaults.set(markdownIncludeLabels, forKey: Key.mdLabels) } }
     /// 重新打开导图时恢复上次的缩放和位置。
     var restoreViewState: Bool { didSet { defaults.set(restoreViewState, forKey: Key.restoreView) } }
+    /// 在画布右下角显示缩略图。
+    var showMinimap: Bool { didSet { defaults.set(showMinimap, forKey: Key.minimap) } }
     var pngScale: Int { didSet { defaults.set(pngScale, forKey: Key.pngScale) } }
     /// 打开 FreeMind 时启动 MCP 服务，让本机的 AI Agent 读取和编辑导图。
     var mcpEnabled: Bool { didSet { defaults.set(mcpEnabled, forKey: Key.mcpEnabled) } }
@@ -75,6 +78,7 @@ final class Preferences {
             Key.mdAttachments: true,
             Key.mdLabels: false,
             Key.restoreView: true,
+            Key.minimap: true,
             Key.pngScale: 2,
             Key.mcpEnabled: true,
             Key.mcpPort: MCPServer.defaultPort,
@@ -90,6 +94,7 @@ final class Preferences {
         markdownExportAttachments = defaults.bool(forKey: Key.mdAttachments)
         markdownIncludeLabels = defaults.bool(forKey: Key.mdLabels)
         restoreViewState = defaults.bool(forKey: Key.restoreView)
+        showMinimap = defaults.bool(forKey: Key.minimap)
         pngScale = min(max(defaults.integer(forKey: Key.pngScale), 1), 4)
         mcpEnabled = defaults.bool(forKey: Key.mcpEnabled)
         mcpPort = defaults.integer(forKey: Key.mcpPort)

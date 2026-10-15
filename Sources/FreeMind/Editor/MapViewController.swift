@@ -22,6 +22,7 @@ final class MapViewController: NSViewController {
     let editor: MapEditor
     let canvas: MindMapCanvasView
     let scrollView = NSScrollView()
+    private var minimap: MinimapView?
     private var findBar: NSView!
     private var findBarHeight: NSLayoutConstraint!
     private var didInitialPosition = false
@@ -63,6 +64,14 @@ final class MapViewController: NSViewController {
         status.translatesAutoresizingMaskIntoConstraints = false
 
         root.addSubview(scrollView)
+        let minimap = MinimapView(canvas: canvas)
+        minimap.translatesAutoresizingMaskIntoConstraints = false
+        minimap.isHidden = !Preferences.shared.showMinimap
+        self.minimap = minimap
+        canvas.onLayoutChange = { [weak minimap] in minimap?.invalidate() }
+        scrollView.contentView.postsBoundsChangedNotifications = true
+
+        root.addSubview(minimap)
         root.addSubview(find)
         root.addSubview(status)
         findBarHeight = find.heightAnchor.constraint(equalToConstant: 0)
@@ -79,9 +88,17 @@ final class MapViewController: NSViewController {
             status.trailingAnchor.constraint(equalTo: root.trailingAnchor),
             status.bottomAnchor.constraint(equalTo: root.bottomAnchor),
             status.heightAnchor.constraint(equalToConstant: 26),
+            minimap.widthAnchor.constraint(equalToConstant: MinimapView.size.width),
+            minimap.heightAnchor.constraint(equalToConstant: MinimapView.size.height),
+            minimap.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            minimap.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16),
         ])
         view = root
 
+        NotificationCenter.default.addObserver(self, selector: #selector(scrollPositionChanged),
+                                               name: NSView.boundsDidChangeNotification, object: scrollView.contentView)
+        NotificationCenter.default.addObserver(self, selector: #selector(minimapPreferenceChanged),
+                                               name: .freeMindMinimapChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(magnificationChanged),
                                                name: NSScrollView.didEndLiveMagnifyNotification, object: scrollView)
     }
@@ -122,6 +139,29 @@ final class MapViewController: NSViewController {
         let c = canvas.visibleCenter
         return ViewState(zoom: Double(scrollView.magnification), centerX: Double(c.x), centerY: Double(c.y),
                          selection: editor.selection)
+    }
+
+    // MARK: 缩略图
+
+    @objc private func scrollPositionChanged() {
+        if minimap?.isHidden == false { minimap?.needsDisplay = true }
+    }
+
+    @objc private func minimapPreferenceChanged() {
+        minimap?.isHidden = !Preferences.shared.showMinimap
+        minimap?.invalidate()
+    }
+
+    @objc func toggleMinimap(_ sender: Any?) {
+        Preferences.shared.showMinimap.toggle()
+        NotificationCenter.default.post(name: .freeMindMinimapChanged, object: nil)
+    }
+
+    func validateMenuItem(_ item: NSMenuItem) -> Bool {
+        if item.action == #selector(toggleMinimap(_:)) {
+            item.state = Preferences.shared.showMinimap ? .on : .off
+        }
+        return true
     }
 
     // MARK: 缩放
@@ -213,4 +253,5 @@ final class MapViewController: NSViewController {
 
 extension Notification.Name {
     static let freeMindFocusFind = Notification.Name("FreeMindFocusFind")
+    static let freeMindMinimapChanged = Notification.Name("FreeMindMinimapChanged")
 }

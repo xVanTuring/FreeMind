@@ -115,6 +115,8 @@
 "Actual Size" = "实际大小";
 "Zoom to Fit" = "缩放到合适大小";
 "Center Map" = "居中显示导图";
+"Show Minimap" = "显示缩略图";
+"Minimap" = "缩略图";
 "Show Format Panel" = "显示格式面板";
 "Hide Format Panel" = "隐藏格式面板";
 "Show Toolbar" = "显示工具栏";

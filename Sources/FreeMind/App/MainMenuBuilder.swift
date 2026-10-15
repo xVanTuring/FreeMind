@@ -256,6 +256,7 @@ enum MainMenuBuilder {
         add(menu, L("Actual Size"), #selector(MapViewController.actualSize(_:)), "0")
         add(menu, L("Zoom to Fit"), #selector(MapViewController.zoomToFit(_:)), "9")
         add(menu, L("Center Map"), #selector(MapViewController.centerMap(_:)), "8")
+        add(menu, L("Show Minimap"), #selector(MapViewController.toggleMinimap(_:)), "m", [.command, .option])
         menu.addItem(.separator())
         add(menu, L("Show Relationships"), #selector(MindMapCanvasView.toggleRelationships(_:)), "l", [.command, .option])
         menu.addItem(.separator())

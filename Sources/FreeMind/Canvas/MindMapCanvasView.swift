@@ -4,6 +4,8 @@ import AppKit
 final class MindMapCanvasView: NSView {
     let editor: MapEditor
     var images: (UUID) -> NSImage? = { _ in nil }
+    /// 布局变化后的回调（缩略图用来重建缩影）。
+    var onLayoutChange: (() -> Void)?
 
     /// 画布四周留白（布局坐标）。
     static let padding: CGFloat = 640
@@ -793,6 +795,7 @@ final class MindMapCanvasView: NSView {
 extension MindMapCanvasView: MapEditorDelegate {
     func editorLayoutDidChange(_ editor: MapEditor) {
         updateFrame(anchor: true)
+        onLayoutChange?()
         if let scrollView = enclosingScrollView, scrollView.backgroundColor != mapLayout.background {
             scrollView.backgroundColor = mapLayout.background
         }
