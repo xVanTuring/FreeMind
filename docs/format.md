@@ -29,7 +29,7 @@ FreeMind 的专属格式是一个 **macOS package**（目录包）：在 Finder 
   "version": 1,                  // 格式版本；读到比自己新的版本会拒绝打开并提示升级
   "generator": "FreeMind 1.0.0",
   "map": {
-    "structure": "mindmap",      // mindmap | logic-right | logic-left | org-down | tree
+    "structure": "mindmap",      // mindmap | logic-right | logic-left | org-down | tree | process（流程串）；旧版本读到不认识的值按 mindmap 打开
     "spacing": "standard",       // compact | standard | loose
     "lineStyle": "curve",        // 可选，覆盖主题的连线样式：curve | straight | elbow | roundedElbow
     "topicMaxWidth": 260,        // 主题文字最大宽度（pt）

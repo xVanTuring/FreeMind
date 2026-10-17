@@ -272,6 +272,8 @@ enum XMindImporter {
 
     static func structure(from xmindClass: String?) -> MapStructure {
         guard let c = xmindClass else { return .mindMap }
+        // 水平时间轴：主题在一条横线上依次排开，最接近流程串
+        if c.contains("timeline.horizontal") { return .process }
         if c.contains("logic.left") { return .logicLeft }
         if c.contains("logic") { return .logicRight }
         if c.contains("org-chart") { return .orgChart }

@@ -116,9 +116,9 @@ struct MapRenderer {
         ctx.restoreGState()
     }
 
-    private func drawArrow(_ ctx: CGContext, tip: CGPoint, from: CGPoint) {
+    private func drawArrow(_ ctx: CGContext, tip: CGPoint, from: CGPoint, length: CGFloat = 12) {
         let angle = atan2(tip.y - from.y, tip.x - from.x)
-        let length: CGFloat = 12, spread: CGFloat = .pi / 7
+        let spread: CGFloat = .pi / 7
         ctx.move(to: tip)
         ctx.addLine(to: CGPoint(x: tip.x - length * cos(angle - spread), y: tip.y - length * sin(angle - spread)))
         ctx.addLine(to: CGPoint(x: tip.x - length * cos(angle + spread), y: tip.y - length * sin(angle + spread)))
@@ -166,8 +166,9 @@ struct MapRenderer {
         ctx.setLineCap(.round)
         ctx.setLineJoin(.round)
         for c in layout.connectors {
+            // 多留一点，流程串的箭头比线宽
             let box = CGRect(x: min(c.from.x, c.to.x), y: min(c.from.y, c.to.y),
-                             width: abs(c.to.x - c.from.x), height: abs(c.to.y - c.from.y)).insetBy(dx: -4, dy: -4)
+                             width: abs(c.to.x - c.from.x), height: abs(c.to.y - c.from.y)).insetBy(dx: -10, dy: -10)
             guard box.intersects(rect) else { continue }
             let path = connectorPath(c)
             ctx.addPath(path)
@@ -176,9 +177,16 @@ struct MapRenderer {
             ctx.setStrokeColor(color.cgColor)
             ctx.setLineWidth(c.width)
             ctx.strokePath()
+            if c.orientation == .chain {
+                ctx.setFillColor(color.cgColor)
+                drawArrow(ctx, tip: c.to, from: c.from, length: chainArrowLength(c))
+            }
         }
         ctx.restoreGState()
     }
+
+    /// 流程串箭头的长度，随线宽变化。
+    private func chainArrowLength(_ c: Connector) -> CGFloat { 8 + c.width * 2 }
 
     func connectorPath(_ c: Connector) -> CGPath {
         let path = CGMutablePath()
@@ -232,6 +240,11 @@ struct MapRenderer {
                 }
                 path.addLine(to: p1)
             }
+        case .chain:
+            // 流程串：直线，终点留出箭头的位置（箭头另外填充），圆头线端不会从箭尖冒出来
+            let d = hypot(p1.x - p0.x, p1.y - p0.y)
+            let back = d > 0 ? min(chainArrowLength(c) * 0.6, d) / d : 0
+            path.addLine(to: CGPoint(x: p1.x - (p1.x - p0.x) * back, y: p1.y - (p1.y - p0.y) * back))
         case .tree:
             // 树状图：从父主题左下竖直向下，再水平接入子主题。
             let r: CGFloat = (layout.lineStyle == .elbow || layout.lineStyle == .straight) ? 0 : min(8, abs(p1.y - p0.y))

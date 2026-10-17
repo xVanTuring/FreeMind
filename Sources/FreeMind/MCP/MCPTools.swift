@@ -246,7 +246,8 @@ enum MCPTools {
     private static func registerMapTools(catalog: MCPCatalog, facade: MCPFacade) {
         let themes = Theme.builtins.map(\.id).joined(separator: ", ")
         let structures = MCPSchema.enumeration(MapStructure.allCases.map(\.rawValue),
-                                               "Layout: mindmap (branches on both sides), logic-right, logic-left, org-down (org chart), tree")
+                                               "Layout: mindmap (branches on both sides), logic-right, logic-left, org-down (org chart), tree, "
+                                                   + "process (main topics in a row joined by arrows in order, each one's subtopics listed below it)")
 
         catalog.register(MCPTool(
             name: "set_map_format",

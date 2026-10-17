@@ -12,6 +12,8 @@ enum MapStructure: String, Codable, CaseIterable, Identifiable {
     case orgChart = "org-down"
     /// 树状图：缩进列表式，向右下展开。
     case tree = "tree"
+    /// 流程串：分支按顺序横排在一条带箭头的线上，各自的细节向下展开。
+    case process = "process"
 
     var id: String { rawValue }
 
@@ -22,6 +24,7 @@ enum MapStructure: String, Codable, CaseIterable, Identifiable {
         case .logicLeft: return L("Logic Chart (Left)")
         case .orgChart: return L("Org Chart")
         case .tree: return L("Tree Chart")
+        case .process: return L("Process Chain")
         }
     }
 
@@ -32,6 +35,7 @@ enum MapStructure: String, Codable, CaseIterable, Identifiable {
         case .logicLeft: return "arrow.left.to.line"
         case .orgChart: return "rectangle.3.group"
         case .tree: return "list.bullet.indent"
+        case .process: return "timeline.selection"
         }
     }
 }

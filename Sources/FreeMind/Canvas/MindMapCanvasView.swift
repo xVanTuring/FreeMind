@@ -313,7 +313,8 @@ final class MindMapCanvasView: NSView {
                 ctx.strokePath()
             case .before, .after:
                 let f = ref.frame
-                let vertical = ref.side == .down
+                // 组织结构图和流程串的兄弟主题左右排列，插入标记是竖条
+                let vertical = ref.side == .down || ref.side == .chain
                 var before = target.kind == .before
                 if ref.side == .left && editor.map.structure == .mindMap && ref.level == 1 { before.toggle() }
                 let bar: CGRect
@@ -674,7 +675,7 @@ final class MindMapCanvasView: NSView {
             if node.level == 0 {
                 return DropTarget(kind: .child, reference: hit, parentID: hit, index: nil)
             }
-            let rel: CGFloat = node.side == .down
+            let rel: CGFloat = node.side == .down || node.side == .chain
                 ? (p.x - node.frame.minX) / max(node.frame.width, 1)
                 : (p.y - node.frame.minY) / max(node.frame.height, 1)
             if rel > 0.28 && rel < 0.72 {
@@ -703,7 +704,7 @@ final class MindMapCanvasView: NSView {
         var index: Int?
         if !children.isEmpty, let topic = map.topic(node.id) {
             let ordered = topic.children.map(\.id)
-            let vertical = node.childSide == .down
+            let vertical = node.childSide == .down || node.childSide == .chain
             let after = children.filter { vertical ? $0.frame.midX < p.x : $0.frame.midY < p.y }
             if let last = after.max(by: { vertical ? $0.frame.midX < $1.frame.midX : $0.frame.midY < $1.frame.midY }),
                let i = ordered.firstIndex(of: last.id) {

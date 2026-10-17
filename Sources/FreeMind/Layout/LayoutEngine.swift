@@ -64,6 +64,8 @@ struct LayoutEngine {
     private var treeIndent: CGFloat { 30 * factor }
     private var treeVGap: CGFloat { 10 * factor }
     private var treeSpineInset: CGFloat { 14 }
+    /// 流程串里相邻两列之间的最小间隔（箭头的最短长度）。
+    private var chainGap: CGFloat { 48 * factor }
 
     // MARK: 入口
 
@@ -77,6 +79,7 @@ struct LayoutEngine {
         case .logicLeft: placeLogic(root, dir: -1)
         case .orgChart: placeOrg(root)
         case .tree: placeTree(root)
+        case .process: placeProcess(root)
         }
 
         var layout = MapLayout()
@@ -448,6 +451,34 @@ struct LayoutEngine {
         return bottom
     }
 
+    // MARK: 流程串（阶段横排，细节向下）
+
+    /// 中心主题在最左边，阶段按子主题顺序从左往右排在同一条水平线上，每个阶段的细节以树状图的方式挂在它下面。
+    /// 每个阶段连同细节占一列，列宽取这一列最宽的地方，列与列之间至少隔 chainGap（箭头画在这里）。
+    private func placeProcess(_ root: PNode) {
+        placeRootCentered(root)
+        root.childSide = .chain
+        let lineY = root.frame.midY
+        var x = root.frame.maxX + chainGap
+        for stage in root.children {
+            // 连线锚点（下划线形状在底线上）对齐到同一条水平线，箭头才是直的
+            let anchorOffset = stage.style.shape == .underline ? stage.frame.height - stage.style.underlineWidth / 2
+                                                                : stage.frame.height / 2
+            stage.frame.origin = CGPoint(x: x, y: lineY - anchorOffset)
+            stage.side = .chain
+            stage.childSide = .tree
+            var y = stage.frame.maxY + treeVGap * 1.6
+            for c in stage.children {
+                y = placeTreeNode(c, x: stage.frame.minX + treeIndent, top: y) + treeVGap
+            }
+            x = subtreeMaxX(stage) + chainGap
+        }
+    }
+
+    private func subtreeMaxX(_ n: PNode) -> CGFloat {
+        n.children.reduce(n.frame.maxX) { max($0, subtreeMaxX($1)) }
+    }
+
     // MARK: 输出
 
     private func anchorY(_ n: PNode) -> CGFloat {
@@ -457,7 +488,7 @@ struct LayoutEngine {
     /// 主题出发去连接子主题的锚点。
     private func outAnchor(_ n: PNode, toward side: BranchSide) -> CGPoint {
         switch side {
-        case .right:
+        case .right, .chain:
             return CGPoint(x: n.frame.maxX, y: n.level == 0 ? n.frame.midY : anchorY(n))
         case .left:
             return CGPoint(x: n.frame.minX, y: n.level == 0 ? n.frame.midY : anchorY(n))
@@ -473,7 +504,7 @@ struct LayoutEngine {
     /// 子主题接入连线的锚点。
     private func inAnchor(_ n: PNode) -> CGPoint {
         switch n.side {
-        case .right: return CGPoint(x: n.frame.minX, y: anchorY(n))
+        case .right, .chain: return CGPoint(x: n.frame.minX, y: anchorY(n))
         case .left: return CGPoint(x: n.frame.maxX, y: anchorY(n))
         case .down: return CGPoint(x: n.frame.midX, y: n.frame.minY)
         case .tree: return CGPoint(x: n.frame.minX, y: anchorY(n))
@@ -483,11 +514,12 @@ struct LayoutEngine {
 
     private func foldCenter(_ n: PNode) -> CGPoint {
         let r = MapLayout.foldRadius
-        if n.stacked {
+        // 流程串的阶段左右两边都是箭头，折叠按钮放在下方细节竖线的起点
+        if n.stacked || n.side == .chain {
             return CGPoint(x: outAnchor(n, toward: .tree).x, y: n.frame.maxY + r + 1)
         }
         switch n.childSide {
-        case .right:
+        case .right, .chain:
             let a = outAnchor(n, toward: .right)
             return CGPoint(x: a.x + r + 3, y: a.y)
         case .left:
@@ -513,13 +545,21 @@ struct LayoutEngine {
         layout.order.append(n.id)
 
         let theme = map.theme
+        var previous: PNode?
         for c in n.children {
-            let from = outAnchor(n, toward: c.side == .root ? n.childSide : c.side)
+            defer { previous = c }
+            var from = outAnchor(n, toward: c.side == .root ? n.childSide : c.side)
             let to = inAnchor(c)
             let orientation: ConnectorOrientation
             let spine: CGFloat
             let direction: CGFloat
             switch c.side {
+            case .chain:
+                // 流程串：箭头从上一个阶段（第一个阶段从中心主题）指过来，而不是都从中心主题出发
+                if let previous { from = outAnchor(previous, toward: .chain) }
+                orientation = .chain
+                spine = from.x
+                direction = 1
             case .down:
                 orientation = .vertical
                 spine = from.y + orgVGap(fromLevel: n.level) / 2

@@ -115,6 +115,9 @@ final class TemplateLibrary {
             MapTemplate(id: "org", name: LT("Organization Chart", "组织架构"),
                         summary: LT("Teams and reporting lines", "团队与汇报关系"), kind: .builtin,
                         make: BuiltinTemplates.orgChart, url: nil),
+            MapTemplate(id: "process", name: LT("Process", "流程"),
+                        summary: LT("Stages in order, details under each", "阶段按顺序串联，细节挂在下面"), kind: .builtin,
+                        make: BuiltinTemplates.processChain, url: nil),
         ]
     }
 }

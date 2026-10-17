@@ -2,13 +2,15 @@ import AppKit
 
 /// 分支相对父主题的生长方向。
 enum BranchSide: Equatable {
-    case root, right, left, down, tree
+    /// chain：流程串的阶段，兄弟主题依次横排在一条线上。
+    case root, right, left, down, tree, chain
 
     var isHorizontal: Bool { self == .right || self == .left }
 }
 
 enum ConnectorOrientation {
-    case horizontal, vertical, tree
+    /// chain：流程串里从上一个阶段指向下一个阶段的箭头（直线）。
+    case horizontal, vertical, tree, chain
 }
 
 struct NodeLayout {
@@ -192,11 +194,24 @@ struct MapLayout {
     func neighbor(of id: UUID, direction: NavigationDirection, preferredChild: UUID? = nil) -> UUID? {
         guard let node = nodes[id] else { return nil }
 
+        // 流程串的阶段：左右在阶段之间移动（第一个阶段向左回到中心主题），向下进入细节。
+        if node.side == .chain, let parentID = node.parentID, let parent = nodes[parentID],
+           let index = parent.childIDs.firstIndex(of: id) {
+            switch direction {
+            case .left: return index > 0 ? parent.childIDs[index - 1] : parentID
+            case .right: return index + 1 < parent.childIDs.count ? parent.childIDs[index + 1] : nil
+            case .down:
+                if let preferredChild, node.childIDs.contains(preferredChild) { return preferredChild }
+                return node.childIDs.first
+            case .up: return nil
+            }
+        }
+
         // 先按树关系导航：朝子主题方向 → 子主题；朝父主题方向 → 父主题。
         let towardChildren: Bool
         let towardParent: Bool
         switch (node.childSide, direction) {
-        case (.right, .right), (.left, .left), (.down, .down), (.tree, .right): towardChildren = true
+        case (.right, .right), (.left, .left), (.down, .down), (.tree, .right), (.chain, .right): towardChildren = true
         // 组织结构图里竖排叶子的父主题：向下进入子主题
         case (.tree, .down) where node.side == .down: towardChildren = true
         default: towardChildren = false
@@ -218,7 +233,7 @@ struct MapLayout {
             if node.childSide == .down {
                 return visible.min { abs($0.frame.midX - node.frame.midX) < abs($1.frame.midX - node.frame.midX) }?.id
             }
-            if node.childSide == .tree { return visible.first?.id }
+            if node.childSide == .tree || node.childSide == .chain { return visible.first?.id }
             return visible.min { abs($0.frame.midY - node.frame.midY) < abs($1.frame.midY - node.frame.midY) }?.id
         }
         if towardParent { return node.parentID }

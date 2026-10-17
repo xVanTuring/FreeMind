@@ -59,7 +59,7 @@ open it and drag FreeMind into the Applications folder.
 
 ### Mapping
 
-- **Five structures**: mind map (balanced), logic chart (right / left), org chart and tree chart. Switch at any time.
+- **Six structures**: mind map (balanced), logic chart (right / left), org chart, tree chart and process chain (stages in a row joined by arrows, with the details of each stage listed below it). Switch at any time.
 - **12 built-in themes**: Classic, Rainbow, Fresh, Ocean, Forest, Sunset, Candy, Business, Minimal, Ink & Paper, Midnight and Graphite. Adjust the background, branch colors, font and line width, then save the result as your own theme.
 - **Topic content**: notes, hyperlinks, attachments, images, labels, markers (priority, progress, flags, stars, symbols), boundaries, and relationships with labels (labels move apart automatically so they don't overlap; drag a line or its label to reshape it, or hide them all when they get in the way).
 - **Per-topic styling**: shape (rounded rectangle, rectangle, capsule, ellipse, diamond, underline, no border), fill, border, text color, font size, bold / italic and branch color. Styles can be copied and pasted.
@@ -102,9 +102,9 @@ One setting per row; colors open in a palette with the theme default, preset col
 
 <img src="docs/images/colors.png" width="620" alt="Color palette in the format panel">
 
-### Five structures
+### Six structures
 
-![Five structures](docs/images/structures.png)
+![Six structures](docs/images/structures.png)
 
 ### Built-in themes (selection)
 

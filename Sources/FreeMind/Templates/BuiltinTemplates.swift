@@ -52,7 +52,7 @@ enum BuiltinTemplates {
             ]),
             t("Look & feel", "外观", [
                 t("⌥⌘I shows the format panel", "⌥⌘I 打开右侧格式面板"),
-                t("Structure: mind map, logic, org, tree", "结构：思维导图、逻辑图、组织结构图、树状图"),
+                t("Structure: mind map, logic, org, tree, process chain", "结构：思维导图、逻辑图、组织结构图、树状图、流程串"),
                 t("Themes change the whole map", "主题一键改变整张图的配色"),
                 t("⌘+ / ⌘- / ⌘0 / ⌘9 zoom", "⌘+ / ⌘- / ⌘0 / ⌘9 缩放"),
             ]),
@@ -224,5 +224,37 @@ enum BuiltinTemplates {
             t("Operations", "运营部", [t("Support", "客服"), t("Finance", "财务")]),
         ])
         return MindMap(root: root, structure: .orgChart, theme: .business)
+    }
+
+    static func processChain() -> MindMap {
+        let root = t("Product Release", "产品上线流程", [
+            t("Plan", "规划", [
+                t("Collect requirements", "收集需求"),
+                t("Set goals and scope", "确定目标和范围"),
+                t("Output: requirement document", "产出：需求文档", markers: ["flag-green"]),
+            ], note: ("Each stage: what comes in, what to do, what comes out.", "每个阶段写清楚：输入什么、做什么、产出什么。")),
+            t("Design", "设计", [
+                t("Interaction and visual design", "交互与视觉设计"),
+                t("Technical design", "技术方案"),
+                t("Output: design specs", "产出：设计稿与技术方案", markers: ["flag-green"]),
+            ]),
+            t("Build", "开发", [
+                t("Write code", "编写代码"),
+                t("Code review", "代码评审"),
+            ]),
+            t("Test", "测试", [
+                t("Functional testing", "功能测试"),
+                t("Fix bugs", "修复问题", markers: ["priority-1"]),
+            ]),
+            t("Launch", "上线", [
+                t("Release", "发布"),
+                t("Announce", "通知用户"),
+            ]),
+            t("Review", "复盘", [
+                t("Collect feedback", "收集反馈"),
+                t("Plan the next round", "规划下一轮"),
+            ]),
+        ])
+        return MindMap(root: root, structure: .process, theme: .rainbow)
     }
 }
