@@ -1,22 +1,6 @@
 import AppKit
 import SwiftUI
 
-/// 内容比可视区域小时居中显示的 clip view。
-final class CenteringClipView: NSClipView {
-    override func constrainBoundsRect(_ proposedBounds: NSRect) -> NSRect {
-        var rect = super.constrainBoundsRect(proposedBounds)
-        guard let documentView else { return rect }
-        let docFrame = documentView.frame
-        if rect.width > docFrame.width {
-            rect.origin.x = docFrame.midX - rect.width / 2
-        }
-        if rect.height > docFrame.height {
-            rect.origin.y = docFrame.midY - rect.height / 2
-        }
-        return rect
-    }
-}
-
 /// 导图编辑区：查找栏 + 可缩放画布 + 状态栏。
 final class MapViewController: NSViewController {
     let editor: MapEditor

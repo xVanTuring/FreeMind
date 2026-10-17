@@ -72,7 +72,7 @@ open it and drag FreeMind into the Applications folder.
 - **Collapsed branches are saved in the file** and restored when you reopen it, along with the zoom level, scroll position and selection.
 - **Import**: Markdown, OPML, XMind (current format and XMind 8) and plain indented outlines.
 - **Export**: Markdown (optionally with attachments copied to a folder), OPML, PNG and PDF, plus printing.
-- **Finder integration**: a Quick Look extension provides thumbnails and space-bar previews for `.fmind` files.
+- **Finder integration**: a Quick Look extension provides thumbnails and space-bar previews for `.fmind` files; drag to pan the preview, pinch or ⌘-scroll to zoom.
 
 ### App
 

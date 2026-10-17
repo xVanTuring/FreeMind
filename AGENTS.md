@@ -83,6 +83,11 @@ build/DerivedData/Build/Products/Debug/FreeMind.app/Contents/MacOS/FreeMind   # 
   新增被这些文件引用的类型时，注意别把 App 专属的依赖（Preferences、NSDocument 等）带进去，否则扩展编译失败。
 - 验证缩略图：`qlmanage -x -t -s 400 -o <目录> 某个.fmind`（要加 `-x` 走 quicklookd）。
   `qlmanage -p` 在命令行里调起预览扩展会崩在 qlmanage 自身（它没有 Bundle ID），预览只能在 Finder 里按空格验证。
+- 空格预览是视图型预览（`PreviewViewController`，可拖动、缩放）。双击被 Quick Look 面板拿去打开文件，扩展收不到。
+- 在 Finder 里验证 Debug 版预览：装了 `/Applications/FreeMind.app` 时系统总是选它的扩展（提高构建号也没用），
+  而且这个 App 每次启动都会重新登记扩展。先 `pluginkit -r` 掉它的 appex（或请用户删掉正式版），
+  `pluginkit -a` 登记 Debug 版的 appex，再 `killall Finder`（Finder 会缓存选中的扩展）。
+  看扩展里的日志用 `Logger` 加 `privacy: .public`，`NSLog` 的内容在系统日志里显示为 `<private>`。
 
 ## 约定
 

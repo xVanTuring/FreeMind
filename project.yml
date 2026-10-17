@@ -151,6 +151,7 @@ targets:
 
   # ── Quick Look：Finder 空格预览 / 文件缩略图 ─────────────────────
   # 两个扩展都只编译“模型 + 布局 + 渲染”这部分代码，直接读 .fmind 包，不依赖 NSDocument。
+  # 空格预览是视图型预览（PreviewViewController，可拖动、缩放），不是数据型的 PDF。
   FreeMindQuickLook:
     type: app-extension
     platform: macOS
@@ -164,6 +165,7 @@ targets:
       - Sources/FreeMind/Theme/BuiltinThemes.swift
       - Sources/FreeMind/Canvas/MapRenderer.swift
       - Sources/FreeMind/Canvas/MapExportView.swift
+      - Sources/FreeMind/Canvas/CenteringClipView.swift
       - Sources/FreeMind/Document/DocumentFormat.swift
       - Sources/FreeMind/Support/L.swift
     settings:
@@ -180,9 +182,9 @@ targets:
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.quicklook.preview
-          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewProvider
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewViewController
           NSExtensionAttributes:
-            QLIsDataBasedPreview: true
+            QLIsDataBasedPreview: false
             QLSupportsSearchableItems: false
             QLSupportedContentTypes: [tech.xvanturing.freemind.map]
 

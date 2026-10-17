@@ -42,7 +42,7 @@ Sources/FreeMind/
 ├─ MCP/            给 AI Agent 用的本机 MCP 服务（HTTP、JSON-RPC、工具）
 └─ Resources/      Info.plist、图标、中英文本地化
 Extensions/
-├─ QuickLook/      空格预览扩展（数据型预览，输出 PDF）
+├─ QuickLook/      空格预览扩展（视图型预览，可拖动、缩放）
 ├─ Thumbnail/      Finder 缩略图扩展
 └─ Shared/         两个扩展共用的读取代码和沙盒 entitlements
 ```

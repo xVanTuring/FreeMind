@@ -19,6 +19,9 @@ final class MapExportView: NSView {
 
     override var isFlipped: Bool { true }
 
+    /// 布局坐标 → 视图坐标的偏移：view = layout + offset。
+    var offset: CGPoint { CGPoint(x: margin - mapLayout.bounds.minX, y: margin - mapLayout.bounds.minY) }
+
     override func draw(_ dirtyRect: NSRect) {
         guard let ctx = NSGraphicsContext.current?.cgContext else { return }
         if !transparent {
@@ -26,8 +29,9 @@ final class MapExportView: NSView {
             ctx.fill(bounds)
         }
         ctx.saveGState()
-        ctx.translateBy(x: margin - mapLayout.bounds.minX, y: margin - mapLayout.bounds.minY)
-        MapRenderer(layout: mapLayout, images: images).draw(in: mapLayout.bounds.insetBy(dx: -margin, dy: -margin),
+        ctx.translateBy(x: offset.x, y: offset.y)
+        // 只画要重绘的区域：导出时就是整个视图，Quick Look 预览里滚动时只画新露出来的部分
+        MapRenderer(layout: mapLayout, images: images).draw(in: dirtyRect.offsetBy(dx: -offset.x, dy: -offset.y),
                                                             drawBackground: false)
         ctx.restoreGState()
     }
