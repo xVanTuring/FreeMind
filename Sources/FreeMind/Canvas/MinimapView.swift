@@ -89,15 +89,18 @@ final class MinimapView: NSView {
     }
 
     /// 把整张导图画成简化的色块和连线（不画文字），缓存成图片，滚动时只重画视口框。
-    private func renderContent(_ layout: MapLayout, world: CGRect) -> NSImage {
+    /// backingScale 默认取窗口的（测试里指定）。
+    func renderContent(_ layout: MapLayout, world: CGRect, backingScale: CGFloat? = nil) -> NSImage {
         cacheWorld = world
-        let scale = window?.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2
+        let scale = backingScale ?? window?.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2
         let pixels = CGSize(width: bounds.width * scale, height: bounds.height * scale)
         guard let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(pixels.width), pixelsHigh: Int(pixels.height),
                                          bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-                                         colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0),
-              let gc = NSGraphicsContext(bitmapImageRep: rep) else { return NSImage(size: bounds.size) }
+                                         colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0) else { return NSImage(size: bounds.size) }
+        // 必须先设好点尺寸再建上下文：上下文按 rep.size 把坐标换算成像素，建好之后再改 size 不起作用，
+        // 坐标会变成像素，Retina 屏上缩影只有一半大而且偏到左下角
         rep.size = bounds.size
+        guard let gc = NSGraphicsContext(bitmapImageRep: rep) else { return NSImage(size: bounds.size) }
         let (s, o) = transform(for: world)
 
         NSGraphicsContext.saveGraphicsState()
